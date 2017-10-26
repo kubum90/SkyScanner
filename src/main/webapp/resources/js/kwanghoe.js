@@ -36,8 +36,96 @@ skyAir.common=(()=>{
     	  skyAir.ticket.init(ctx);
       });
      
-    
+    $('#loginBtn').click(e=>{
+    	alert('로그인버튼 클릭되었음');
+    	var i = $('#usrname').val();
+    	var p = $('#psw').val();
+    	e.preventDefault();
+        $.ajax({
+            url :'/sky'+'/'+i+'/'+p,
+            method : 'post',
+            dataType:'json',
+            data : JSON.stringify({
+          	  'password' : p,
+          	  'email' : i
+            }),
+            contentType : 'application/json',
+            success : (data)=>{
+               alert('ajax 통신:  '+data.success);
+               alert('로그인한 사람 이름: '+data.bean.sirname);
+            },
+            error : (x,s,m)=>{
+               alert('글 개시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+            }
+         });
+    });
      
+    $('#signup').click(()=>{
+    	alert('sign up');
+    	var signup='<div class="modal-body" style="padding:40px 50px;">'
+			+'        <form role="form">'
+			+'          <div class="form-group">'
+			+'            <label for="usrname"><span class="glyphicon glyphicon-envelope"></span> E-MAIL</label>'
+			+'            <input type="text" class="form-control" id="usrname" placeholder="Enter email">'
+			+'          </div>'
+			+'          <div class="form-group">'
+			+'            <label for="psw"><span class="glyphicon glyphicon-lock"></span> Password</label>'
+			+'            <input type="text" class="form-control" id="psw" placeholder="Enter password">'
+			+'          </div>'
+			+'          <button type="submit" class="btn btn-success btn-block" data-dismiss="modal"><span class="glyphicon glyphicon-off"></span> JOIN</button>'
+			+'    <br />'
+			+'   이미 스카이스캐너 계정이 있으신가요? <a id="loginmm"><b id="signup" style="color: red;">login</b></a>'
+			+'        </form>'
+			+'      </div>'
+			+'      <div class="modal-footer" style="">'
+			+'      </div>';
+    	$('.modal-content').empty();
+    	$('.modal-content').append(signup);	
+    	
+    	 $('#loginmm').click(()=>{
+    	    	alert('???');
+    	    	var loginmm='<div class="modal-content">'
+	    			+'      <div class="modal-header" style="padding:35px 50px;">'
+	    			+'      <button type="button" class="close" data-dismiss="modal">&times;</button>'
+	    			
+	    			+'      <span class=""></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+	    			+'      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 로그인 또는 회원가입'
+	    			+'      </div>'
+	    			+'      <div class="modal-body" style="padding:80px 50px; float: left;">'
+	    			+'        <button type="submit" class="btn btn-success btn-block" style="background-color: blue;" data-dismiss="modal">Login By FaceBook</button>'
+	    			+'        <p style="position:absolute; width: 110%; padding: 50px 10px 0px 0px;">Not a member? <a id="joinmm" href="#"><b id="signup" style="color: red;">Sign Up</b></a></p>'
+	    			
+	    			+'      </div>'
+	    			+'      <div class="modal-body" style="padding:80px 50px; float: right;">'
+	    			+'        <form role="form">'
+	    			+'          <div class="form-group">'
+	    			+'            <label for="usrname"><span class="glyphicon glyphicon-envelope"></span> Username</label>'
+	    			+'            <input type="text" class="form-control" id="usrname" placeholder="Enter email">'
+	    			+'          </div>'
+	    			+'          <div class="form-group">'
+	    			+'            <label for="psw"><span class="glyphicon glyphicon-lock"></span> Password</label>'
+	    			+'            <input type="password" class="form-control" id="psw" placeholder="Enter password">'
+	    			+'          </div>'
+	    			+'          <div class="checkbox">'
+	    			+'            <label><input type="checkbox" value="" checked>Remember me</label>'
+	    			+'          </div>'
+	    			+'          <button id="loginBtn" type="submit" class="btn btn-success btn-block" data-dismiss="modal"><span class="glyphicon glyphicon-off"></span> Login</button>'
+	    			+'        </form>'
+	    			+'      </div>'
+	    			+'      <div class="modal-footer" style="">'
+	    			+'      </div>'
+	    			+'    </div>    '	
+    	    	$('.modal-content').empty();
+    	    	$('.modal-content').append(loginmm);
+    	    	
+    	    	
+    	    	
+    	    	
+    	    	
+    	    
+    	    	
+    	    });
+    	});
    };
 	   var onCreate=()=>{
 	   setContentView();
@@ -1352,37 +1440,6 @@ skyAir.timeline={
 	}
 	
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

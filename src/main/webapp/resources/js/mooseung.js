@@ -58,8 +58,12 @@ ms.common=((ctx)=>{
 		onClose: function(selectedDate) {
 			if($("#ed-placeholder").val() < selectedDate){
 				var sdate=$('#sd-placeholder').datepicker('getDate', '+1d');
-				$.datepicker.formatDate("yy. mm. dd.",sdate);
 				$("#ed-placeholder").val($.datepicker.formatDate("yy. mm. dd.",sdate));
+				$("#ed").val($.datepicker.formatDate("yy. mm. dd.",sdate));
+				$('#sd').val($.datepicker.formatDate("yy-mm-dd",sdate));
+			}else{
+				$('#sd').val($.datepicker.formatDate("yy-mm-dd",$('#sd-placeholder').datepicker('getDate')));
+				$("#ed").val($.datepicker.formatDate("yy. mm. dd.",$('#sd-placeholder').datepicker('getDate')));
 			};
         }
 	});
@@ -75,18 +79,14 @@ ms.common=((ctx)=>{
 			if($("#sd-placeholder").val() > selectedDate){
 				var edate=$('#ed-placeholder').datepicker('getDate', '-1d');
 				$("#sd-placeholder").val($.datepicker.formatDate("yy. mm. dd.",edate));
+				$("#sd").val($.datepicker.formatDate("yy. mm. dd.",edate));
+				$('#ed').val($.datepicker.formatDate("yy-mm-dd",edate));
+			}else{
+				$("#sd-placeholder").val($.datepicker.formatDate("yy. mm. dd.",$('#ed-placeholder').datepicker('getDate')));
+				$('#ed').val($.datepicker.formatDate("yy-mm-dd",$('#ed-placeholder').datepicker('getDate')));
 			};
         }
 	});
-	$('#sd-placeholder').click(()=>{
-		$('#sd-placeholder').val($.datepicker.formatDate("yy. MM. dd.",$('#sd-placeholder').datepicker('getDate')));
-		$('#sd').val($.datepicker.formatDate("yyyy-MM-dd",$('#sd-placeholder').datepicker('getDate')));
-	});
-	$('#ed-placeholder').click(()=>{
-		$('#ed-placeholder').val($.datepicker.formatDate("yy. MM. dd.",$('#ed-placeholder').datepicker('getDate')));
-		$('#ed').val($.datepicker.formatDate("yyyy-MM-dd",$('#ed-placeholder').datepicker('getDate')));
-	})
-	;
 	
 	$('<button/>')
 		.appendTo('#div-search')
@@ -144,10 +144,8 @@ ms.common=((ctx)=>{
 			contentType : 'application/json',
 			success : (data)=>{
 				var s='';
-				var temp='';
 				$.each(data.sgst,(i,v)=>{
-					temp='호텔이름: '+v.hotel_name+'/ 지역: '+v.destination+'/ 구역:'+v.destination+'/ 가격:'+v.price;
-					s+='"'+temp+'",';
+					s+='호텔이름: '+v.hotel_name+'/ 지역: '+v.destination+'/ 구역:'+v.destination+'/ 가격:'+v.price+'  ';
 				})
 				if($('#q').val()==="서울"){
 					alert(s);

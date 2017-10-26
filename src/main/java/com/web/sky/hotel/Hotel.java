@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data @Lazy @Component
 public class Hotel {
-   private String hotel_site, hotel_name,destination,district,rate,type,hotel_date;
+   private String hotel_name,destination,district,guest;
    private int price;
    
 }

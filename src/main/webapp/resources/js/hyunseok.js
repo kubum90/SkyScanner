@@ -97,22 +97,19 @@ hyunseok.home=(()=>{
 	var onCreate=()=>{
 		$('body').empty();
 		$('body').append(hyunseok.navbar.init());
-
 		$('body').append(hyunseok.introUI.home());
 		
-		$('#list-adminBtn').click(()=>{
-			alert('관리자');
-			$('body').empty();
-			$('.header').empty();
-			hyunseok.navbar.init();
 		
+		$('#list-adminBtn').click(()=>{
+			alert('관리자.');
+			$('body').empty();
+			hyunseok.navbar.init();
 			$('body').append(hyunseok.compUI.admin());
 			hyunseok.admin.init();
 			});
 		$('#list-adminBtn-admin').click(()=>{
 			alert('관리자');
 			$('body').empty();
-			$('.header').empty();
 			hyunseok.navbar.init();
 		
 			$('body').append(hyunseok.compUI.admin());
@@ -183,13 +180,19 @@ hyunseok.admin=(()=>{
 			});
 		$('#admin-update-btn-cancel').click(e=>{
 			alert('관리자 정보 수정 취소');
+			$('#w3-input-email').val("");
+			$('#w3-input-name').val("");
+			$('#w3-input-password').val("");
 			});
 		$('#new-admin-update-btn').click(e=>{
 			alert('새 관리자 정보 수정 ');
 			});
 		$('#new-admin-update-btn-cancel').click(e=>{
 			alert('새 관리자 정보 수정 취소');
-			});
+			$('#w3-input-email1').val("");
+			$('#w3-input-name1').val("");
+			$('#w3-input-password1').val("");
+		});
 
 	};
 	return {init:init};
@@ -230,82 +233,41 @@ hyunseok.memberUpdate=(()=>{
 			
 		$('#memberUpdate-email').click(e=>{
 			alert('이메일 업데이트');
-			$('body').empty();
-			$('.header').empty();
-			hyunseok.navbar.init();
-		
-			$('body').append(hyunseok.compUI.memberUpdate());
-			hyunseok.memberUpdate.init();
 			});
 		$('#memberUpdate-email-cancel').click(e=>{
 			alert('이메일 업데이트 취소');
-			$('body').empty();
-			$('.header').empty();
-			hyunseok.navbar.init();
-		
-			$('body').append(hyunseok.compUI.memberUpdate());
-			hyunseok.memberUpdate.init();
+			$('#ac-email').val("");
 			});
 		$('#memberUpdate-password').click(e=>{
 			alert('비번 업데이트');
-			$('body').empty();
-			$('.header').empty();
-			hyunseok.navbar.init();
-		
-			$('body').append(hyunseok.compUI.memberUpdate());
-			hyunseok.memberUpdate.init();
+			
 			});
 		$('#memberUpdate-password-cancel').click(e=>{
 			alert('비번 업데이트 취소');
-			$('body').empty();
-			$('.header').empty();
-			hyunseok.navbar.init();
-		
-			$('body').append(hyunseok.compUI.memberUpdate());
-			hyunseok.memberUpdate.init();
+			$('#ac-old-password').val("");
+			$('#ac-new-password').val("");
+			$('#ac-confirm-password').val("");
 			});
 		$('#memberUpdate-profile').click(e=>{
 			alert('프로필 업데이트');
-			$('body').empty();
-			$('.header').empty();
-			hyunseok.navbar.init();
-		
-			$('body').append(hyunseok.compUI.memberUpdate());
-			hyunseok.memberUpdate.init();
 			});
 		$('#memberUpdate-profile-cancel').click(e=>{
 			alert('프로필 업데이트 취소');
-			$('body').empty();
-			$('.header').empty();
-			hyunseok.navbar.init();
-		
-			$('body').append(hyunseok.compUI.memberUpdate());
-			hyunseok.memberUpdate.init();
+			$('#ac-first-name').val("");
+			$('#ac-last-name').val("");
 			});
 		$('#memberUpdate-basic').click(e=>{
 			alert('기본 정보 업데이트');
-			$('body').empty();
-			$('.header').empty();
-			hyunseok.navbar.init();
-		
-			$('body').append(hyunseok.compUI.memberUpdate());
-			hyunseok.memberUpdate.init();
+			
 			});
 		$('#memberUpdate-basic-cancel').click(e=>{
 			alert('기본 정보 업데이트 취소');
-			$('body').empty();
-			$('.header').empty();
-			hyunseok.navbar.init();
-		
-			$('body').append(hyunseok.compUI.memberUpdate());
-			hyunseok.memberUpdate.init();
+			$('#home-airport').val("");
 			});
 		$('#member-update-btn').click(e=>{
 			alert('계정 수정 완료');
 			$('body').empty();
-			$('.header').empty();
 			hyunseok.navbar.init();
-		
 			$('body').append(hyunseok.compUI.member());
 			hyunseok.member.init();
 			});
@@ -314,7 +276,6 @@ hyunseok.memberUpdate=(()=>{
 			$('body').empty();
 			$('.header').empty();
 			hyunseok.navbar.init();
-		
 			$('body').append(hyunseok.compUI.member());
 			hyunseok.member.init();
 			});
@@ -417,6 +378,8 @@ hyunseok.airport=(()=>{
 			});
         $('#btn-air-add-cancel').click(e=>{
 			alert('항공 노선 추가 취소');
+			$('.air-section-drop').val('air-drop');
+			$('.air-add-section').val("");
 			});
 
 		
@@ -452,6 +415,17 @@ hyunseok.airportUpdate=(()=>{
 				
 				
 				});
+		$('#btn-air-update-cancel').click(e=>{
+			alert('air update 취소');
+			$('body').empty();
+			$('.header').empty();
+			hyunseok.navbar.init();
+		
+			$('body').append(hyunseok.compUI.airport());
+			hyunseok.airport.init();
+			
+			});
+		
 	};
 	return {init:init};
 })();
@@ -500,6 +474,10 @@ hyunseok.hotel=(()=>{
 				});
 	        $('#btn-hotel-add-cancel').click(e=>{
 				alert('호텔 추가 취소');
+				$('.air-section-drop').val('air-drop');
+				$('.air-add-section').val("");
+				$('.check-n').prop("checked",false);
+				
 				});
 		
 	};
@@ -527,12 +505,18 @@ hyunseok.hotelUpdate=(()=>{
 				$('body').empty();
 				$('.header').empty();
 				hyunseok.navbar.init();
-		
 				$('body').append(hyunseok.compUI.hotel());
 				hyunseok.hotel.init();
-			
-			
-				});
+					});
+				$('#btn-hotel-update-cancel').click(e=>{
+					alert('hotel update!!');
+					$('body').empty();
+					$('.header').empty();
+					hyunseok.navbar.init();
+					$('body').append(hyunseok.compUI.hotel());
+					hyunseok.hotel.init();
+						});
+				
 	};
 	return {init:init};
 })();
@@ -601,21 +585,20 @@ hyunseok.introUI={
 					+'  height : 20%;'
 					+'  margin-top: 15px;'
 					+'  }'
-					+'</style>'					
+					+'</style>'	
 					+'<body>'
-				
-					+'<div>    '
+					+'<div> '
 					+'  <div class="row">'
 					+'    <div class="column"><div class="panel panel-primary">'
-					+'      <div class="panel-heading">Today 방문자</div>'
-					+'      <div class="panel-body"> count </div>'
+					+'      <div class="panel-heading">회원 Count</div>'
+					+'      <div class="panel-body">count 명</div>'
 					+'    </div></div>'
 					+'      <div class="column"><div class="panel panel-primary">'
-					+'      <div class="panel-heading">Today 게시글</div>'
+					+'      <div class="panel-heading">Airline Count</div>'
 					+'      <div class="panel-body">count</div>'
 					+'  </div>  </div>'
 					+'   <div class="column"><div class="panel panel-primary">'
-					+'      <div class="panel-heading">Today 가입자</div>'
+					+'      <div class="panel-heading">Hotel Count</div>'
 					+'      <div class="panel-body">count</div>'
 					+'    </div> </div>'
 					+'</div>'
@@ -881,13 +864,12 @@ hyunseok.compUI={
 			+'</div>'
 			+'<form class="w3-container">'
 			+'  <label>이메일 주소</label>'
-			+'  <input class="w3-input" type="text" value="Admin@gmail.com">'
+			+'  <input class="w3-input" id="w3-input-email" type="text" placeholder="Admin@gmail.com">'
 			+'  <label>이름</label>'
-			+'  <input class="w3-input" type="text" value="관리자">'
+			+'  <input class="w3-input" id="w3-input-name" type="text" placeholder="관리자">'
 			+'  <label>비밀 번호</label>'
-			+'  <input class="w3-input" type="text" placeholder="비밀번호 변경">'
+			+'  <input class="w3-input" id="w3-input-password" type="text" placeholder="비밀번호 변경">'
 			+'</form>'
-		
 			+'<fieldset class="buttons">'
 			+'<button id="admin-update-btn"class="btn-info-admin ">정보 수정</button>'
 			+'<button id="admin-update-btn-cancel" class="btn-info-admin ">취소</button>'
@@ -899,20 +881,20 @@ hyunseok.compUI={
 			+'</div>'
 			+'<form class="w3-container">'
 			+'  <label>이메일 주소</label>'
-			+'  <input class="w3-input" type="text" >'
+			+'  <input class="w3-input" id="w3-input-email1" type="text" >'
 			+'  <label>이름</label>'
-			+'  <input class="w3-input" type="text" >'
+			+'  <input class="w3-input" id="w3-input-name1" type="text" >'
 			+'  <label>비밀 번호</label>'
-			+'  <input class="w3-input" type="text" >'
+			+'  <input class="w3-input" id="w3-input-password1" type="text" >'
 			+'</form>'
 			+'<fieldset class="buttons">'
-			+'<button id="new-admin-update-btn"class="btn-info-admin ">정보 수정</button>'
+			+'<button id="new-admin-update-btn"class="btn-info-admin ">관리자 설정</button>'
 			+'<button id="new-admin-update-btn-cancel" class="btn-info-admin ">취소</button>'
 			+'</fieldset>'
 			+'</body>'
 		},
 		member : ()=>{
-			return '<style>'
+			var member= '<style>'
 			+'* { box-sizing: border-box;}'
 			+'body { margin: 0;}'
 			+'/* Style the header */'
@@ -1091,22 +1073,41 @@ hyunseok.compUI={
 			+'<button type="button"  class="btn btn-info btn-md">검색</button>'
 			+'</form>'
 			+'<div id=datagrid-div>'
-			+'<div class="datagrid"><table>'
-			+'<thead class="datagrid-thead" ><tr><th>선택</th><th>이메일</th><th>이름</th><th>문화권</th><th >가입 일시</th><th >뉴스레터 여부</th></thead>'
-			+'<tbody><tr><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr class="alt"><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr class="alt"><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tfoot class="datagrid-paging"><tr><td colspan="6"><div id="paging"><ul><li><a href="#"><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul></div></tr></tfoot>'
+			+'<div class="datagrid">'
+			+'<table>'
+			+'<thead class="datagrid-thead" ><tr><th>선택</th><th>이메일</th><th>성</th><th>이름</th><th >국가</th><th >가입일</th></tr></thead>'
+			+'<tbody>';
+			var arr=[{email:'sky@gmail.com',first_name:'홍',sirname:'길동',country:'Korea',regdate:'2017/10/23'},
+				{email:'sky@gmail.com',first_name:'홍',sirname:'길동',country:'Korea',regdate:'2017/10/23'},
+				{email:'sky@gmail.com',first_name:'홍',sirname:'길동',country:'Korea',regdate:'2017/10/23'},
+				{email:'sky@gmail.com',first_name:'홍',sirname:'길동',country:'Korea',regdate:'2017/10/23'},
+				{email:'sky@gmail.com',first_name:'홍',sirname:'길동',country:'Korea',regdate:'2017/10/23'}];
+			$.each(arr,(i,val)=>{
+				member+='<tr><td><input type="checkbox" name="check" value=""></td><td>'+val.email+'</td><td>'+val.first_name+'</td><td>'+val.sirname+'</td><td>'+val.country+'</td><td>'+val.regdate+'</td></tr>'
+			})			
+			member+='<tfoot class="datagrid-paging"><tr><td colspan="6"><div id="paging"><ul>'   
+			+'<li>'
+			+'      <a href="#" aria-label="Previous">'
+			+'        <span aria-hidden="true">&laquo;</span>'
+			+'      </a>'
+			+'    </li>'
+			+'    <li><a href="#">1</a></li>'
+			+'    <li><a href="#">2</a></li>'
+			+'    <li><a href="#">3</a></li>'
+			+'    <li><a href="#">4</a></li>'
+			+'    <li><a href="#">5</a></li>'
+			+'    <li>'
+			+'      <a href="#" aria-label="Next">'
+			+'        <span aria-hidden="true">&raquo;</span>'
+			+'      </a>'
+			+'    </li> </ul></div></tr></tfoot>'
 			+'</tbody>'
 			+'</table></div></div>'	
-			
 			+'<fieldset class="buttons">'
 			+'<button id="btn-member-update"class="btn-info-admin ">정보 수정</button>'
 			+'<button id="btn-member-update-cancel" class="btn-info-admin ">삭제</button>'
 			+'</fieldset>'
-		
+			return member;
 		},	
 		memberUpdate : ()=>{
 			
@@ -1210,7 +1211,7 @@ hyunseok.compUI={
 				+'<article class="account-settings-management">'
 			+'<section class="ac-basics">'
 			+'    <h4>기본 정보</h4>'
-			+'<form class=""><fieldset>'
+			+'<fieldset>'
 			+'    <legend>이메일 주소</legend>'
 			+'    <ol>'
 			+'        <li>'
@@ -1222,20 +1223,20 @@ hyunseok.compUI={
 			+'<fieldset class="buttons">'
 			+'    <legend>Save your changes</legend>'
 			+'    <button id="memberUpdate-email" class="primary">수정</button>'
-			+'    <button id="memberUpdate-email-cancel" class="cancel">취소</button>'
-			+'</fieldset></form><form class=""><fieldset>'
+			+'    <button id="memberUpdate-email-cancel" class="primary">취소</button>'
+			+'</fieldset><fieldset>'
 			+'    <legend>비밀번호</legend>'
 			+'    <ol >'
 			+'        <li>'
-			+'            <input id="ac-old-password" type="password" value="" placeholder="현재 비밀번호" autocomplete="off">'
+			+'            <input id="ac-old-password" type="password"  placeholder="현재 비밀번호" autocomplete="off">'
 			+'            <output id="ac-old-password-validate"></output>'
 			+'        </li>'
 			+'        <li>'
-			+'            <input id="ac-new-password" type="password" value="" placeholder="새 비밀번호">'
+			+'            <input id="ac-new-password" type="password"  placeholder="새 비밀번호">'
 			+'            <output id="ac-new-password-validate"></output>'
 			+'        </li>'
 			+'        <li>'
-			+'            <input id="ac-confirm-password" type="password" value="" placeholder="새 비밀번호 확인">'
+			+'            <input id="ac-confirm-password" type="password" placeholder="새 비밀번호 확인">'
 			+'            <output id="ac-confirm-password-validate"></output>'
 			+'        </li>'
 			+'    </ol>'
@@ -1243,11 +1244,11 @@ hyunseok.compUI={
 			+'<fieldset class="buttons">'
 			+'    <legend>Save your changes</legend>'
 			+'    <button id="memberUpdate-password" class="primary">수정</button>'
-			+'    <button id="memberUpdate-password-cancel" class="cancel">취소</button>'
-			+'</fieldset></form></section>'
+			+'    <button id="memberUpdate-password-cancel" class="primary">취소</button>'
+			+'</fieldset></section>'
 			+'<section class="ac-profile">'
 			+'    <h4>프로필 작성</h4>'
-			+'<form><fieldset>'
+			+'<fieldset>'
 			+'    <legend>이름</legend>'
 			+'    <ol>'
 			+'        <li>'
@@ -1264,11 +1265,9 @@ hyunseok.compUI={
 			+'    <legend>문화권 기본 설정</legend>'
 			+'    <ol>'
 			+'        <li id="ac-locale">'
-			
 			+'            <select ><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option></select>'
 			+'        </li>'
 			+'        <li id="ac-market">'
-			
 			+'            <select ><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option></select>'
 			+'        </li>'
 			+'    </ol>'
@@ -1276,12 +1275,12 @@ hyunseok.compUI={
 			+'<fieldset class="buttons">'
 			+'    <legend>Save your changes</legend>'
 			+'    <button id="memberUpdate-profile" class="primary">수정</button>'
-			+'    <button id="memberUpdate-profile-cancel" class="cancel">취소</button>'
-			+'</fieldset></form></section>'
+			+'    <button id="memberUpdate-profile-cancel" class="primary">취소</button>'
+			+'</fieldset></section>'
 			
 			+'<section class="ac-preferences">'
 			+'    <h4>기본 설정 검색</h4>'
-						+'<form><fieldset>'
+						+'<fieldset>'
 			+'    <legend>출발 공항</legend>'
 			+'    <ol>'
 			+'        <li>'
@@ -1293,21 +1292,21 @@ hyunseok.compUI={
 			+'<fieldset class="buttons">'
 			+'    <legend>Save your changes</legend>'
 			+'    <button id="memberUpdate-basic" class="primary">수정</button>'
-			+'    <button id="memberUpdate-basic-cancel" class="cancel">취소</button>'
+			+'    <button id="memberUpdate-basic-cancel" class="primary">취소</button>'
 			+'</fieldset>'
-			+'</form></section>'
-			+'</form></section>'
+			+'</section>'
+			+'</section>'
 			+'</article></div><div class="wrap legal-info">'
 			+'<fieldset class="buttons">'
 			+'    <button id="member-update-btn" class="primary">수정 완료</button>'
-			+'    <button id="member-delete-btn"" class="cancel">계정 삭제</button>'
+			+'    <button id="member-delete-btn"" class="primary">계정 삭제</button>'
 			+'</fieldset>'
 						+'</div>'
 			+'</div>'
 		
 		},	
 		airport : ()=>{
-			return '<style>'
+			var airport= '<style>'
 			+'* { box-sizing: border-box;}'
 			+'body { margin: 0;}'
 			+'/* Style the header */'
@@ -1550,7 +1549,7 @@ hyunseok.compUI={
 			+'<body>'
 			+'<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">'
 			+'  <h1 class="title-h1">Airport Info</h1>'	
-			+'<form class="search-air">'
+			+'<div class="search-air">'
 			+'<select>'
 			+'  <option value="agency">여행사</option>'
 			+' <option value="airport">항공사</option>'
@@ -1560,19 +1559,39 @@ hyunseok.compUI={
 			+' <input type="text" class="myInput"  placeholder="search">'
 			+'<input type="text" id="datepicker-air-search" placeholder="날짜 입력" > <span class="glyphicon glyphicon-calendar"></span></input>'
 			+'<button type="button" class="btn btn-info btn-md">검색</button>'
-			+'</form>'
+			+'</div>'
 			+'<div id=datagrid-div>'
-			+'<div class="datagrid"><table>'
-			+'<thead class="datagrid-thead" ><tr><th>선택</th><th>여행사</th><th>항공사</th><th>출발지역</th><th >도착지역</th><th >출발시간</th><th >경유지</th><th >가격</th><th >잔여좌석</th></tr></thead>'
-			+'<tbody><tr><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr class="alt"><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr class="alt"><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tfoot class="datagrid-paging"><tr><td colspan="9"><div id="paging"><ul><li><a href="#"><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul></div></tr></tfoot>'
+			+'<div class="datagrid">'
+			+'<table>'
+			+'<thead class="datagrid-thead" ><tr><th>선택</th><th>항공기 번호</th><th>항공사</th><th>좌석 등급</th><th>춟발 지역</th><th >도착 지역</th><th >출발일</th><th >가격</th></tr></thead>'
+			+'<tbody>';
+			var arr=[{flight_no:'KE908',airline:'대항항공',cabin_class:'econmy',place_from:'인천',place_to:'뉴욕존에프케네디',date_depart:'2017.10.24',price:'1,000,000'},
+				{flight_no:'KE908',airline:'대항항공',cabin_class:'econmy',place_from:'인천',place_to:'뉴욕존에프케네디',date_depart:'2017.10.24',price:'1,000,000'},
+				{flight_no:'KE908',airline:'대항항공',cabin_class:'econmy',place_from:'인천',place_to:'뉴욕존에프케네디',date_depart:'2017.10.24',price:'1,000,000'},
+				{flight_no:'KE908',airline:'대항항공',cabin_class:'econmy',place_from:'인천',place_to:'뉴욕존에프케네디',date_depart:'2017.10.24',price:'1,000,000'},
+				{flight_no:'KE908',airline:'대항항공',cabin_class:'econmy',place_from:'인천',place_to:'뉴욕존에프케네디',date_depart:'2017.10.24',price:'1,000,000'},
+				];
+			$.each(arr,(i,val)=>{
+				airport+='<tr><td><input type="checkbox" name="check" value=""></td><td>'+val.flight_no+'</td><td>'+val.airline+'</td><td>'+val.cabin_class+'</td><td>'+val.place_from+'</td><td>'+val.place_to+'</td><td>'+val.date_depart+'</td><td>'+val.price+'</td></tr>'
+			})			
+			airport+='<tfoot class="datagrid-paging"><tr><td colspan="8"><div id="paging"><ul>'   
+			+'<li>'
+			+'      <a href="#" aria-label="Previous">'
+			+'        <span aria-hidden="true">&laquo;</span>'
+			+'      </a>'
+			+'    </li>'
+			+'    <li><a href="#">1</a></li>'
+			+'    <li><a href="#">2</a></li>'
+			+'    <li><a href="#">3</a></li>'
+			+'    <li><a href="#">4</a></li>'
+			+'    <li><a href="#">5</a></li>'
+			+'    <li>'
+			+'      <a href="#" aria-label="Next">'
+			+'        <span aria-hidden="true">&raquo;</span>'
+			+'      </a>'
+			+'    </li> </ul></div></tr></tfoot>'
 			+'</tbody>'
-			+'</table></div></div>'
-			
+			+'</table></div></div>'	
 			+'<fieldset class="buttons">'
 			+'<button id="btn-air-update"class="btn-info-admin ">정보 수정</button>'
 			+'<button id="btn-air-delete" class="btn-info-admin ">삭제</button>'
@@ -1586,12 +1605,21 @@ hyunseok.compUI={
 		+'<section class="airport-add-section">'
 		+'    <h4>&nbsp&nbsp&nbsp&nbsp노선추가</h4>'
 	
-		+'<form><fieldset>'
+		+'<form>'
+		+'<fieldset>'
+		+'    <legend>항공기 번호</legend>'
+		+'    <ol>'
+		+'        <li>'
+		+'<input type="text"  class="air-add-section" ></input>'
+		+'        </li>'	
+		+'    </ol>'
+		+'</fieldset>'
+		+'<fieldset>'
 		+'    <legend>항공사</legend>'
 		+'    <ol>'
 		+'        <li>'
 		+'<select class="air-section-drop">'
-		+'  <option value="agency">항공사/여행사</option>'
+		+'  <option value="air-drop">항공사/여행사</option>'
 		+' <option value="agency-1">Mytrip</option>'
 		+'  <option value="agency-2">아시아나</option>'
 		+'  <option value="agency-3">.....</option>'
@@ -1601,17 +1629,26 @@ hyunseok.compUI={
 		+'</fieldset>'
 		
 		+'<fieldset>'
-		+'    <legend>날 짜</legend>'
+		+'    <legend>출발일</legend>'
 		+'    <ol>'
 		+'        <li>'
 		+'<input type="text" id="datepicker-air-depart"  class="air-add-section" placeholder="출발 날짜" ></input>'
-		+'<input type="text" id="datepicker-air-arrive"  class="air-add-section" placeholder="도착 날짜" ></input>'
 		+'        </li>'	
 		+'    </ol>'
 		+'</fieldset>'
-		
-		
-		
+		+'<fieldset>'
+		+'    <legend>좌석 등급</legend>'
+		+'    <ol>'
+		+'        <li>'
+		+'<select class="air-section-drop">'
+		+'  <option value="air-drop">좌석 등급</option>'
+		+' <option value="agency-1">economy</option>'
+		+'  <option value="agency-2">business</option>'
+		+'  <option value="agency-3">first</option>'
+		+'</select>'
+		+'        </li>'	
+		+'    </ol>'
+		+'</fieldset>'
 		+'<fieldset>'
 		+'    <legend>항공 운임</legend>'
 		+'    <ol>'
@@ -1622,36 +1659,17 @@ hyunseok.compUI={
 		+'</fieldset>'
 		
 		+'<fieldset>'
-		+'    <legend> 경유 횟수</legend>'
+		+'    <legend>도착지</legend>'
 		+'    <ol>'
 		+'        <li>'
-		+'<select class="air-section-drop">'
-		+'  <option value="count-transit">경유 횟수</option>'
-		+' <option value="no-transit"> 직 항 </option>'
-		+'  <option value="one-transit"> 1회 경유</option>'
-		+'  <option value="many-transit">2회 이상 경유</option>'
-		+'</select>'
+		+'<input type="text"  class="air-add-section" ></input>'
 		+'        </li>'	
 		+'    </ol>'
-		+'</fieldset>'
-		
-		+'<fieldset>'
-		+'    <legend> 경유 공항</legend>'
-		+'    <ol>'
-		+'        <li>'
-		+'<select class="air-section-drop">'
-		+'  <option value="count-transit">경유 공항</option>'
-		+' <option value="no-transit"> 상하이 공항 </option>'
-		+'  <option value="one-transit"> 도쿄 공항</option>'
-		+'  <option value="many-transit">........</option>'
-		+'</select>'
-		+'        </li>'	
-		+'    </ol>'
-		+'</fieldset>'
+		+'</fieldset>'		
 	
 		+'</form></section>'
 		+'</form></section>'
-			
+		
 			
 			+'</form>'
 					
@@ -1659,10 +1677,10 @@ hyunseok.compUI={
 			+'<button id="btn-air-add" class="btn-info-air ">추가</button>'
 			+'<button id="btn-air-add-cancel" class="btn-info-air ">취소</button>'
 			+'</fieldset>'
-			
+			return airport;
 		}	,
 		hotel : ()=>{
-			return  '<style>'
+			var hotel= '<style>'
 			+'* { box-sizing: border-box;}'
 			+'body { margin: 0;}'
 			+'/* Style the header */'
@@ -1926,17 +1944,37 @@ hyunseok.compUI={
 			+'<button type="button" class="btn btn-info btn-md">검색</button>'
 			+'</form>'
 			+'<div id=datagrid-div>'
-			+'<div class="datagrid"><table>'
-			+'<thead class="datagrid-thead" ><tr><th>선택</th><th>예약 사이트</th><th>이름</th><th>도시</th><th >구역</th><th >가격</th><th >호텔등급</th><th >평점</th><th >투숙일</th></tr></thead>'
-			+'<tbody><tr><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr class="alt"><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr class="alt"><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tr><td><input type="checkbox" name="check" value=""></td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td><td>data</td></tr>'
-			+'<tfoot class="datagrid-paging"><tr><td colspan="9"><div id="paging"><ul><li><a href="#"><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul></div></tr></tfoot>'
+			+'<div class="datagrid">'
+			+'<table>'
+			+'<thead class="datagrid-thead" ><tr><th>선택</th><th>예약 사이트</th><th>호텔 이름</th><th>도시</th><th >구역</th><th >가격</th><th >호텔 등급</th><th >투숙일</th></tr></thead>'
+			+'<tbody>';
+			var arr=[{hotel_site:'호텔스컴바인',hotel_name:'신라호텔',destination:'서울',district:'강남',price:'1,000,000',rate:'★★★',hotel_date:'2017/10/23'},
+				{hotel_site:'호텔스컴바인',hotel_name:'뉴욕호텔',destination:'뉴욕',district:'브루클린',price:'1,000,000',rate:'★★★',hotel_date:'2017/10/23'},
+				{hotel_site:'호텔스컴바인',hotel_name:'힐튼호텔',destination:'하노이',district:'북쪽마을',price:'1,000,000',rate:'★★★',hotel_date:'2017/10/23'},
+				{hotel_site:'호텔스컴바인',hotel_name:'부산호텔',destination:'부산',district:'남포동',price:'1,000,000',rate:'★★★',hotel_date:'2017/10/23'},
+				{hotel_site:'여행닷컴',hotel_name:'힐튼호텔',destination:'서울',district:'강남',price:'1,000,000',rate:'★★★',hotel_date:'2017/10/23'}
+				];
+			$.each(arr,(i,val)=>{
+				hotel+='<tr><td><input type="checkbox" name="check" value=""></td><td>'+val.hotel_site+'</td><td>'+val.hotel_name+'</td><td>'+val.destination+'</td><td>'+val.district+'</td><td>'+val.price+'</td><td>'+val.rate+'</td><td>'+val.hotel_date+'</td></tr>'
+			})			
+			hotel+='<tfoot class="datagrid-paging"><tr><td colspan="8"><div id="paging"><ul>'   
+			+'<li>'
+			+'      <a href="#" aria-label="Previous">'
+			+'        <span aria-hidden="true">&laquo;</span>'
+			+'      </a>'
+			+'    </li>'
+			+'    <li><a href="#">1</a></li>'
+			+'    <li><a href="#">2</a></li>'
+			+'    <li><a href="#">3</a></li>'
+			+'    <li><a href="#">4</a></li>'
+			+'    <li><a href="#">5</a></li>'
+			+'    <li>'
+			+'      <a href="#" aria-label="Next">'
+			+'        <span aria-hidden="true">&raquo;</span>'
+			+'      </a>'
+			+'    </li> </ul></div></tr></tfoot>'
 			+'</tbody>'
-			+'</table></div></div>'
-			
+			+'</table></div></div>'	
 			+'<fieldset class="buttons">'
 			+'<button id="btn-hotel-update"class="btn-info-admin ">정보 수정</button>'
 			+'<button id="btn-hotel-delete" class="btn-info-admin ">삭제</button>'
@@ -1954,7 +1992,7 @@ hyunseok.compUI={
 			+'    <ol>'
 			+'        <li>'
 			+'<select class="air-section-drop">'
-			+'  <option value="agency">예약사이트</option>'
+			+'  <option value="air-drop">예약사이트</option>'
 			+' <option value="agency-1">호텔스컴바인</option>'
 			+'  <option value="agency-2">야놀자</option>'
 			+'  <option value="agency-3">.....</option>'
@@ -1985,7 +2023,7 @@ hyunseok.compUI={
 			+'    <legend>구  역</legend>'
 			+'    <ol>'
 			+'        <li>'
-			+'<input type="text"  class="air-add-section" placeholder="원"></input>'
+			+'<input type="text"  class="air-add-section" ></input>'
 			+'        </li>'	
 			+'    </ol>'
 			+'</fieldset>'
@@ -1994,7 +2032,7 @@ hyunseok.compUI={
 			+'    <legend>도  시</legend>'
 			+'    <ol>'
 			+'        <li>'
-			+'<input type="text"  class="air-add-section" placeholder="원"></input>'
+			+'<input type="text"  class="air-add-section"></input>'
 			+'        </li>'	
 			+'    </ol>'
 			+'</fieldset>'
@@ -2004,7 +2042,7 @@ hyunseok.compUI={
 			+'    <ol>'
 			+'        <li>'
 			+'<select class="air-section-drop">'
-			+'  <option value="agency">호텔 등급</option>'
+			+'  <option value="air-drop">호텔 등급</option>'
 			+' <option value="agency-1">★★★★★</option>'
 			+'  <option value="agency-2">★★★★</option>'
 			+'  <option value="agency-3">★★★</option>'
@@ -2019,9 +2057,9 @@ hyunseok.compUI={
 			+'    <legend>취소 정책</legend>'
 			+'    <ol>'
 			+'        <li>'
-			+'<p class="column-check-p"><input type="checkbox" name="check" value="">&nbsp무료 환불 가능</br>'
-			+'<input type="checkbox" name="check" value="">&nbsp환불 가능</br>'
-			+'<input type="checkbox" name="check" value="">&nbsp환불 불가</p>'
+			+'<p class="column-check-p"><input type="checkbox" name="check" class="check-n" value="">&nbsp무료 환불 가능</br>'
+			+'<input type="checkbox" class="check-n" name="check" value="">&nbsp환불 가능</br>'
+			+'<input type="checkbox" class="check-n" name="check" value="">&nbsp환불 불가</p>'
 			+'        </li>'	
 			+'    </ol>'
 			+'</fieldset>'
@@ -2030,21 +2068,20 @@ hyunseok.compUI={
 			+'    <legend>식사 계획</legend>'
 			+'    <ol>'
 			+'        <li>'
-			+'<p class="column-check-p"><input type="checkbox" name="check" value="">&nbsp조식포함</br>'
-			+'<input type="checkbox" name="check" value="">&nbsp객실만 제공</br>'
-			+'<input type="checkbox" name="check" value="">&nbsp......</p>'
+			+'<p class="column-check-p"><input type="checkbox" class="check-n" name="check" value="">&nbsp조식포함</br>'
+			+'<input type="checkbox" class="check-n" name="check" value="">&nbsp객실만 제공</br>'
+			+'<input type="checkbox" class="check-n" name="check" value="">&nbsp......</p>'
 			+'        </li>'	
 			+'    </ol>'
 			+'</fieldset>'
-			
 			+'<fieldset>'
 			+'    <legend>시 설</legend>'
 			+'    <ol>'
 			+'        <li>'
-			+'<p class="column-check-p"><input type="checkbox" name="check" value="">&nbsp와이파이</br>'
-			+'<input type="checkbox" name="check" value="">&nbsp수영장</br>'
-			+'<input type="checkbox" name="check" value="">&nbsp노래방</br>'
-			+'<input type="checkbox" name="check" value="">&nbsp......</p>'
+			+'<p class="column-check-p"><input class="check-n" type="checkbox" name="check" value="">&nbsp와이파이</br>'
+			+'<input type="checkbox" class="check-n" name="check" value="">&nbsp수영장</br>'
+			+'<input type="checkbox" class="check-n" name="check" value="">&nbsp노래방</br>'
+			+'<input type="checkbox"  class="check-n" name="check" value="">&nbsp......</p>'
 			+'        </li>'	
 			+'    </ol>'
 			+'</fieldset>'
@@ -2052,17 +2089,14 @@ hyunseok.compUI={
 					
 			+'</form></section>'
 			+'</form></section>'
-				
-				
+						
 				+'</form>'
-			
-			
-			
+					
 			+'<fieldset class="buttons">'
 			+'<button id="btn-hotel-add" class="btn-info-air ">추가</button>'
 			+'<button id="btn-hotel-add-cancel" class="btn-info-air ">취소</button>'
 			+'</fieldset>'
-			
+			return hotel;
 		},	
 		airportUpdate : ()=>{
 			return '<style>'
@@ -2228,6 +2262,21 @@ hyunseok.compUI={
 			+'    min-width: 15%;'
 			+'    position: static;'
 			+'}'
+			+'#btn-air-update-cancel{'
+			+'    height: auto;'
+			+'    line-height: 280%;'
+			+'    color: #black;'
+			+'    border: none;'
+			+'    cursor: pointer;'
+			+'    font-weight: 700;'
+			+'    margin-left: 2%;'
+			+'    text-align: center;'
+			+'    border-radius: 4px;'
+			+'    -moz-border-radius: 4px;'
+			+'    -webkit-border-radius: 4px;'
+			+'    min-width: 15%;'
+			+'    position: static;'
+			+'}'
 
 			+'fieldset{'
 			+'  border :0px solid #fff;'
@@ -2253,11 +2302,20 @@ hyunseok.compUI={
 			+'    <h4>&nbsp&nbsp&nbsp&nbsp노선수정</h4>'
 		
 			+'<form><fieldset>'
+			+'<fieldset>'
+			+'    <legend>항공기 번호</legend>'
+			+'    <ol>'
+			+'        <li>'
+			+'<input type="text"  class="air-add-section" ></input>'
+			+'        </li>'	
+			+'    </ol>'
+			+'</fieldset>'
+			+'<fieldset>'
 			+'    <legend>항공사</legend>'
 			+'    <ol>'
 			+'        <li>'
 			+'<select class="air-section-drop">'
-			+'  <option value="agency">항공사/여행사</option>'
+			+'  <option value="air-drop">항공사/여행사</option>'
 			+' <option value="agency-1">Mytrip</option>'
 			+'  <option value="agency-2">아시아나</option>'
 			+'  <option value="agency-3">.....</option>'
@@ -2267,14 +2325,26 @@ hyunseok.compUI={
 			+'</fieldset>'
 			
 			+'<fieldset>'
-			+'    <legend>출발 일시</legend>'
+			+'    <legend>출발일</legend>'
 			+'    <ol>'
 			+'        <li>'
-			+'<input type="text"  id="datepicker-air-update" class="air-add-section" placeholder="날짜 입력" ></input>'
+			+'<input type="text" id="datepicker-air-update"  class="air-add-section" placeholder="출발 날짜" ></input>'
 			+'        </li>'	
 			+'    </ol>'
 			+'</fieldset>'
-						
+			+'<fieldset>'
+			+'    <legend>좌석 등급</legend>'
+			+'    <ol>'
+			+'        <li>'
+			+'<select class="air-section-drop">'
+			+'  <option value="air-drop">좌석 등급</option>'
+			+' <option value="agency-1">economy</option>'
+			+'  <option value="agency-2">business</option>'
+			+'  <option value="agency-3">first</option>'
+			+'</select>'
+			+'        </li>'	
+			+'    </ol>'
+			+'</fieldset>'
 			+'<fieldset>'
 			+'    <legend>항공 운임</legend>'
 			+'    <ol>'
@@ -2285,32 +2355,14 @@ hyunseok.compUI={
 			+'</fieldset>'
 			
 			+'<fieldset>'
-			+'    <legend> 경유 횟수</legend>'
+			+'    <legend>도착지</legend>'
 			+'    <ol>'
 			+'        <li>'
-			+'<select class="air-section-drop">'
-			+'  <option value="count-transit">경유 횟수</option>'
-			+' <option value="no-transit"> 직 항 </option>'
-			+'  <option value="one-transit"> 1회 경유</option>'
-			+'  <option value="many-transit">2회 이상 경유</option>'
-			+'</select>'
+			+'<input type="text"  class="air-add-section" ></input>'
 			+'        </li>'	
 			+'    </ol>'
-			+'</fieldset>'
-			
-			+'<fieldset>'
-			+'    <legend> 경유 공항</legend>'
-			+'    <ol>'
-			+'        <li>'
-			+'<select class="air-section-drop">'
-			+'  <option value="count-transit">경유 공항</option>'
-			+' <option value="no-transit"> 상하이 공항 </option>'
-			+'  <option value="one-transit"> 도쿄 공항</option>'
-			+'  <option value="many-transit">........</option>'
-			+'</select>'
-			+'        </li>'	
-			+'    </ol>'
-			+'</fieldset>'
+			+'</fieldset>'		
+		
 		
 			+'</form></section>'
 			+'</form></section>'
@@ -2319,6 +2371,7 @@ hyunseok.compUI={
 				+'</form>'
 				+'<fieldset class="buttons">'
 			+'<button id="btn-air-update-complete" ">수정 완료</button>'
+			+'<button id="btn-air-update-cancel">취소</button>'
 			+'</fieldset>'
 			+'</form>'
 		}		
@@ -2488,10 +2541,24 @@ hyunseok.compUI={
 			+'fieldset{'
 			+'text-align:left;'	
 			+'  }'
-			
+			+'#btn-hotel-update-cancel{'
+			+'    height: auto;'
+			+'    line-height: 280%;'
+			+'    color: #black;'
+			+'    border: none;'
+			+'    cursor: pointer;'
+			+'    font-weight: 700;'
+			+'    margin-left: 2%;'
+			+'    text-align: center;'
+			+'    border-radius: 4px;'
+			+'    -moz-border-radius: 4px;'
+			+'    -webkit-border-radius: 4px;'
+			+'    min-width: 15%;'
+			+'    position: static;'
+			+'}'
 			+'#btn-hotel-update-complete  {'
 			+'    height: auto;'
-			+'    line-height: 200%;'
+			+'    line-height: 280%;'
 			+'    background: #39a8ee;'
 			+'    color: #fff;'
 			+'    border: none;'
@@ -2501,8 +2568,6 @@ hyunseok.compUI={
 			+'    border-radius: 4px;'
 			+'    -moz-border-radius: 4px;'
 			+'    -webkit-border-radius: 4px;'
-			+'    margin-top: 5%;'
-			+'    margin-left: 15%;'
 			+'    min-width: 15%;'
 			+'    position: static;'
 			+'  }'
@@ -2618,6 +2683,7 @@ hyunseok.compUI={
 			+'</form></section>'
 			+'<fieldset class="buttons">'
 			+'<button id="btn-hotel-update-complete" ">수정 완료</button>'
+			+'<button id="btn-hotel-update-cancel" ">취소</button>'
 			+'</fieldset>'
 				
 				+'</form>'

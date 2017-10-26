@@ -106,8 +106,8 @@
 			</div>
 			<div class="modal-body" style="padding:80px 50px; float: left;">
 				<button type="submit" class="btn btn-success btn-block" style="background-color: blue;" data-dismiss="modal">Login By FaceBook</button>
-				<p style="position:absolute; width: 110%; padding: 50px 10px 0px 0px;">Not a member? <a id="joinmm" href="#"><b style="color: red;">Sign Up</b></a></p>
-				<p style="position:absolute; padding: 110px 0px 0px 0px;">Forgot <a id="findpass" href="#"><b style="color: blue;">Password?</b></a></p>
+				<p style="position:absolute; width: 110%; padding: 50px 10px 0px 0px;">Not a member? <a id="joinmm" href="#"><b id="signup" style="color: red;">Sign Up</b></a></p>
+				
 			</div>
 			<div class="modal-body" style="padding:80px 50px; float: right;">
 				<form role="form">
@@ -117,7 +117,7 @@
 					</div>
 					<div class="form-group">
 						<label for="psw"><span class="glyphicon glyphicon-lock"></span> Password</label>
-						<input type="text" class="form-control" id="psw" placeholder="Enter password">
+						<input type="password" class="form-control" id="psw" placeholder="Enter password">
 					</div>
 					<div class="checkbox">
 						<label><input type="checkbox" value="" checked>Remember me</label>
@@ -164,23 +164,6 @@
 
 
 
-
-
-
-
-
-
-
-    
-
-    
-
-
-
-
-
-
-
 		
 </body>
 <div id="wrapper"></div>
@@ -199,7 +182,7 @@ function join(){
 	$('.modal-content').html('<div class="modal-body" style="padding:40px 50px;">'
 			+'        <form role="form">'
 			+'          <div class="form-group">'
-			+'            <label for="usrname"><span class="glyphicon glyphicon-envelope"></span> Username</label>'
+			+'            <label for="usrname"><span class="glyphicon glyphicon-envelope"></span> E-MAIL</label>'
 			+'            <input type="text" class="form-control" id="usrname" placeholder="Enter email">'
 			+'          </div>'
 			+'          <div class="form-group">'
@@ -220,14 +203,14 @@ function findpass(){
 			+'            <label for="usrname"><span class="glyphicon glyphicon-envelope"></span> Username</label>'
 			+'            <input type="text" class="form-control" id="usrname" placeholder="Enter email">'
 			+'          </div>'
-			+'          <button type="submit" class="btn btn-success btn-block" data-dismiss="modal"><span class="glyphicon glyphicon-off"></span> FINDPASS</button>'
+			+'          <button type="submit" class="btn btn-success btn-block" data-dismiss="modal"><span class="glyphicon glyphicon-off"></span>FINDPASS</button>'
 			+'        </form>'
 			+'      </div>'
 			+'      <div class="modal-footer" style="">'
 			+'      </div>');
 };
 $('#loginBtn').click(e=>{
-	alert('로그인버튼 클릭했음');
+	alert('로그인버튼 클릭되었음');
 	var i = $('#usrname').val();
 	var p = $('#psw').val();
 	e.preventDefault();
@@ -248,7 +231,7 @@ $('#loginBtn').click(e=>{
            alert('글 개시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
         }
      });
-});
+}); 
 
 </script>
 </html>	

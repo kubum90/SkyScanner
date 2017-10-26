@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data @Lazy @Component
 public class FlightReserve {
-	private String airline,email;
-	private int flight_reserve_no;
-	
+   private String revervationNo, gender, surname, firstname, country, phone, email, flight_no, airline, cabin_class, departCity, arriveCity, departDate, arriveDate,authority;
+
 }
