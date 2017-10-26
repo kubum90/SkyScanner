@@ -18,12 +18,14 @@
    	FROM hotel
    	WHERE destination LIKE '%${action}%'
    </select>
-   <select id="selectOne" resultType="com.web.sky.member.Member" parameterType="com.web.sky.command.Command">
-		SELECT * 
-		FROM MEMBER 
-		WHERE email LIKE #{search} AND password LIKE #{column};
+   <select id="selectOne" resultType="string" parameterType="com.web.sky.command.Command">
+		SELECT email  FROM MEMBER 
+		WHERE email = 'base@a.com' ;
+		
    </select>
-   <select id="count"></select>
+   <select id="count" resultType="string" parameterType="com.web.sky.command.Command">
+   SELECT COUNT(*) AS count FROM MEMBER 
+   </select>
    <update id="update"></update>
    <delete id="delete"></delete>
 </mapper>

@@ -6,7 +6,51 @@
 	<insert id="insert"></insert>
 	<select id="selectList"></select>
 	<select id="selectOne"></select>
-	<select id="count"></select>
+	<select id="countMember" resultType="string">
+	SELECT COUNT(*)AS count FROM Member;	
+	</select>
+		<select id="countFlight" resultType="string">
+	SELECT COUNT(*)AS count FROM Flight;	
+	</select>
+		<select id="countHotel" resultType="string">
+	SELECT COUNT(*)AS count FROM Hotel;	
+	</select>
+
+	<select id="selectAdminEmail" resultType="string">
+	select email from member where authority like 1;
+	</select>
+
+<select id="selectAdminSir" resultType="string">
+	   SELECT sirname FROM member where authority like 1;
+	</select>
+	<select id="selectAdminFirst" resultType="string">
+	   SELECT first_Name FROM member where authority like 1;
+	</select>
+	
+	<select id="selectAdminPassword" resultType="string">
+	select password from member where authority like 1;
+	</select>
+	  <select  id="memberList" resultType="com.web.sky.member.Member">
+	 select email,first_Name as firstName,sirname,country,regdate  from member ;
+ </select>
+  <select  id="searchMember" resultType="com.web.sky.member.Member" parameterType="com.web.sky.command.Command">
+	select email,first_Name as firstName,sirname,country,regdate
+	 from member 
+	 where email=#{search} or first_Name =#{search} or sirname=#{search} or country=#{search};
+ </select>
+<select id="updateAdmin" resultType="com.web.sky.member.Member" parameterType="com.web.sky.command.Command">
+	 update member 
+	 set email=#{search} ,first_Name=#{column},sirname=#{dir}, password=#{action} 
+	 where authority like 1;
+	</select>
+	
+	<select id="newAdmin" resultType="com.web.sky.member.Member" parameterType="com.web.sky.command.Command">
+  		update member set authority='1' 
+  		where (email= #{search} AND password = #{action});
+		</select>
+	<select id="newAdmin1" resultType="com.web.sky.member.Member" parameterType="com.web.sky.command.Command">
+  		update member set authority='0' where authority='1';
+		</select>	
 	<update id="update"></update>
 	<delete id="delete"></delete>
 </mapper>

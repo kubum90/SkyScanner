@@ -165,7 +165,7 @@
 
 
 		
-</body>
+
 <div id="wrapper"></div>
 <div id="container"></div>
 
@@ -208,7 +208,7 @@ function findpass(){
 			+'      </div>'
 			+'      <div class="modal-footer" style="">'
 			+'      </div>');
-};
+};/* 
 $('#loginBtn').click(e=>{
 	alert('로그인버튼 클릭되었음');
 	var i = $('#usrname').val();
@@ -219,7 +219,7 @@ $('#loginBtn').click(e=>{
         method : 'post',
         dataType:'json',
         data : JSON.stringify({
-      	  'password' : p,
+      	  'pw' : p,
       	  'email' : i
         }),
         contentType : 'application/json',
@@ -231,7 +231,7 @@ $('#loginBtn').click(e=>{
            alert('글 개시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
         }
      });
-}); 
+});  */
 
 </script>
 </html>	

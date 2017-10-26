@@ -33,13 +33,13 @@ public class Command implements Commandable{
 		this.column = 
 				(column==null)?
 						"move":column;
-		System.out.println("컬럼: "+this.column);
+		//System.out.println("컬럼: "+this.column);
 	}
 	public void setSearch(String search){
 		this.search = 
 				(search==null)?
 						"move":search;
-		System.out.println("서치: "+this.search);
+		//System.out.println("서치: "+this.search);
 	}
 	@Override
 	public void process() {
@@ -51,7 +51,7 @@ public class Command implements Commandable{
 	}
 	@Override
 	public String toString() {
-		return "Command [DEST="+dir+"/"
+		return "Command [DEST="+search+"/"+column
 				+page+".jsp"+ ",ACTION="+action+"]";
 	}
 }

@@ -92,13 +92,23 @@ hyunseok.navbar=(()=>{
 })();
 hyunseok.home=(()=>{
 	var init=()=>{	
+		ctx=$$('x');
 		onCreate();
 	};
 	var onCreate=()=>{
+	
 		$('body').empty();
 		$('body').append(hyunseok.navbar.init());
 		$('body').append(hyunseok.introUI.home());
-		
+		$.getJSON(ctx+'/list/member',data=>{
+				$('#panel-body-member').html(data.total);
+			});
+		$.getJSON(ctx+'/list/flight',data=>{
+			$('#panel-body-flight').html(data.total);
+		});
+		$.getJSON(ctx+'/list/hotel',data=>{
+			$('#panel-body-hotel').html(data.total);
+		});
 		
 		$('#list-adminBtn').click(()=>{
 			alert('관리자.');
@@ -168,29 +178,101 @@ hyunseok.home=(()=>{
 })();
 hyunseok.admin=(()=>{
 	var init=()=>{	
+		cts=$$('x');
 		onCreate();
+		
 	};
 	var onCreate=()=>{
 		$('body').empty();
 		$('body').append(hyunseok.navbar.init());
 		$('body').append(hyunseok.compUI.admin());
 
+		$.getJSON(ctx+'/admin/now',data=>{
+			$('#w3-input-email').val(data.email);			
+			$('#w3-input-firstname').val(data.firstname);
+			$('#w3-input-sirname').val(data.sirname);
+			$('#w3-input-password').val(data.password);
+		});
+		
+		
 		$('#admin-update-btn').click(e=>{
 			alert('관리자 정보 수정');
+			var i=$('#w3-input-email').val();
+			var s=$('#w3-input-sirname').val();
+			var f=$('#w3-input-firstname').val();
+			var p=$('#w3-input-password').val();
+			alert('email'+i);
+			
+			e.preventDefault();
+			$.ajax({
+				url:ctx+'/'+i+'/'+s+'/'+f+'/'+p,
+				method:'post',
+				dataType:'json',
+				data : JSON.stringify({
+					'email':i,
+					'sirname':s,
+					'firstname':f,
+					'password':p
+				}),
+				contentType:'application/json',
+				 success : (data)=>{
+					 alert('홈');
+						$('body').empty();
+						$('.header').empty();
+						hyunseok.navbar.init();
+						hyunseok.home.init();			          
+			        },
+			        error : (x,s,m)=>{
+			            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+			       }
+			})
+		
 			});
+		
 		$('#admin-update-btn-cancel').click(e=>{
 			alert('관리자 정보 수정 취소');
-			$('#w3-input-email').val("");
-			$('#w3-input-name').val("");
-			$('#w3-input-password').val("");
+			$.getJSON(ctx+'/admin/now',data=>{
+				$('#w3-input-email').val(data.email);			
+				$('#w3-input-firstname').val(data.firstname);
+				$('#w3-input-sirname').val(data.sirname);
+				$('#w3-input-password').val(data.password);
+			});
+			
 			});
 		$('#new-admin-update-btn').click(e=>{
-			alert('새 관리자 정보 수정 ');
-			});
+			alert('새 관리자 정보 수정 ');	
+			var r=$('#w3-input-email1').val();			
+			var p=$('#w3-input-password1').val();
+			alert('email'+r);
+			alert('password'+p);
+			e.preventDefault();
+			$.ajax({
+				url:ctx+'/a/'+r+'/'+p,
+				method:'post',
+				dataType:'json',
+				data : JSON.stringify({
+					'email':r,				
+					'password':p
+				}),
+				contentType:'application/json',
+				 success : (data)=>{
+			           alert('ajax 통신:'+data.success);			          
+			           alert('홈');
+						$('body').empty();
+						$('.header').empty();
+						hyunseok.navbar.init();
+						hyunseok.home.init();
+				 },
+			     error : (x,s,m)=>{
+			            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+			     }
+			})	
+			
+		});
+		
 		$('#new-admin-update-btn-cancel').click(e=>{
 			alert('새 관리자 정보 수정 취소');
 			$('#w3-input-email1').val("");
-			$('#w3-input-name1').val("");
 			$('#w3-input-password1').val("");
 		});
 
@@ -199,13 +281,58 @@ hyunseok.admin=(()=>{
 })();
 hyunseok.member=(()=>{
 	var init=()=>{	
+		cts=$$('x');
 		onCreate();
 	};
 	var onCreate=()=>{
 		$('body').empty();
 		$('body').append(hyunseok.navbar.init());
 		$('body').append(hyunseok.compUI.member());
-		
+	
+	   $.getJSON(ctx+'/a/list/member',data=>{
+		var memberList='';
+			
+			$.each(data.memberList,(i,val)=>{
+				memberList+='<tr id="tr-'+i+'"><td><input type="checkbox" id="check-'+i+'" ></td><td>'+val.email
+				+'</td><td>'+val.firstName+'</td><td>'+val.sirname+'</td><td>'
+				+val.country+'</td><td>'+val.regdate+'</td></tr>';
+				
+			})
+			$('#memberList-tab').append(memberList);
+			$('#memberList-tab tr').each(()=>{
+				console.log('mmm'+$(this).attr("id"));
+			});
+		});
+
+	   	$('#member-search-btn').click(e=>{
+			alert('멤버 검색');
+			var i=$('#searchContent').val();
+			alert('searchContent'+i);
+			e.preventDefault();
+			$.ajax({
+				url:ctx+'/search/'+i,
+				method:'post',
+				dataType:'json',
+				data : JSON.stringify({
+					'search':i
+							}),
+			contentType:'application/json',
+			
+			success : (data)=>{
+			           alert('ajax 통신:'+data.success);			          
+			           var list='';
+			           console.log(data.searchMember);
+			          for(var i=0;i<data.searchMember.length;i++){
+						list+='<tr><td><input type="checkbox" name="check" value=""></td><td>'+data.searchMember[i].email+'</td><td>'+data.searchMember[i].firstName+'</td><td>'+data.searchMember[i].sirname+'</td><td>'+data.searchMember[i].country+'</td><td>'+data.searchMember[i].regdate+'</td></tr>'
+					}
+					$('#memberList-tab').html(list);
+				 },
+			error : (x,s,m)=>{
+			            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+			     }
+			});
+	   	});
+	  
 		$('#btn-member-update').click(e=>{
 			alert('member update');
 			$('body').empty();
@@ -214,8 +341,13 @@ hyunseok.member=(()=>{
 			$('body').append(hyunseok.compUI.memberUpdate());
 			hyunseok.memberUpdate.init();
 			});
+		
 		$('#btn-member-update-cancel').click(e=>{
 			alert('멤버 삭제');
+			if($('#check-'+i+'').is("checked")){
+				
+			} ;
+
 			});
 		
 	};
@@ -590,16 +722,16 @@ hyunseok.introUI={
 					+'<div> '
 					+'  <div class="row">'
 					+'    <div class="column"><div class="panel panel-primary">'
-					+'      <div class="panel-heading">회원 Count</div>'
-					+'      <div class="panel-body">count 명</div>'
+					+'      <div class="panel-heading">Member Count</div>'
+					+'      <div id="panel-body-member" class="panel-body"></div>'
 					+'    </div></div>'
 					+'      <div class="column"><div class="panel panel-primary">'
 					+'      <div class="panel-heading">Airline Count</div>'
-					+'      <div class="panel-body">count</div>'
+					+'      <div id="panel-body-flight" class="panel-body"></div>'
 					+'  </div>  </div>'
 					+'   <div class="column"><div class="panel panel-primary">'
 					+'      <div class="panel-heading">Hotel Count</div>'
-					+'      <div class="panel-body">count</div>'
+					+'      <div id="panel-body-hotel" class="panel-body"></div>'
 					+'    </div> </div>'
 					+'</div>'
 					+'</div>'
@@ -864,11 +996,13 @@ hyunseok.compUI={
 			+'</div>'
 			+'<form class="w3-container">'
 			+'  <label>이메일 주소</label>'
-			+'  <input class="w3-input" id="w3-input-email" type="text" placeholder="Admin@gmail.com">'
+			+'  <input class="w3-input" id="w3-input-email" value=""></input>'
 			+'  <label>이름</label>'
-			+'  <input class="w3-input" id="w3-input-name" type="text" placeholder="관리자">'
+			+'  <input class="w3-input" id="w3-input-sirname" value=""></input>'
+			+'  <label>성</label>'
+			+'  <input class="w3-input" id="w3-input-firstname" value=""></input>'
 			+'  <label>비밀 번호</label>'
-			+'  <input class="w3-input" id="w3-input-password" type="text" placeholder="비밀번호 변경">'
+			+'  <input class="w3-input" id="w3-input-password" value="" type="password"></input>'
 			+'</form>'
 			+'<fieldset class="buttons">'
 			+'<button id="admin-update-btn"class="btn-info-admin ">정보 수정</button>'
@@ -882,16 +1016,15 @@ hyunseok.compUI={
 			+'<form class="w3-container">'
 			+'  <label>이메일 주소</label>'
 			+'  <input class="w3-input" id="w3-input-email1" type="text" >'
-			+'  <label>이름</label>'
-			+'  <input class="w3-input" id="w3-input-name1" type="text" >'
 			+'  <label>비밀 번호</label>'
-			+'  <input class="w3-input" id="w3-input-password1" type="text" >'
+			+'  <input class="w3-input" id="w3-input-password1" type="password" >'
 			+'</form>'
 			+'<fieldset class="buttons">'
 			+'<button id="new-admin-update-btn"class="btn-info-admin ">관리자 설정</button>'
 			+'<button id="new-admin-update-btn-cancel" class="btn-info-admin ">취소</button>'
 			+'</fieldset>'
 			+'</body>'
+			
 		},
 		member : ()=>{
 			var member= '<style>'
@@ -1065,27 +1198,17 @@ hyunseok.compUI={
 			+'  <h1 class="title-h1">Member Info</h1>'	
 			
 			+'<form class="search-air">'
-			+'<select>'
-			+'  <option >E-mail</option>'
-			+' <option >이름</option>'
 			+'</select>'
-			+' <input type="text" class="myInput"  placeholder="search">'
-			+'<button type="button"  class="btn btn-info btn-md">검색</button>'
+			+' <input type="text" id="searchContent" class="myInput"  placeholder="search">'
+			+'<button type="button"  id="member-search-btn"class="btn btn-info btn-md">검색</button>'
 			+'</form>'
 			+'<div id=datagrid-div>'
 			+'<div class="datagrid">'
-			+'<table>'
+			+'<table id="member-sheet">'
 			+'<thead class="datagrid-thead" ><tr><th>선택</th><th>이메일</th><th>성</th><th>이름</th><th >국가</th><th >가입일</th></tr></thead>'
-			+'<tbody>';
-			var arr=[{email:'sky@gmail.com',first_name:'홍',sirname:'길동',country:'Korea',regdate:'2017/10/23'},
-				{email:'sky@gmail.com',first_name:'홍',sirname:'길동',country:'Korea',regdate:'2017/10/23'},
-				{email:'sky@gmail.com',first_name:'홍',sirname:'길동',country:'Korea',regdate:'2017/10/23'},
-				{email:'sky@gmail.com',first_name:'홍',sirname:'길동',country:'Korea',regdate:'2017/10/23'},
-				{email:'sky@gmail.com',first_name:'홍',sirname:'길동',country:'Korea',regdate:'2017/10/23'}];
-			$.each(arr,(i,val)=>{
-				member+='<tr><td><input type="checkbox" name="check" value=""></td><td>'+val.email+'</td><td>'+val.first_name+'</td><td>'+val.sirname+'</td><td>'+val.country+'</td><td>'+val.regdate+'</td></tr>'
-			})			
-			member+='<tfoot class="datagrid-paging"><tr><td colspan="6"><div id="paging"><ul>'   
+			+'<tbody id="memberList-tab"></tbody>'
+			
+			+'<tfoot class="datagrid-paging"><tr><td colspan="6"><div id="paging"><ul>'   
 			+'<li>'
 			+'      <a href="#" aria-label="Previous">'
 			+'        <span aria-hidden="true">&laquo;</span>'
@@ -1101,12 +1224,13 @@ hyunseok.compUI={
 			+'        <span aria-hidden="true">&raquo;</span>'
 			+'      </a>'
 			+'    </li> </ul></div></tr></tfoot>'
-			+'</tbody>'
+			
 			+'</table></div></div>'	
 			+'<fieldset class="buttons">'
 			+'<button id="btn-member-update"class="btn-info-admin ">정보 수정</button>'
 			+'<button id="btn-member-update-cancel" class="btn-info-admin ">삭제</button>'
 			+'</fieldset>'
+			
 			return member;
 		},	
 		memberUpdate : ()=>{
@@ -1565,14 +1689,17 @@ hyunseok.compUI={
 			+'<table>'
 			+'<thead class="datagrid-thead" ><tr><th>선택</th><th>항공기 번호</th><th>항공사</th><th>좌석 등급</th><th>춟발 지역</th><th >도착 지역</th><th >출발일</th><th >가격</th></tr></thead>'
 			+'<tbody>';
+		
 			var arr=[{flight_no:'KE908',airline:'대항항공',cabin_class:'econmy',place_from:'인천',place_to:'뉴욕존에프케네디',date_depart:'2017.10.24',price:'1,000,000'},
 				{flight_no:'KE908',airline:'대항항공',cabin_class:'econmy',place_from:'인천',place_to:'뉴욕존에프케네디',date_depart:'2017.10.24',price:'1,000,000'},
 				{flight_no:'KE908',airline:'대항항공',cabin_class:'econmy',place_from:'인천',place_to:'뉴욕존에프케네디',date_depart:'2017.10.24',price:'1,000,000'},
 				{flight_no:'KE908',airline:'대항항공',cabin_class:'econmy',place_from:'인천',place_to:'뉴욕존에프케네디',date_depart:'2017.10.24',price:'1,000,000'},
 				{flight_no:'KE908',airline:'대항항공',cabin_class:'econmy',place_from:'인천',place_to:'뉴욕존에프케네디',date_depart:'2017.10.24',price:'1,000,000'},
 				];
+			
 			$.each(arr,(i,val)=>{
 				airport+='<tr><td><input type="checkbox" name="check" value=""></td><td>'+val.flight_no+'</td><td>'+val.airline+'</td><td>'+val.cabin_class+'</td><td>'+val.place_from+'</td><td>'+val.place_to+'</td><td>'+val.date_depart+'</td><td>'+val.price+'</td></tr>'
+			
 			})			
 			airport+='<tfoot class="datagrid-paging"><tr><td colspan="8"><div id="paging"><ul>'   
 			+'<li>'
