@@ -24,7 +24,6 @@ skyAir.common=(()=>{
         	  ms.common.init(ctx);
       });
       $('#adminhi').click(()=>{
-    	  
     	  $('body').empty();
         	  hyunseok.hello.init(ctx);
       });
@@ -35,7 +34,6 @@ skyAir.common=(()=>{
     	  $('body').empty();
     	  skyAir.ticket.init(ctx);
       });
-    
     $('#loginBtn').click(e=>{
     	alert('로그인버튼 클릭되었음');
     	var i = $('#usrname').val();
@@ -56,8 +54,9 @@ skyAir.common=(()=>{
             	if(data.success==='통신성공'){
             		alert('로그인 성공');
             		sessionStorage.setItem('email',data.bean.email);
-            		$('#login').remove();
-            		$('#button').before(compUI.span('session').text(data.bean.name+'님 환영합니다.'));
+            		
+            		//$('#login').remove();
+            		//$('#button').before(compUI.span('session').text(data.bean.name+'님 환영합니다.'));
             		
             	}else{
             		alert('로그인 실패');
@@ -83,7 +82,7 @@ skyAir.common=(()=>{
 			+'            <label for="psw"><span class="glyphicon glyphicon-lock"></span> Password</label>'
 			+'            <input type="text" class="form-control" id="psw" placeholder="Enter password">'
 			+'          </div>'
-			+'          <button type="submit" class="btn btn-success btn-block" data-dismiss="modal"><span class="glyphicon glyphicon-off"></span> JOIN</button>'
+			+'          <button id="goJoin" type="submit" class="btn btn-success btn-block" data-dismiss="modal"><span class="glyphicon glyphicon-off"></span> JOIN</button>'
 			+'    <br />'
 			+'        </form>'
 			+'      </div>'
@@ -94,6 +93,39 @@ skyAir.common=(()=>{
     	$('.clos').click(()=>{
     		location.reload();
     	});
+    	$('#goJoin').click(e=>{
+    		e.preventDefault();
+    		alert('조인 버튼 클릭');
+    		var _email = $('#usrname').val();
+    		var _pw = $('#psw').val();
+    		$.ajax({
+    			url:ctx+'/join',
+    			method:'post',
+    			dataType:'json',
+    			data:JSON.stringify({
+                	  'email' : _email,
+                  	  'password' : _pw
+                }),
+                contentType : 'application/json',
+                success : (data)=>{
+                	alert('통신: '+data.success);
+                	
+              /*  	if(data.success==='통신성공'){
+                		alert('가입성공');
+                		//$('#login').remove();
+                		//$('#button').before(compUI.span('session').text(data.bean.name+'님 환영합니다.'));
+                	}else{
+                		alert('가입 실패');
+                	}   */   	
+                   
+                },
+                error : (x,s,m)=>{
+                   alert('가입 에러'+m+'\n x에러: '+x+'\n s에러'+s);
+                }
+    		});
+    	});
+    	
+    	
     	 $('#loginmm').click(()=>{
     	    	alert('???');
     	    	var loginmm='<div class="modal-content" >'

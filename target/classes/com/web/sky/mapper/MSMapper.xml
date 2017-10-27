@@ -12,15 +12,19 @@
 		<result property="price" column="price"/>
 	</resultMap>
 	
-   <insert id="insert"></insert>
+   <insert id="memberInsert" parameterType="com.web.sky.command.Command">
+   	Insert Into Member(email,password) values (#{search},#{column});
+   </insert>
+   
+   
    <select id="selectList" resultMap="hotel" parameterType="com.web.sky.command.Command">
    	SELECT hotel_name, destination, district, price
    	FROM hotel
    	WHERE destination LIKE '%${action}%'
    </select>
-   <select id="selectOne" resultType="string" parameterType="com.web.sky.command.Command">
-		SELECT email  FROM MEMBER 
-		WHERE email = 'base@a.com' ;
+   <select id="selectOne" resultType="com.web.sky.member.Member" parameterType="com.web.sky.command.Command">
+		SELECT *  FROM MEMBER 
+		WHERE email = #{search} and password = #{column};
 		
    </select>
    <select id="count" resultType="string" parameterType="com.web.sky.command.Command">

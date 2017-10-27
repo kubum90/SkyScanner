@@ -1,6 +1,7 @@
 package com.web.sky.command;
 
 import org.springframework.context.annotation.Lazy;
+
 import org.springframework.stereotype.Component;
 
 import com.web.sky.constants.*;
@@ -33,13 +34,13 @@ public class Command implements Commandable{
 		this.column = 
 				(column==null)?
 						"move":column;
-		//System.out.println("컬럼: "+this.column);
+		System.out.println("컬럼: "+this.column);
 	}
 	public void setSearch(String search){
 		this.search = 
 				(search==null)?
 						"move":search;
-		//System.out.println("서치: "+this.search);
+		System.out.println("서치: "+this.search);
 	}
 	@Override
 	public void process() {

@@ -21,8 +21,10 @@ import com.web.sky.command.Command;
 import com.web.sky.hotel.Hotel;
 import com.web.sky.mapper.MSMapper;
 import com.web.sky.member.Member;
-import com.web.sky.service.IGetService;
+
 import com.web.sky.service.IListService;
+import com.web.sky.service.IPostService;
+
 
 @RestController
 public class MSController {
@@ -35,14 +37,61 @@ public class MSController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MSController.class);
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody Map<?, ?> login(@RequestBody Member mem) {
-	
+	@RequestMapping(value = "/join", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody Map<?, ?> join (@RequestBody Member mem) {
 		Map<String, Object> map = new HashMap<>();
 		
 		cmd.setSearch(mem.getEmail());
 		cmd.setColumn(mem.getPassword());
 		System.out.println("받은 이메일::" + cmd.getSearch());
+		System.out.println("받은 패스워드::" + cmd.getColumn());
+		
+		IPostService postService = x->{
+				ms.memberInsert(cmd);
+					
+		};
+		postService.execute(cmd);
+		
+/*		System.out.println("실행 후 회원수"+(ms.count(cmd)));
+*/	/*	new IPostService() {
+			@Override
+			public void execute(Object o) {
+				System.out.println("실행 전 체크"+cmd.getSearch());
+				System.out.println("실행 전 회원수"
+						+
+						(ms.count(cmd)));
+				ms.memberInsert(cmd);	
+				
+				System.out.println("실행 전 체크"
+						+
+						((Member)ms.selectOne(cmd)).getPassword());
+				System.out.println("실행 후 회원수"
+						+
+						(ms.count(cmd)));
+				
+			}
+		}.execute(null);*/
+		map.put("success", "success");
+		return map;
+	};
+	
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody Map<?, ?> login(@RequestBody Member mem) {
+		Map<String, Object> map = new HashMap<>();
+		cmd.setSearch(mem.getEmail());
+		cmd.setColumn(mem.getPassword());
+		System.out.println("받은 이메일::" + cmd.getSearch());
+
+		member.setEmail((String)ms.selectOne(cmd));
+		if(member.getEmail()==null) {
+			System.out.println("실패");
+		}else {
+			map.put("success", "통신성공");
+			map.put("bean", member);	
+		}
+		System.out.println("aaaa =>"+member.getEmail());
+		return map;
 		
 		/*IGetService detailService = (x) -> {
 			System.out.println("llllll"+((Member)ms.selectOne(cmd)).getEmail());
@@ -59,11 +108,6 @@ public class MSController {
 		}.execute(null);*/
 		//Member bean = (Member) detailService.execute(cmd);
 		
-		member.setEmail("kkkkk"+((String)ms.selectOne(cmd)));
-		System.out.println("aaaa =>"+member.getEmail());
-		map.put("success", "통신성공");
-		map.put("bean", member);
-		return map;
 	};
 
 	/*

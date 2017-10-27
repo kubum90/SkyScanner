@@ -4,11 +4,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import lombok.Data;
 
-@Data @Component
+@Data @Lazy @Component
 public class Member {
-	private String email,sirname,first_name,
-	country,regdate,password;
-	private int budget,news_seq;
-	
-	
+   private String email,sirname,firstName,
+   country,regdate,oldPassword,newPassword,password;
+   private int budget,news_seq;
+   
 }
