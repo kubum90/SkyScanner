@@ -22,6 +22,7 @@ skyAir.common=(()=>{
 			}else{
 				$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');	
 			}
+    	  
   	  $('#account').click(()=>{
   		  sessionStorage.clear();
   		  location.reload();
