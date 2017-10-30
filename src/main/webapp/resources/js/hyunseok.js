@@ -77,6 +77,7 @@ hyunseok.navbar=(()=>{
 		$('#identity').click(()=>{
 			$('body').empty();
 			skyAir.common.init(ctx);
+			location.reload();
 			$('#home-container').removeClass('#home-container').addClass('.homecontent').css("background-image", "url(//content.skyscnr.com/6bf5a29ce130132f28e912434f295b76/canada-lake-feb.jpg?crop=2000px:599px&quality=80)");
 		      $('#first').removeClass('#first').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/853dd1ece19afb1f46dabe8485021767/GettyImages-564760601.jpg?resize=500px:600px&quality=50)");
 		      $('#two').removeClass('#two').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/a60a89126ed3f927d123c815b610298d/GettyImages-475335963.jpg?resize=600px:600px&quality=50)");
@@ -85,8 +86,7 @@ hyunseok.navbar=(()=>{
 		      $('#saleone').removeClass('#saleone').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/3d13492ebf1c1b0ac415bea8e172b960/GettyImages-505532917.jpg?resize=500px:600px&quality=50)");
 		      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
 		      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
-		      location.reload();
-		});
+	    });
 		
 	};
 	return {init:init};
@@ -159,7 +159,6 @@ hyunseok.home=(()=>{
 			$('body').empty();
 			$('.header').empty();
 			hyunseok.navbar.init();
-
 			$('body').append(hyunseok.compUI.member());
 			hyunseok.member.init();
 			});
@@ -191,7 +190,7 @@ hyunseok.admin=(()=>{
 		$.getJSON(ctx+'/admin/now',data=>{
 			$('#w3-input-email').val(data.email);			
 			$('#w3-input-firstname').val(data.firstname);
-			$('#w3-input-sirname').val(data.sirname);
+			$('#w3-input-surname').val(data.surname);
 			$('#w3-input-password').val(data.password);
 		});
 		
@@ -199,20 +198,20 @@ hyunseok.admin=(()=>{
 		$('#admin-update-btn').click(e=>{
 			alert('관리자 정보 수정');
 			var i=$('#w3-input-email').val();
-			var s=$('#w3-input-sirname').val();
+			var s=$('#w3-input-surname').val();
 			var f=$('#w3-input-firstname').val();
 			var p=$('#w3-input-password').val();
 			alert('email'+i);
 			
 			e.preventDefault();
 			$.ajax({
-				url:ctx+'/'+i+'/'+s+'/'+f+'/'+p,
+				url:ctx+'/updateAdmin',
 				method:'post',
 				dataType:'json',
 				data : JSON.stringify({
 					'email':i,
-					'sirname':s,
-					'firstname':f,
+					'surname':s,
+					'firstName':f,
 					'password':p
 				}),
 				contentType:'application/json',
@@ -230,16 +229,6 @@ hyunseok.admin=(()=>{
 		
 			});
 		
-		$('#admin-update-btn-cancel').click(e=>{
-			alert('관리자 정보 수정 취소');
-			$.getJSON(ctx+'/admin/now',data=>{
-				$('#w3-input-email').val(data.email);			
-				$('#w3-input-firstname').val(data.firstname);
-				$('#w3-input-sirname').val(data.sirname);
-				$('#w3-input-password').val(data.password);
-			});
-			
-			});
 		$('#new-admin-update-btn').click(e=>{
 			alert('새 관리자 정보 수정 ');	
 			var r=$('#w3-input-email1').val();			
@@ -248,7 +237,7 @@ hyunseok.admin=(()=>{
 			alert('password'+p);
 			e.preventDefault();
 			$.ajax({
-				url:ctx+'/a/'+r+'/'+p,
+				url:ctx+'/updateAdmin/new',
 				method:'post',
 				dataType:'json',
 				data : JSON.stringify({
@@ -256,20 +245,30 @@ hyunseok.admin=(()=>{
 					'password':p
 				}),
 				contentType:'application/json',
-				 success : (data)=>{
-			           alert('ajax 통신:'+data.success);			          
-			           alert('홈');
-						$('body').empty();
-						$('.header').empty();
-						hyunseok.navbar.init();
-						hyunseok.home.init();
-				 },
-			     error : (x,s,m)=>{
-			            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
-			     }
+				success : (data)=>{
+					alert('ajax 통신:'+data.success);			          
+					alert('홈');
+					$('body').empty();
+					$('.header').empty();
+					hyunseok.navbar.init();
+					hyunseok.home.init();
+				},
+				error : (x,s,m)=>{
+					alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+				}
 			})	
 			
 		});
+		$('#admin-update-btn-cancel').click(e=>{
+			alert('관리자 정보 수정 취소');
+			$.getJSON(ctx+'/admin/now',data=>{
+				$('#w3-input-email').val(data.email);			
+				$('#w3-input-firstname').val(data.firstname);
+				$('#w3-input-surname').val(data.surname);
+				$('#w3-input-password').val(data.password);
+			});
+			
+			});
 		
 		$('#new-admin-update-btn-cancel').click(e=>{
 			alert('새 관리자 정보 수정 취소');
@@ -282,27 +281,43 @@ hyunseok.admin=(()=>{
 })();
 hyunseok.member=(()=>{
 	var init=()=>{	
-		cts=$$('x');
+		ctx=$$('x');
 		onCreate();
 	};
 	var onCreate=()=>{
 		$('body').empty();
 		$('body').append(hyunseok.navbar.init());
 		$('body').append(hyunseok.compUI.member());
-	
+
+		
 	   $.getJSON(ctx+'/a/list/member',data=>{
 		var memberList='';
-			
+		var pagination='';
+		
 			$.each(data.memberList,(i,val)=>{
-				memberList+='<tr id="tr-'+i+'"><td><input type="checkbox" id="check-'+i+'" ></td><td>'+val.email
-				+'</td><td>'+val.firstName+'</td><td>'+val.sirname+'</td><td>'
-				+val.country+'</td><td>'+val.regdate+'</td></tr>';
-				
-			})
+				memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+val.email
+				+'</td><td  id="firstname-'+i+'">'+val.firstName+'</td><td  id="surname-'+i+'">'+val.surname+'</td><td  id="country-'+i+'">'
+				+val.country+'</td><td  id="regdate-'+i+'">'+val.regdate+'</td></tr>';
+				})
 			$('#memberList-tab').append(memberList);
-			$('#memberList-tab tr').each(()=>{
-				console.log('mmm'+$(this).attr("id"));
-			});
+			$('#paging').append(
+					+'<ul>'   
+					+'<li>'
+					+'      <a href="#" aria-label="Previous">'
+					+'        <span aria-hidden="true">&laquo;</span>'
+					+'      </a>'
+					+'    </li>'
+					+'    <li><a href="#">1</a></li>'
+					+'    <li><a href="#">2</a></li>'
+					+'    <li><a href="#">3</a></li>'
+					+'    <li><a href="#">4</a></li>'
+					+'    <li><a href="#">5</a></li>'
+					+'    <li>'
+					+'      <a href="#" aria-label="Next">'
+					+'        <span aria-hidden="true">&raquo;</span>'
+					+'      </a>'
+					+'    </li>'
+					+'</ul>');
 		});
 
 	   	$('#member-search-btn').click(e=>{
@@ -324,39 +339,96 @@ hyunseok.member=(()=>{
 			           var list='';
 			           console.log(data.searchMember);
 			          for(var i=0;i<data.searchMember.length;i++){
-						list+='<tr><td><input type="checkbox" name="check" value=""></td><td>'+data.searchMember[i].email+'</td><td>'+data.searchMember[i].firstName+'</td><td>'+data.searchMember[i].sirname+'</td><td>'+data.searchMember[i].country+'</td><td>'+data.searchMember[i].regdate+'</td></tr>'
+						list+='<tr id="tr-'+i+'"><td><input type="checkbox" id="check-'+i+'" name="check" value=""></td><td id="email-'+i+'">'+data.searchMember[i].email+'</td><td id="firstname-'+i+'">'+data.searchMember[i].firstName+'</td><td id="surname-'+i+'">'+data.searchMember[i].surname+'</td><td id="country-'+i+'">'+data.searchMember[i].country+'</td><td id="regdate-'+i+'">'+data.searchMember[i].regdate+'</td></tr>'
 					}
 					$('#memberList-tab').html(list);
 				 },
-			error : (x,s,m)=>{
+				 		error : (x,s,m)=>{
 			            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
 			     }
 			});
 	   	});
-	  
-		$('#btn-member-update').click(e=>{
+	   	$('#btn-member-update-cancel').click(e=>{
+	   		e.preventDefault();
+	   		if($("input:checkbox[name=check]:checked").length==0){
+	   			alert("삭제할 계정을 선택해주세요");
+	   		}else{		
+	   		$.each($('#memberList-tab tr'),(i)=>{
+	   			console.log('check'+$('#check-'+i).prop("checked"));
+	   			var check=$('#check-'+i).prop("checked");
+	   		  		 if(check==true){
+	   				var i=$('#email-'+i).text();
+	   				alert(i);
+	   			
+	   				$.ajax({
+	   					url:ctx+'/delete/email',
+	   					method:'post',
+	   					dataType:'json',
+	   					data : JSON.stringify({
+	   						'email':i	   						
+	   					}),
+	   					contentType:'application/json',
+	   					 success : (data)=>{
+	   					alert('삭제완료');
+	   					
+	   						
+	   				        },
+	   				        error : (x,s,m)=>{
+	   				            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+	   				       }
+	   				})
+	   				};
+	   		});
+	   		$('body').empty();
+		     hyunseok.member.init();
+	   		};
+	   	});
+
+	   	$('#btn-member-update').click(e=>{
+	   		e.preventDefault();
 			alert('member update');
-			$('body').empty();
-			$('.header').empty();
-			hyunseok.navbar.init();
-			$('body').append(hyunseok.compUI.memberUpdate());
-			hyunseok.memberUpdate.init();
+					
+			
+			if($("input:checkbox[name=check]:checked").length==1){
+				$.each($('#memberList-tab tr'),(i)=>{
+					console.log('check'+$('#check-'+i).prop("checked"));
+					var check=$('#check-'+i).prop("checked");
+					if(check==true){
+						var k=$('#email-'+i).text();
+						var f=$('#firstname-'+i).text();
+						var s=$('#surname-'+i).text();
+						var c=$('#country-'+i).text();
+						
+						alert(k);
+						$('body').empty();
+						hyunseok.navbar.init();
+						$('body').append(hyunseok.compUI.memberUpdate());
+						hyunseok.memberUpdate.init();
+						$('#ac-email').val(k);
+						if(f==="null"){$('#ac-first-name').val(""); }else{$('#ac-first-name').val(f);};
+						if(s==="null"){$('#ac-last-name').val(""); }else{$('#ac-last-name').val(s);};
+						if(c==="null"){$('#ac-locale').val(""); }else{$('#ac-locale').val(c);};
+						
+						
+						
+					};
+				});
+			}else if($("input:checkbox[name=check]:checked").length==0){
+				alert("계정을 선택해주세요");
+			}else{
+				alert("계정 하나만 선택해주세요");
+			};
+	  
+				  
 			});
 		
-		$('#btn-member-update-cancel').click(e=>{
-			alert('멤버 삭제');
-			if($('#check-'+i+'').is("checked")){
-				
-			} ;
-
-			});
 		
 	};
 	return {init:init};
 })();
 hyunseok.memberUpdate=(()=>{
 	var init=()=>{	
-		
+		ctx=$$('x');
 		onCreate();
 	};
 	var onCreate=()=>{
@@ -364,53 +436,61 @@ hyunseok.memberUpdate=(()=>{
 		$('body').append(hyunseok.navbar.init());
 		$('body').append(hyunseok.compUI.memberUpdate());
 			
-		$('#memberUpdate-email').click(e=>{
-			alert('이메일 업데이트');
-			});
-		$('#memberUpdate-email-cancel').click(e=>{
-			alert('이메일 업데이트 취소');
-			$('#ac-email').val("");
-			});
-		$('#memberUpdate-password').click(e=>{
-			alert('비번 업데이트');
-			
-			});
-		$('#memberUpdate-password-cancel').click(e=>{
-			alert('비번 업데이트 취소');
-			$('#ac-old-password').val("");
-			$('#ac-new-password').val("");
-			$('#ac-confirm-password').val("");
-			});
-		$('#memberUpdate-profile').click(e=>{
-			alert('프로필 업데이트');
-			});
-		$('#memberUpdate-profile-cancel').click(e=>{
-			alert('프로필 업데이트 취소');
-			$('#ac-first-name').val("");
-			$('#ac-last-name').val("");
-			});
-		$('#memberUpdate-basic').click(e=>{
-			alert('기본 정보 업데이트');
-			
-			});
-		$('#memberUpdate-basic-cancel').click(e=>{
-			alert('기본 정보 업데이트 취소');
-			$('#home-airport').val("");
-			});
 		$('#member-update-btn').click(e=>{
-			alert('계정 수정 완료');
-			$('body').empty();
-			hyunseok.navbar.init();
-			$('body').append(hyunseok.compUI.member());
-			hyunseok.member.init();
+			
+				
+			var i=$("#ac-email").val();
+			var o=$("#ac-old-password").val();
+			var n=$("#ac-new-password").val();
+			var f=$("#ac-first-name").val();
+			var l=$("#ac-last-name").val();
+			var c=$("#ac-locale").val();
+			e.preventDefault();
+			$.ajax({
+				url:ctx+'/update/member',
+				method:'post',
+				dataType:'json',
+				data : JSON.stringify({
+					'email':i,				
+					'oldPassword':o,
+					'newPassword':n,
+					'firstName':f,
+					'surname':l,
+					'country':c
+				}),
+				contentType:'application/json',
+				 success : (data)=>{
+					  if(o===""){
+						 alert('프로필 정보 수정!');	
+						 $('body').empty();
+							hyunseok.navbar.init();
+							$('body').append(hyunseok.compUI.member());
+							hyunseok.member.init();
+					 }
+					  else if(data.selectPass!=o){
+						  alert('틀린 비밀번호 입니다.');	
+						
+					 }
+					 else{ alert('계정 정보 수정!');		          
+				       	$('body').empty();
+						hyunseok.navbar.init();
+						$('body').append(hyunseok.compUI.member());
+						hyunseok.member.init();};
+					
+				 },
+			     error : (x,s,m)=>{
+			            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+			     }
+			})
 			});
 		$('#member-delete-btn').click(e=>{
-			alert('계정 삭제 완료');
+			alert('계정 수정 취소');
 			$('body').empty();
-			$('.header').empty();
 			hyunseok.navbar.init();
 			$('body').append(hyunseok.compUI.member());
 			hyunseok.member.init();
+			
+			
 			});
 	};
 	
@@ -999,7 +1079,7 @@ hyunseok.compUI={
 			+'  <label>이메일 주소</label>'
 			+'  <input class="w3-input" id="w3-input-email" value=""></input>'
 			+'  <label>이름</label>'
-			+'  <input class="w3-input" id="w3-input-sirname" value=""></input>'
+			+'  <input class="w3-input" id="w3-input-surname" value=""></input>'
 			+'  <label>성</label>'
 			+'  <input class="w3-input" id="w3-input-firstname" value=""></input>'
 			+'  <label>비밀 번호</label>'
@@ -1209,22 +1289,12 @@ hyunseok.compUI={
 			+'<thead class="datagrid-thead" ><tr><th>선택</th><th>이메일</th><th>성</th><th>이름</th><th >국가</th><th >가입일</th></tr></thead>'
 			+'<tbody id="memberList-tab"></tbody>'
 			
-			+'<tfoot class="datagrid-paging"><tr><td colspan="6"><div id="paging"><ul>'   
-			+'<li>'
-			+'      <a href="#" aria-label="Previous">'
-			+'        <span aria-hidden="true">&laquo;</span>'
-			+'      </a>'
-			+'    </li>'
-			+'    <li><a href="#">1</a></li>'
-			+'    <li><a href="#">2</a></li>'
-			+'    <li><a href="#">3</a></li>'
-			+'    <li><a href="#">4</a></li>'
-			+'    <li><a href="#">5</a></li>'
-			+'    <li>'
-			+'      <a href="#" aria-label="Next">'
-			+'        <span aria-hidden="true">&raquo;</span>'
-			+'      </a>'
-			+'    </li> </ul></div></tr></tfoot>'
+			+'<tfoot id="member-pagination" class="datagrid-paging">'
+			+'<tr><td colspan="6">'
+			+'<div id="paging">'
+			+'</div>'
+			+'</tr>'
+			+'</tfoot>'
 			
 			+'</table></div></div>'	
 			+'<fieldset class="buttons">'
@@ -1340,91 +1410,57 @@ hyunseok.compUI={
 			+'    <legend>이메일 주소</legend>'
 			+'    <ol>'
 			+'        <li>'
-			+'            <input id="ac-email" type="text" value="" placeholder="이메일 주소 입력">'
+			+'            <input id="ac-email" type="text" value="" readonly="readonly">'
 			+'            <output id="ac-email-validate"></output>'
 			+'        </li>'
 			+'    </ol>'
 			+'</fieldset>'
-			+'<fieldset class="buttons">'
-			+'    <legend>Save your changes</legend>'
-			+'    <button id="memberUpdate-email" class="primary">수정</button>'
-			+'    <button id="memberUpdate-email-cancel" class="primary">취소</button>'
-			+'</fieldset><fieldset>'
+		
+			+'<fieldset>'
 			+'    <legend>비밀번호</legend>'
 			+'    <ol >'
 			+'        <li>'
-			+'            <input id="ac-old-password" type="password"  placeholder="현재 비밀번호" autocomplete="off">'
-			+'            <output id="ac-old-password-validate"></output>'
+			+'            <input id="ac-old-password" type="password" value=""  placeholder="현재 비밀번호" autocomplete="off">'
 			+'        </li>'
 			+'        <li>'
-			+'            <input id="ac-new-password" type="password"  placeholder="새 비밀번호">'
-			+'            <output id="ac-new-password-validate"></output>'
-			+'        </li>'
-			+'        <li>'
-			+'            <input id="ac-confirm-password" type="password" placeholder="새 비밀번호 확인">'
-			+'            <output id="ac-confirm-password-validate"></output>'
+			+'            <input id="ac-new-password" type="password" value=""  placeholder="새 비밀번호">'
 			+'        </li>'
 			+'    </ol>'
 			+'</fieldset>'
-			+'<fieldset class="buttons">'
-			+'    <legend>Save your changes</legend>'
-			+'    <button id="memberUpdate-password" class="primary">수정</button>'
-			+'    <button id="memberUpdate-password-cancel" class="primary">취소</button>'
-			+'</fieldset></section>'
+	
+			+'</section>'
 			+'<section class="ac-profile">'
 			+'    <h4>프로필 작성</h4>'
 			+'<fieldset>'
 			+'    <legend>이름</legend>'
 			+'    <ol>'
 			+'        <li>'
-			+'            <input id="ac-first-name" type="text" placeholder="이름을 입력하십시오.">'
+			+'            <input id="ac-first-name" type="text" value="" placeholder="이름을 입력하십시오.">'
 			+'            <output id="ac-first-name-validate"></output>'
 			+'        </li>'
 			+'        <li>'
-			+'            <input id="ac-last-name" type="text" placeholder="성을 입력하십시오.">'
+			+'            <input id="ac-last-name" type="text" value="" placeholder="성을 입력하십시오.">'
 			+'            <output id="ac-last-name-validate"></output>'
 			+'        </li>'
 			+'    </ol>'
 			+'</fieldset>'
 			+'<fieldset>'
-			+'    <legend>문화권 기본 설정</legend>'
-			+'    <ol>'
-			+'        <li id="ac-locale">'
-			+'            <select ><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option><option value="ko-kr">한국어 (대한민국)</option></select>'
-			+'        </li>'
-			+'        <li id="ac-market">'
-			+'            <select ><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option><option value="kr">대한민국</option></select>'
-			+'        </li>'
-			+'    </ol>'
-			+'</fieldset>'
-			+'<fieldset class="buttons">'
-			+'    <legend>Save your changes</legend>'
-			+'    <button id="memberUpdate-profile" class="primary">수정</button>'
-			+'    <button id="memberUpdate-profile-cancel" class="primary">취소</button>'
-			+'</fieldset></section>'
-			
-			+'<section class="ac-preferences">'
-			+'    <h4>기본 설정 검색</h4>'
-						+'<fieldset>'
-			+'    <legend>출발 공항</legend>'
+			+'    <legend>국가 설정</legend>'
 			+'    <ol>'
 			+'        <li>'
-			+'            <input id="home-airport" type="text" placeholder="" autocomplete="off"><ul class="autocomplete"></ul>'
-			+'            <output id="home-airport-id"></output>'
+			+'            <input id="ac-locale" type="text" value="" placeholder="국가를 입력하십시요.">'
+			+'            <output id="ac-locale"></output>'
 			+'        </li>'
 			+'    </ol>'
-			+'</fieldset>'			
-			+'<fieldset class="buttons">'
-			+'    <legend>Save your changes</legend>'
-			+'    <button id="memberUpdate-basic" class="primary">수정</button>'
-			+'    <button id="memberUpdate-basic-cancel" class="primary">취소</button>'
 			+'</fieldset>'
+			
 			+'</section>'
+	
 			+'</section>'
 			+'</article></div><div class="wrap legal-info">'
 			+'<fieldset class="buttons">'
 			+'    <button id="member-update-btn" class="primary">수정 완료</button>'
-			+'    <button id="member-delete-btn"" class="primary">계정 삭제</button>'
+			+'    <button id="member-delete-btn"" class="primary">수정 취소</button>'
 			+'</fieldset>'
 						+'</div>'
 			+'</div>'

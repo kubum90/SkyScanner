@@ -2,6 +2,7 @@ package com.web.sky.controller;
 
 import java.util.HashMap;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.sky.command.Command;
 import com.web.sky.mapper.HSMapper;
 import com.web.sky.member.Member;
+import com.web.sky.service.IDeleteService;
 import com.web.sky.service.IGetService;
 import com.web.sky.service.IListService;
+import com.web.sky.service.IPutService;
 
 @RestController
 public class HSController {
@@ -120,7 +124,7 @@ public class HSController {
 			
 			map.put("result","success");
 			map.put("email",e);
-			map.put("sirname",s);
+			map.put("surname",s);
 			map.put("firstname",n);
 			map.put("password",p);
 			break;
@@ -131,61 +135,83 @@ public class HSController {
 		return map;
 	}
 	
-	@RequestMapping(value="/{email}/{sirname}/{firstname}/{password}",
+	
+	
+	
+	@RequestMapping(value="/update/member",
 			method=RequestMethod.POST,
 	         consumes="application/json")
-	public @ResponseBody Map<?, ?> get(@PathVariable String email,@PathVariable String sirname,@PathVariable String firstname,@PathVariable String password){
+	public @ResponseBody Map<?, ?> updateMember(@RequestBody Member bean){
 		logger.info("컨트롤러 진입!!");
 		Map<String, Object> map = new HashMap<>();
-		Member bean=null;
-		logger.info("지금 관리자 이메일: {}",email);
-		cmd.setSearch(email);
-		cmd.setDir(sirname);
-		cmd.setColumn(firstname);
-		cmd.setAction(password);
 		
-		IGetService updateService=(x)->{
-			return hs.updateAdmin(cmd);
+		logger.info("업데이트 할 이메일: {}",bean.getEmail());
+	
+		
+		cmd.setSearch(bean.getEmail());
+		cmd.setDir(bean.getOldPassword());
+		cmd.setColumn(bean.getNewPassword());
+		cmd.setAction(bean.getFirstName());
+		cmd.setView(bean.getSurname());
+		cmd.setPage(bean.getCountry());
+		
+		
+		IPutService updateService=x->{
+			 hs.updateMember(cmd);
 		};
-		bean = (Member) updateService.execute(cmd);
-		map.put("success", "통신성공");
-		map.put("bean", bean);	
-		return map;
-	};
+		IPutService updateService1=x->{
+			hs.updateMember1(cmd);
+		};
 	
-	@RequestMapping(value="/search/{search}",
-			method=RequestMethod.POST,
-	         consumes="application/json")
-	public @ResponseBody Map<?, ?> searchMember(@PathVariable String search){
-		logger.info("컨트롤러 진입!!");
-		Map<String, Object> map = new HashMap<>();
-		
-		logger.info("찾는 내용: {}",search);		
-		Command cmd=new Command();
-		cmd.setSearch(search);	
-		
-		map.put("searchMember",new IListService() {
+
+		Member bean1 = (Member) new IGetService() {
 			@Override
-			public List<?> execute(Object o) {
-				return hs.searchMember(cmd);
+			public Object execute(Object o) {
+				return hs.selectPass(cmd);
 			}
-		}.execute(cmd));
-		
-		map.put("success", "통신성공");
-		
+		}.execute(cmd);
+			
+		String pw=bean1.getPassword();
+		 updateService.execute(cmd);
+		 updateService1.execute(cmd);
+		 map.put("selectPass", pw);
+		 map.put("success", "통신성공");
+	
 		return map;
 	};
 	
-	@RequestMapping(value="/a/{email}/{password}",
+	
+
+	
+	@RequestMapping(value="/delete/email",
 			method=RequestMethod.POST,
 	         consumes="application/json")
-	public @ResponseBody Map<?, ?> put(@PathVariable String email,@PathVariable String password){
+	public @ResponseBody Map<?, ?> deleteMember(@RequestBody Member bean){
 		logger.info("컨트롤러 진입!!");
 		Map<String, Object> map = new HashMap<>();
-		Member bean=null;
-		logger.info("지금 관리자 이메일: {}",email);
-		cmd.setSearch(email);
-		cmd.setAction(password);
+
+		logger.info("삭제할 이메일: {}",bean.getEmail());
+		cmd.setSearch(bean.getEmail());
+		
+		IDeleteService deleteService=x->{
+				 hs.deleteMember(cmd);
+		};
+		deleteService.execute(cmd);
+		
+		map.put("success", "통신성공");
+			
+		return map;
+	};
+	
+	@RequestMapping(value="//updateAdmin/new",
+			method=RequestMethod.POST,
+	         consumes="application/json")
+	public @ResponseBody Map<?, ?> put(@RequestBody Member bean){
+		logger.info("컨트롤러 진입!!");
+		Map<String, Object> map = new HashMap<>();
+		logger.info("지금 관리자 이메일: {}",bean.getEmail());
+		cmd.setSearch(bean.getEmail());
+		cmd.setAction(bean.getPassword());
 		
 		IGetService updateService1=(x)->{
 			return hs.newAdmin1(cmd);
@@ -200,6 +226,32 @@ public class HSController {
 		return map;
 	};
 	
+	
+	
+	@RequestMapping(value="/updateAdmin",
+			method=RequestMethod.POST,
+	         consumes="application/json")
+	public @ResponseBody Map<?, ?> get(@RequestBody Member bean){
+		logger.info("컨트롤러 진입!!");
+		Map<String, Object> map = new HashMap<>();
+		
+		logger.info("지금 관리자 이메일: {}",bean.getEmail());
+		cmd.setSearch(bean.getEmail());
+		cmd.setDir(bean.getSurname());
+		cmd.setColumn(bean.getFirstName());
+		cmd.setAction(bean.getPassword());
+		
+		IGetService updateService=(x)->{
+			return hs.updateAdmin(cmd);
+		};
+		bean = (Member) updateService.execute(cmd);
+		map.put("success", "통신성공");
+		map.put("bean", bean);	
+		return map;
+	};
+	
+	
+	
 	@RequestMapping("/a/list/{cate}")
 	public @ResponseBody Map<?, ?> memberList(Model model,@PathVariable String cate) {
 		logger.info("회원정보 하는거 진입");
@@ -210,7 +262,6 @@ public class HSController {
 		case "member":
 			logger.info("member 리스트에 들어옴");
 		
-			map.put("result","success");
 			map.put("memberCount",new IGetService() {
 				@Override
 				public Object execute(Object o) {
@@ -224,6 +275,7 @@ public class HSController {
 					
 				}
 			}.execute(null));
+			map.put("result","success");
 			break;
 	
 		
@@ -231,6 +283,29 @@ public class HSController {
 			break;
 		}
 		return map;
-	}
+	};
+	@RequestMapping(value="/search/{search}",
+			method=RequestMethod.POST,
+	         consumes="application/json")
+	public @ResponseBody Map<?, ?> searchMember(@PathVariable String search){
+		logger.info("컨트롤러 진입!!");
+		Map<String, Object> map = new HashMap<>();
+		
+		logger.info("찾는 내용: {}",search);		
+	
+		cmd.setSearch(search);	
+		
+		map.put("searchMember",new IListService() {
+			@Override
+			public List<?> execute(Object o) {
+				return hs.searchMember(cmd);
+			}
+		}.execute(cmd));
+		
+		map.put("success", "통신성공");
+		
+		return map;
+	};
+	
 	
 }
