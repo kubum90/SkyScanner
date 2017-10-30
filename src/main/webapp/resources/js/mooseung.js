@@ -19,16 +19,65 @@ ms.common=((ctx)=>{
 		}else{
 			$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
 			$('#account').click(()=>{
-				sessionStorage.clear();
-				$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그인');
+			alert('dsafdsaf');
+			$('#account').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','loginBu').removeAttr('data-toggle','').removeAttr('data-target','').text('로그인');
+			sessionStorage.clear();
+			$('body').empty();
+			ms.common.init(ctx);
 			});
 		}
 		
-		$('#authentication-link').click(()=>{ 
+		$('#loginBu').click(e=>{ 
 	
-				alert('모달');
+				alert('모달123');
 				$('body').append(ms.hotelUI.modal());
 				$('#idModal').modal();
+				var i = $('#usrname').val();
+		    	var p = $('#psw').val();
+		    	e.preventDefault();
+		        $.ajax({
+		        	url :ctx+'/login',
+		            method : 'post',
+		            dataType:'json',
+		            data : JSON.stringify({
+		              	  'email' : i,
+		              	  'password' : p
+		            }),
+		            contentType : 'application/json',
+		            success : (data)=>{
+		            	alert('통신: '+data.success);
+		            	alert('빈: '+data.bean.email);
+		            	if(data.bean.email===null){
+		            		alert('로그인 실패');
+		            	}else{
+		            		alert('로그인 성공');
+		            		sessionStorage.setItem('email',data.bean.email);
+		            		alert('세션 스토리지 :: '+ sessionStorage.getItem('email'));
+		            		$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
+		            		/*$('#login-button-container').append('<span id="login_session">'+sessionStorage.getItem('email')+'님 환영합니다.'+'</span>')*/
+		            	}     
+		            	$('#account').click(()=>{
+		              	alert('logout');
+		              	$('body').empty();
+		              	location.reload();
+		              	skyAir.common.init(ctx);
+		              	  
+		              $('#home-container').removeClass('#home-container').addClass('.homecontent').css("background-image", "url(//content.skyscnr.com/6bf5a29ce130132f28e912434f295b76/canada-lake-feb.jpg?crop=2000px:599px&quality=80)");
+		      	      $('#first').removeClass('#first').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/853dd1ece19afb1f46dabe8485021767/GettyImages-564760601.jpg?resize=500px:600px&quality=50)");
+		      	      $('#two').removeClass('#two').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/a60a89126ed3f927d123c815b610298d/GettyImages-475335963.jpg?resize=600px:600px&quality=50)");
+		      	      $('#three').removeClass('#three').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/bc42cc80dd1447615ee441e2020cbe2c/GettyImages-126509194.jpg?resize=450px:603px&quality=50)");
+		      	      $('#ssssssss').css("background-image","url(https://css.skyscnr.com/inspiration/static/embeddableMap/svg_map_20170525.svg)"); 
+		      	      $('#saleone').removeClass('#saleone').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/3d13492ebf1c1b0ac415bea8e172b960/GettyImages-505532917.jpg?resize=500px:600px&quality=50)");
+		      	      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
+		      	      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
+		      	      
+		            });
+		               /*alert('로그인 할 사람 패스워드: '+data.password);*/
+		            },
+		            error : (x,s,m)=>{
+		               alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+		            }
+		         });
 			});
 
 

@@ -13,7 +13,7 @@
 	</resultMap>
 	
    <insert id="insert" parameterType="com.web.sky.command.Command">
-   	Insert Into Member(email,password) values (#{search},#{column});
+   	Insert Into Member(email,password,regdate) values (#{search},#{column},now());
    </insert>
    
    
