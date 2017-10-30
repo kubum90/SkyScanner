@@ -1,7 +1,8 @@
-var ms = ms || {};
-/*AIzaSyDQ54QGoZJi5Y9m5wxVGDzHkWIyPgh6-wM  내 구글 API key*/
 
-//1번 페이지
+var ms = ms || {};
+/* AIzaSyDQ54QGoZJi5Y9m5wxVGDzHkWIyPgh6-wM 내 구글 API key */
+
+// 1번 페이지
 
 ms.common=((ctx)=>{
 	var init=(ctx)=>{
@@ -27,57 +28,20 @@ ms.common=((ctx)=>{
 			});
 		}
 		
-		$('#loginBu').click(e=>{ 
-	
-				alert('모달123');
-				$('body').append(ms.hotelUI.modal());
-				$('#idModal').modal();
-				var i = $('#usrname').val();
-		    	var p = $('#psw').val();
-		    	e.preventDefault();
-		        $.ajax({
-		        	url :ctx+'/login',
-		            method : 'post',
-		            dataType:'json',
-		            data : JSON.stringify({
-		              	  'email' : i,
-		              	  'password' : p
-		            }),
-		            contentType : 'application/json',
-		            success : (data)=>{
-		            	alert('통신: '+data.success);
-		            	alert('빈: '+data.bean.email);
-		            	if(data.bean.email===null){
-		            		alert('로그인 실패');
-		            	}else{
-		            		alert('로그인 성공');
-		            		sessionStorage.setItem('email',data.bean.email);
-		            		alert('세션 스토리지 :: '+ sessionStorage.getItem('email'));
-		            		$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
-		            		/*$('#login-button-container').append('<span id="login_session">'+sessionStorage.getItem('email')+'님 환영합니다.'+'</span>')*/
-		            	}     
-		            	$('#account').click(()=>{
-		              	alert('logout');
-		              	$('body').empty();
-		              	location.reload();
-		              	skyAir.common.init(ctx);
-		              	  
-		              $('#home-container').removeClass('#home-container').addClass('.homecontent').css("background-image", "url(//content.skyscnr.com/6bf5a29ce130132f28e912434f295b76/canada-lake-feb.jpg?crop=2000px:599px&quality=80)");
-		      	      $('#first').removeClass('#first').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/853dd1ece19afb1f46dabe8485021767/GettyImages-564760601.jpg?resize=500px:600px&quality=50)");
-		      	      $('#two').removeClass('#two').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/a60a89126ed3f927d123c815b610298d/GettyImages-475335963.jpg?resize=600px:600px&quality=50)");
-		      	      $('#three').removeClass('#three').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/bc42cc80dd1447615ee441e2020cbe2c/GettyImages-126509194.jpg?resize=450px:603px&quality=50)");
-		      	      $('#ssssssss').css("background-image","url(https://css.skyscnr.com/inspiration/static/embeddableMap/svg_map_20170525.svg)"); 
-		      	      $('#saleone').removeClass('#saleone').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/3d13492ebf1c1b0ac415bea8e172b960/GettyImages-505532917.jpg?resize=500px:600px&quality=50)");
-		      	      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
-		      	      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
-		      	      
-		            });
-		               /*alert('로그인 할 사람 패스워드: '+data.password);*/
-		            },
-		            error : (x,s,m)=>{
-		               alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
-		            }
-		         });
+		$('#loginBu').click(()=>{
+				$('body').empty();
+				skyAir.common.init();
+				$('#home-container').removeClass('#home-container').addClass('.homecontent').css("background-image", "url(//content.skyscnr.com/6bf5a29ce130132f28e912434f295b76/canada-lake-feb.jpg?crop=2000px:599px&quality=80)");
+			      $('#first').removeClass('#first').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/853dd1ece19afb1f46dabe8485021767/GettyImages-564760601.jpg?resize=500px:600px&quality=50)");
+			      $('#two').removeClass('#two').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/a60a89126ed3f927d123c815b610298d/GettyImages-475335963.jpg?resize=600px:600px&quality=50)");
+			      $('#three').removeClass('#three').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/bc42cc80dd1447615ee441e2020cbe2c/GettyImages-126509194.jpg?resize=450px:603px&quality=50)");
+			      $('#ssssssss').css("background-image","url(https://css.skyscnr.com/inspiration/static/embeddableMap/svg_map_20170525.svg)"); 
+			      $('#saleone').removeClass('#saleone').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/3d13492ebf1c1b0ac415bea8e172b960/GettyImages-505532917.jpg?resize=500px:600px&quality=50)");
+			      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
+			      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
+		  	      
+				
+		       
 			});
 
 
@@ -96,7 +60,7 @@ ms.common=((ctx)=>{
 				      $('#saleone').removeClass('#saleone').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/3d13492ebf1c1b0ac415bea8e172b960/GettyImages-505532917.jpg?resize=500px:600px&quality=50)");
 				      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
 				      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
-			  	      /*location.reload();*/
+			  	      /* location.reload(); */
 			  	   
 				}else{
 					 $('body').empty();
@@ -110,7 +74,7 @@ ms.common=((ctx)=>{
 					      $('#saleone').removeClass('#saleone').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/3d13492ebf1c1b0ac415bea8e172b960/GettyImages-505532917.jpg?resize=500px:600px&quality=50)");
 					      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
 					      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
-				  	      /*location.reload();*/
+				  	      /* location.reload(); */
 					      $('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
 				}
 			
@@ -256,19 +220,15 @@ ms.searchList=((q)=>{
 		});
 	};
 	
-/*	var auto=(list)=>{
-		var s=[{,,,}];
-		$.each(list,(i,v)=>{
-			s+=['호텔이름: '+v.hotelName,'/ 지역: '+v.destination,'/ 구역:'+v.destination,'/ 가격:'+v.price+'\n'];
-		});
-		$('#q').autocomplete({
-			source:[s]
-		});
-	};*/
+/*
+ * var auto=(list)=>{ var s=[{,,,}]; $.each(list,(i,v)=>{ s+=['호텔이름:
+ * '+v.hotelName,'/ 지역: '+v.destination,'/ 구역:'+v.destination,'/
+ * 가격:'+v.price+'\n']; }); $('#q').autocomplete({ source:[s] }); };
+ */
 	return {searchSuggestion:searchSuggestion}
 })();
 
-//2번 페이지
+// 2번 페이지
 ms.chooseResult=((q,sdp,edp,na,nr)=>{
 	var init=(q,sdp,edp,na,nr)=>{
 		console.log(q,sdp,edp,na,nr);
@@ -369,7 +329,7 @@ ms.chooseResult=((q,sdp,edp,na,nr)=>{
 	return {init:init,hlist:hlist};
 })();
 
-//3번 페이지
+// 3번 페이지
 ms.hotelRecommand=((q,sdp,edp,na,nr)=>{
 	var init=(q,sdp,edp,na,nr)=>{
 	onCreate(q,sdp,edp,na,nr);
@@ -531,32 +491,23 @@ ms.hotelRecommand=((q,sdp,edp,na,nr)=>{
 				console.log(data.filter.refundPolicy);
 				console.log(data.filter.breakfast);
 				console.log(data.filter.facility);
-				/*var arr =[
-					{cate:'refund_policy',text:'환불 정책'},
-					{cate:'breakfast',text:'아침 식사 여부'},
-					{cate:'facility',text:'편의 시설'}
-					];
-					$.each(arr,(i,val)=>{
-					flt+='<dl id="filter-'+val.cate+'" class="expanded">'
-					+'<dt><a data-icon="upBlue after" href="javascript:void(0)">'+val.text+'</a></dt>'
-					+'<dd>'
-					+'<ol>'
-					var dlid='filter-'+val.cate;
-					$.each(data.filter,(i,val)=>{
-					flt+='<li id="filter_PR_BK_'+i+'">'
-				                            +'<label for="'+dlid+'-input-PR_BK_'+i+'">'
-				                        +'<span class="filter-control">'
-				                        +' <input id="'+dlid+'-input-PR_BK_'+i+'" type="checkbox" name="'+dlid+'" value="PR_BK_'+i+'">'
-				                        +'</span>'
-				                        +'    <span class="filter-meta-range">'
-				                        +'        <span>'+val.span+'</span>'
-				                        +'        <span class="filter-meta-amount"> ('+val.amount+')</span>'
-				                        +'    </span>'
-				                        +'</label>'
-				                        +'</li>'
-					});
-					flt+='</ol></dd></dl>'
-					});*/
+				/*
+				 * var arr =[ {cate:'refund_policy',text:'환불 정책'},
+				 * {cate:'breakfast',text:'아침 식사 여부'}, {cate:'facility',text:'편의
+				 * 시설'} ]; $.each(arr,(i,val)=>{ flt+='<dl id="filter-'+val.cate+'" class="expanded">' +'<dt><a
+				 * data-icon="upBlue after"
+				 * href="javascript:void(0)">'+val.text+'</a></dt>' +'<dd>' +'<ol>'
+				 * var dlid='filter-'+val.cate; $.each(data.filter,(i,val)=>{
+				 * flt+='<li id="filter_PR_BK_'+i+'">' +'<label
+				 * for="'+dlid+'-input-PR_BK_'+i+'">' +'<span
+				 * class="filter-control">' +' <input
+				 * id="'+dlid+'-input-PR_BK_'+i+'" type="checkbox"
+				 * name="'+dlid+'" value="PR_BK_'+i+'">' +'</span>' +' <span
+				 * class="filter-meta-range">' +' <span>'+val.span+'</span>' +'
+				 * <span class="filter-meta-amount"> ('+val.amount+')</span>' +'
+				 * </span>' +'</label>' +'</li>' }); flt+='</ol></dd></dl>'
+				 * });
+				 */
 			},
 			error : (x,s,m)=>{
 				alert('필터링 ajax 통신 실패: '+m);
@@ -647,7 +598,7 @@ ms.hotelUI ={
 	
 	},
 	index : (x,y,z)=>{
-	/*ms.hotelUI.navbar(), ms.hotelUI.content(), ms.hotelUI.footer()*/
+	/* ms.hotelUI.navbar(), ms.hotelUI.content(), ms.hotelUI.footer() */
 	return '<div id="pagewrap" class="clearfix">'
 	+'	<div class="wrap h1-heading"><h1 id="h1-heading">호텔 | 스카이스캐너 - 스카이스캐너에서 호텔 검색 및 비교</h1></div><link rel="stylesheet" href="//js.skyscnr.com/sttc/oc-registry/components/header/0.4.42/build/static/css/main.dc7e0f67.css"><script>;</script>'
 	+'	<div id="header-root">'
@@ -942,7 +893,7 @@ ms.hotelUI ={
 	}
 };
 
-/* chooseResult UI*/
+/* chooseResult UI */
 ms.chooseResultUI={
 	content : (search)=>{
 		return '<div id="content-wrap" class="wrap clearfix" style="margin-top:0%">'
@@ -1112,12 +1063,12 @@ ms.hotelRecommandUI={
 				];
 			$.each(b,(i,v)=>{
 				if(i=0){
-					hts+='                   <option class="sort-item_'+v.l+'" value="'+v.l+'" selected="">'+v.p+'</option>'
+					hts+='<option class="sort-item_'+v.l+'" value="'+v.l+'" selected="">'+v.p+'</option>'
 				}else{
-					hts+='                   <option class="sort-item_'+v.l+'" value="'+v.l+'">'+v.p+'</option>'
+					hts+='<option class="sort-item_'+v.l+'" value="'+v.l+'">'+v.p+'</option>'
 				};
 			});
-			hts+='           </select>'
+			hts+='</select>'
 			+'       </li>'
 			+'       <li id="tab_map" class="tab_item map map-trigger">'
 			+'           <button data-icon="view-map before" class="hotel-cta-secondary" id="btn-map"><span class="label">지도</span></button>'

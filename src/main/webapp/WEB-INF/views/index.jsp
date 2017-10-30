@@ -90,10 +90,6 @@
    <script src="${path.js}/template.js"></script> 
 </head>
 <body id="category-flights" class="lang-ko page-home action-index   default-layout    spring-clean month-view-spring-clean">
-
-
-
-
 <div class="modal fade" id="myModal" role="dialog">
 	<div class="modal-dialog"> 
 	Modal content
@@ -138,7 +134,6 @@
     </div>
   </div>
   <div class="modal-body">
-  
   </div>
   <div class="modal-footer">
   </div>
@@ -151,7 +146,6 @@
         <h4 class="modal-title" id="myModalLabel">Modal title</h4>
       </div>
       <div class="modal-body">
-        ...
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -160,19 +154,10 @@
     </div>
   </div>
 </div>
-
-
-
-
-		
-
 <div id="wrapper"></div>
 <div id="container"></div>
-
-
 </body>
 <script>
-
 /* hyunseok.hello.init('${path.ctx}');  */
     skyAir.common.init('${path.ctx}');     
 /* ms.common.init('${path.ctx}'); */   
