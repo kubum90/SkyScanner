@@ -2,7 +2,8 @@ var ms = ms || {};
 /* AIzaSyDQ54QGoZJi5Y9m5wxVGDzHkWIyPgh6-wM 내 구글 API key */
 
 // 1번 페이지
-
+//2017-11-1 할 일
+//광회 메인 가는 UI 기능으로 분리하기 , 호텔 navbar()에 로그인버튼 꺼내서 제어하기. 
 ms.common=((ctx)=>{
 	var init=(ctx)=>{
 	
