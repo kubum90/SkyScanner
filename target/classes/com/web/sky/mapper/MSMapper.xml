@@ -49,7 +49,7 @@
    </resultMap> 
 	
    <insert id="insert" parameterType="com.web.sky.command.Command">
-   	Insert Into Member(email,password,regdate) values (#{search},#{column},now());
+   	Insert Into Member(email,password,regdate) values (#{search},#{dir},now());
    </insert>
    
    

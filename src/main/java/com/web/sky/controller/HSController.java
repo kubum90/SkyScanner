@@ -333,7 +333,7 @@ public class HSController {
 		return map;
 	};
 	@RequestMapping(value="/search/{search}",
-			method=RequestMethod.POST,
+			method=RequestMethod.GET,
 	         consumes="application/json")
 	public @ResponseBody Map<?, ?> searchMember(@PathVariable String search){
 		logger.info("컨트롤러 진입!!");

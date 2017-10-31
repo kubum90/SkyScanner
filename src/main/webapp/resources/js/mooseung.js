@@ -63,7 +63,6 @@ ms.common=((ctx)=>{
 			  	   
 				}else{
 					 $('body').empty();
-					 
 					 skyAir.common.init(ctx);
 						$('#home-container').removeClass('#home-container').addClass('.homecontent').css("background-image", "url(//content.skyscnr.com/6bf5a29ce130132f28e912434f295b76/canada-lake-feb.jpg?crop=2000px:599px&quality=80)");
 					      $('#first').removeClass('#first').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/853dd1ece19afb1f46dabe8485021767/GettyImages-564760601.jpg?resize=500px:600px&quality=50)");
@@ -73,9 +72,15 @@ ms.common=((ctx)=>{
 					      $('#saleone').removeClass('#saleone').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/3d13492ebf1c1b0ac415bea8e172b960/GettyImages-505532917.jpg?resize=500px:600px&quality=50)");
 					      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
 					      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
-				  	      /* location.reload(); */
+				  	      
 					      $('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
+					      $('#account').click(()=>{
+					    	  alert('sdfdsafadfs');
+					    	  sessionStorage.clear();
+					    	  location.reload();
+					      });
 				}
+			 
 			
 	  	    
 		});
@@ -102,6 +107,11 @@ ms.common=((ctx)=>{
 						$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
 						
 					}
+			      $('#account').click(()=>{
+			    	  sessionStorage.clear();
+			    	  location.reload();
+			      });
+			      
 			      
 		});
 	
@@ -209,7 +219,7 @@ ms.common=((ctx)=>{
 ms.searchList=((q)=>{
 	var searchSuggestion=(q)=>{
 		$.ajax({
-			url:'/web/suggest',
+			url:'/sky/suggest',
 			method : 'post',
 			dataType : 'json',
 			data : JSON.stringify({
@@ -280,6 +290,7 @@ ms.chooseResult=((q,sdp,edp,na,nr)=>{
 	
 	$('#ms-airli').click(()=>{
 		var ctx=$$('x');
+		//ㄴㄴ
 	  		  $('body').empty();
 	      	  skyAir.common.init(ctx);
 	      	$('#home-container').removeClass('#home-container').addClass('.homecontent').css("background-image", "url(//content.skyscnr.com/6bf5a29ce130132f28e912434f295b76/canada-lake-feb.jpg?crop=2000px:599px&quality=80)");
@@ -290,11 +301,14 @@ ms.chooseResult=((q,sdp,edp,na,nr)=>{
 		      $('#saleone').removeClass('#saleone').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/3d13492ebf1c1b0ac415bea8e172b960/GettyImages-505532917.jpg?resize=500px:600px&quality=50)");
 		      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
 		      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
+		     
 		      if(sessionStorage.getItem('email')===null){
 					
-				}else{
-					$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');	
-				}
+			  }else{
+					$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
+					
+			  }
+		   
 	  });
 		$('#ms-carli').click(()=>{
 			var ctx=$$('x');
@@ -313,7 +327,7 @@ ms.chooseResult=((q,sdp,edp,na,nr)=>{
 	
 	var hlist=(q,sdp,edp,na,nr)=>{
 		$.ajax({
-			url:'/web/suggest',
+			url:'/sky/suggest',
 			method : 'post',
 			dataType : 'json',
 			data : JSON.stringify({
@@ -367,7 +381,7 @@ ms.hotelRecommand=((q,sdp,edp,na,nr)=>{
 			.click((e)=>{
 				e.preventDefault();
 				$.ajax({
-					url : '/web/hotelReservation',
+					url : '/sky/hotelReservation',
 					method : 'post',
 					dataType : 'json',
 					data : JSON.stringify({
@@ -399,6 +413,7 @@ ms.hotelRecommand=((q,sdp,edp,na,nr)=>{
 		$('#category-flights').append(ms.hotelUI.index(ms.hotelUI.navbar(),ms.hotelRecommandUI.content(q,sdp,edp,na,nr),ms.hotelUI.footer()));
 		$('#ms-airli').click(()=>{
 			var ctx=$$('x');
+			//ㄴㄴ
 		  	$('body').empty();
 		  	 	
 		    skyAir.common.init(ctx);
@@ -410,7 +425,8 @@ ms.hotelRecommand=((q,sdp,edp,na,nr)=>{
 			$('#saleone').removeClass('#saleone').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/3d13492ebf1c1b0ac415bea8e172b960/GettyImages-505532917.jpg?resize=500px:600px&quality=50)");
 			$('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
 			$('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
-	  });
+			
+		});
 		$('#loginBu').click(()=>{
 			
 			var ctx=$$('x');
@@ -457,7 +473,7 @@ ms.hotelRecommand=((q,sdp,edp,na,nr)=>{
 	};
 	var hotelList = (q,sdp,edp,na,nr,range)=>{
 		$.ajax({
-			url : '/web/recommandView/'+range,
+			url : '/sky/recommandView/'+range,
 			method : 'post',
 			dataType : 'json',
 			data : JSON.stringify({
@@ -538,7 +554,7 @@ ms.hotelRecommand=((q,sdp,edp,na,nr)=>{
 	
 	var filter =()=>{
 		$.ajax({
-			url : '/web/filter',
+			url : '/sky/filter',
 			method : 'post',
 			dataType : 'json',
 			contentType : 'application/json',

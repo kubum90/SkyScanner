@@ -43,9 +43,9 @@ public class MSController {
 		Map<String, Object> map = new HashMap<>();
 		
 		cmd.setSearch(mem.getEmail());
-		cmd.setColumn(mem.getPassword());
+		cmd.setDir(mem.getPassword());
 		System.out.println("받은 이메일::" + cmd.getSearch());
-		System.out.println("받은 패스워드::" + cmd.getColumn());
+		System.out.println("받은 패스워드::" + cmd.getDir());
 		
 		IPostService postService = x->{
 				ms.insert(cmd);
