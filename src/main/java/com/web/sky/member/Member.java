@@ -8,6 +8,6 @@ import lombok.Data;
 public class Member {
    private String email,surname,firstName,
    country,regdate,oldPassword,newPassword,password;
-   private int budget,news_seq;
+   private int budget,news_seq,authority;
    
 }

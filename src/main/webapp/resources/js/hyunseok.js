@@ -77,7 +77,6 @@ hyunseok.navbar=(()=>{
 		$('#identity').click(()=>{
 			$('body').empty();
 			skyAir.common.init(ctx);
-			location.reload();
 			$('#home-container').removeClass('#home-container').addClass('.homecontent').css("background-image", "url(//content.skyscnr.com/6bf5a29ce130132f28e912434f295b76/canada-lake-feb.jpg?crop=2000px:599px&quality=80)");
 		      $('#first').removeClass('#first').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/853dd1ece19afb1f46dabe8485021767/GettyImages-564760601.jpg?resize=500px:600px&quality=50)");
 		      $('#two').removeClass('#two').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/a60a89126ed3f927d123c815b610298d/GettyImages-475335963.jpg?resize=600px:600px&quality=50)");
@@ -284,40 +283,73 @@ hyunseok.member=(()=>{
 		ctx=$$('x');
 		onCreate();
 	};
+	
 	var onCreate=()=>{
 		$('body').empty();
 		$('body').append(hyunseok.navbar.init());
 		$('body').append(hyunseok.compUI.member());
 
-		
-	   $.getJSON(ctx+'/a/list/member',data=>{
+		var ctx=$$('x');
+	   $.getJSON('/a/list/member/1',data=>{
 		var memberList='';
 		var pagination='';
-		
-			$.each(data.memberList,(i,val)=>{
-				memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+val.email
-				+'</td><td  id="firstname-'+i+'">'+val.firstName+'</td><td  id="surname-'+i+'">'+val.surname+'</td><td  id="country-'+i+'">'
-				+val.country+'</td><td  id="regdate-'+i+'">'+val.regdate+'</td></tr>';
-				})
+	    var start_page=data.startPage;
+		var end_page=data.endPage;
+		var page_num=data.pageNum;
+		var page_size=data.pageSize;
+		var total_page=data.totalPage;
+		var block_size=data.blockSize;
+		console.log('start_page '+start_page )
+		console.log('end_page '+end_page )
+		console.log('page_num '+page_num )
+		console.log('page_size '+page_size)
+		console.log('total_page'+total_page)
+		console.log('block_size '+block_size )
+		console.log(data.count);
+		if(data.count==0){
+			memberList +='<tr><td colspan=6>'
+			+'등록된 게시글이 없습니다</td>'
+			+'</tr>';
+
+		}else{
+			for(var i=start_page;i<=page_size;i++){
+				memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+				+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+				+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+			};
+			
+			}
 			$('#memberList-tab').append(memberList);
-			$('#paging').append(
-					+'<ul>'   
-					+'<li>'
-					+'      <a href="#" aria-label="Previous">'
-					+'        <span aria-hidden="true">&laquo;</span>'
-					+'      </a>'
-					+'    </li>'
-					+'    <li><a href="#">1</a></li>'
-					+'    <li><a href="#">2</a></li>'
-					+'    <li><a href="#">3</a></li>'
-					+'    <li><a href="#">4</a></li>'
-					+'    <li><a href="#">5</a></li>'
-					+'    <li>'
-					+'      <a href="#" aria-label="Next">'
-					+'        <span aria-hidden="true">&raquo;</span>'
-					+'      </a>'
-					+'    </li>'
-					+'</ul>');
+			
+			
+	
+			for(var i=start_page;i<=end_page;i++){
+				pagination+='<li><a onclick="hyunseok.member.list('+i+')">'+i+'<a><li>';
+			}
+			
+			if(parseInt(block_size)<parseInt(total_page)){
+				pagination+=
+					   '<li>'
+				       +'<a aria-label="Next">'
+				        +'<button aria-hidden="true" id="next">&raquo;</button>'
+				        +'</a>'
+				        +'</li>';
+			}
+			
+			
+			
+		$('#paging').append(pagination);
+		
+		$('#next').click(e=>{
+			alert('next');
+			console.log(start_page);
+			console.log(block_size);
+		
+		var i=(parseInt(start_page)+parseInt(block_size));
+		console.log(i);
+			hyunseok.member.list(i);
+		});
+			
 		});
 
 	   	$('#member-search-btn').click(e=>{
@@ -340,7 +372,9 @@ hyunseok.member=(()=>{
 			           console.log(data.searchMember);
 			          for(var i=0;i<data.searchMember.length;i++){
 						list+='<tr id="tr-'+i+'"><td><input type="checkbox" id="check-'+i+'" name="check" value=""></td><td id="email-'+i+'">'+data.searchMember[i].email+'</td><td id="firstname-'+i+'">'+data.searchMember[i].firstName+'</td><td id="surname-'+i+'">'+data.searchMember[i].surname+'</td><td id="country-'+i+'">'+data.searchMember[i].country+'</td><td id="regdate-'+i+'">'+data.searchMember[i].regdate+'</td></tr>'
-					}
+				
+			          
+			          }
 					$('#memberList-tab').html(list);
 				 },
 				 		error : (x,s,m)=>{
@@ -348,39 +382,42 @@ hyunseok.member=(()=>{
 			     }
 			});
 	   	});
-	   	$('#btn-member-update-cancel').click(e=>{
+	   	
+		$('#btn-mem-del-171031').click(e=>{
 	   		e.preventDefault();
 	   		if($("input:checkbox[name=check]:checked").length==0){
-	   			alert("삭제할 계정을 선택해주세요");
+	   			alert("삭제할 계정을 선택해주세요!");
 	   		}else{		
-	   		$.each($('#memberList-tab tr'),(i)=>{
+	   			var selected_emails='';
+	   		$.each($('#memberList-tab tr'),i=>{
+	   			console.log(i);
 	   			console.log('check'+$('#check-'+i).prop("checked"));
 	   			var check=$('#check-'+i).prop("checked");
 	   		  		 if(check==true){
-	   				var i=$('#email-'+i).text();
-	   				alert(i);
+	   		  			  selected_emails+=$('#email-'+i).text()+',';
+	   				alert(selected_emails);
 	   			
-	   				$.ajax({
-	   					url:ctx+'/delete/email',
-	   					method:'post',
-	   					dataType:'json',
-	   					data : JSON.stringify({
-	   						'email':i	   						
-	   					}),
-	   					contentType:'application/json',
-	   					 success : (data)=>{
-	   					alert('삭제완료');
-	   					
-	   						
-	   				        },
-	   				        error : (x,s,m)=>{
-	   				            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
-	   				       }
-	   				})
+	   			
 	   				};
 	   		});
-	   		$('body').empty();
-		     hyunseok.member.init();
+	   		$.ajax({
+					url:ctx+'/delete/email',
+					method:'post',
+					dataType:'json',
+					data : JSON.stringify({
+						'selected_emails':selected_emails						
+					}),
+					contentType:'application/json',
+					 success : (data)=>{
+						 	alert("결과 :"+data.result);
+						 	hyunseok.member.list(1);
+						
+				        },
+				        error : (x,s,m)=>{
+				            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+				       }
+				})
+
 	   		};
 	   	});
 
@@ -400,6 +437,7 @@ hyunseok.member=(()=>{
 						var c=$('#country-'+i).text();
 						
 						alert(k);
+						
 						$('body').empty();
 						hyunseok.navbar.init();
 						$('body').append(hyunseok.compUI.memberUpdate());
@@ -424,7 +462,230 @@ hyunseok.member=(()=>{
 		
 		
 	};
-	return {init:init};
+var list=(i)=>{
+		
+
+	$('body').empty();
+	$('body').append(hyunseok.navbar.init());
+	$('body').append(hyunseok.compUI.member());
+
+	
+   $.getJSON(ctx+'/a/list/member/'+i,data=>{
+	   alert()
+	var memberList='';
+	var pagination='';
+    var start_page=data.startPage;
+	var end_page=data.endPage;
+	var page_num=data.pageNum;
+	var page_size=data.pageSize;
+	var total_page=data.totalPage;
+	var block_size=data.blockSize;
+	console.log('start_page '+start_page )
+	console.log('end_page '+end_page )
+	console.log('page_num '+page_num )
+	console.log('page_size '+page_size)
+	console.log('total_page'+total_page)
+	console.log('block_size '+block_size )
+	console.log(data.count);
+	if(data.count==0){
+		memberList +='<tr><td colspan=6>'
+		+'등록된 게시글이 없습니다</td>'
+		+'</tr>';
+
+	}else{
+		if(parseInt(data.count)>=parseInt(end_page)*parseInt(page_size)){
+			for(var i=(page_num-1)*page_size+1;i<=page_num*page_size;i++){
+				memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+				+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+				+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+			};
+		}else{
+			if(page_num==end_page){
+		
+			page_size=data.count-page_size*(page_num-1);
+			for(var i=(parseInt(page_num)-1)*parseInt(page_size)+1;i<=(parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size);i++){
+				memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+				+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+				+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+			};
+				}
+			else{
+			for(var i=(parseInt(page_num)-1)*parseInt(page_size)+1;i<=(parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size);i++){
+				memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+				+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+				+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+			};};
+			
+		};		
+		}
+		$('#memberList-tab').append(memberList);
+		
+		if(parseInt(start_page)!=1){
+			pagination+=
+			    '<li>'
+		       +'<a aria-label="Previous">'
+		        +'<button aria-hidden="true" id="prev">&laquo;</button>'
+		        +'</a>'
+		        +'</li>';
+		};
+	
+		
+		for(var i=parseInt(start_page);i<=parseInt(end_page);i++){
+			pagination+='<li><a onclick="hyunseok.member.list('+i+')">'+i+'<a><li>';
+		}
+		
+		if(parseInt(end_page)<parseInt(total_page)){
+			pagination+=
+				   '<li>'
+			       +'<a aria-label="Next">'
+			        +'<button aria-hidden="true" id="next">&raquo;</button>'
+			        +'</a>'
+			        +'</li>';
+		}
+		
+	$('#paging').append(pagination);
+	$('#prev').click(e=>{
+		alert('previous');
+		console.log(start_page);
+		console.log(block_size);
+	
+	var i=(parseInt(start_page)-parseInt(block_size));
+	console.log(i);
+		hyunseok.member.list(i);
+	});
+	$('#next').click(e=>{
+		alert('next');
+		console.log(start_page);
+		console.log(block_size);
+	
+		var i=(parseInt(start_page)+parseInt(block_size));
+		console.log(i);
+			hyunseok.member.list(i);
+	});
+		
+	});
+
+   	$('#member-search-btn').click(e=>{
+		alert('멤버 검색');
+		var i=$('#searchContent').val();
+		alert('searchContent'+i);
+		e.preventDefault();
+		$.ajax({
+			url:ctx+'/search/'+i,
+			method:'post',
+			dataType:'json',
+			data : JSON.stringify({
+				'search':i
+						}),
+			contentType:'application/json',
+			
+			success : (data)=>{
+				          alert('ajax 통신:'+data.success);			          
+				          var list='';
+				          console.log(data.searchMember);
+				          for(var i=0;i<data.searchMember.length;i++){
+							list+='<tr id="tr-'+i+'"><td><input type="checkbox" id="check-'+i+'" name="check" value=""></td><td id="email-'+i+'">'+data.searchMember[i].email+'</td><td id="firstname-'+i+'">'+data.searchMember[i].firstName+'</td><td id="surname-'+i+'">'+data.searchMember[i].surname+'</td><td id="country-'+i+'">'+data.searchMember[i].country+'</td><td id="regdate-'+i+'">'+data.searchMember[i].regdate+'</td></tr>'
+						
+				          }
+						$('#memberList-tab').html(list);
+			},
+	 		error : (x,s,m)=>{
+	 			alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+		    }
+		});
+   	});
+   	$.getJSON(ctx+'/a/list/member/'+i,data=>{
+   	    var start_page=data.startPage;
+   		var end_page=data.endPage;
+   		var page_num=data.pageNum;
+   		var page_size=data.pageSize;
+   		var total_page=data.totalPage;
+   		var block_size=data.blockSize;
+   	$('#btn-mem-del-171031').click(e=>{
+   		e.preventDefault();
+   		if($("input:checkbox[name=check]:checked").length==0){
+   			alert("삭제할 계정을 선택해주세요!");
+   		}else{		
+   			var selected_emails='';
+   		for(var i=(page_num-1)*page_size+1 ;i<=page_num*page_size;i++){
+   	  		console.log();
+   			console.log('check'+$('#check-'+i).prop("checked"));
+   			var check=$('#check-'+i).prop("checked");
+   		  		 if(check==true){
+   		  			  selected_emails+=$('#email-'+i).text()+',';
+   				alert(selected_emails);
+   		
+   				};
+   		};
+   		$.ajax({
+				url:ctx+'/delete/email',
+				method:'post',
+				dataType:'json',
+				data : JSON.stringify({
+					'selected_emails':selected_emails						
+				}),
+				contentType:'application/json',
+				 success : (data)=>{
+					 	alert("결과 :"+data.result);
+					 	hyunseok.member.list(1);
+					
+			        },
+			        error : (x,s,m)=>{
+			            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+			       }
+			})
+
+   		};
+   	});});
+  	$.getJSON(ctx+'/a/list/member/'+i,data=>{
+   	    var start_page=data.startPage;
+   		var end_page=data.endPage;
+   		var page_num=data.pageNum;
+   		var page_size=data.pageSize;
+   		var total_page=data.totalPage;
+   		var block_size=data.blockSize;
+   	$('#btn-member-update').click(e=>{
+   		e.preventDefault();
+		alert('member update');
+				
+		
+		if($("input:checkbox[name=check]:checked").length==1){
+			for(var i=(page_num-1)*page_size+1 ;i<=page_num*page_size;i++){
+				console.log('check'+$('#check-'+i).prop("checked"));
+				var check=$('#check-'+i).prop("checked");
+				if(check==true){
+					var k=$('#email-'+i).text();
+					var f=$('#firstname-'+i).text();
+					var s=$('#surname-'+i).text();
+					var c=$('#country-'+i).text();
+					
+					alert(k);
+					$('body').empty();
+					hyunseok.navbar.init();
+					$('body').append(hyunseok.compUI.memberUpdate());
+					hyunseok.memberUpdate.init();
+					$('#ac-email').val(k);
+					if(f==="null"){$('#ac-first-name').val(""); }else{$('#ac-first-name').val(f);};
+					if(s==="null"){$('#ac-last-name').val(""); }else{$('#ac-last-name').val(s);};
+					if(c==="null"){$('#ac-locale').val(""); }else{$('#ac-locale').val(c);};
+					
+					
+					
+				};
+			};
+		}else if($("input:checkbox[name=check]:checked").length==0){
+			alert("계정을 선택해주세요");
+		}else{
+			alert("계정 하나만 선택해주세요");
+		};
+  
+			  
+		});});
+	
+	
+
+	};
+	return {init:init,list:list};
 })();
 hyunseok.memberUpdate=(()=>{
 	var init=()=>{	
@@ -1108,6 +1369,7 @@ hyunseok.compUI={
 			
 		},
 		member : ()=>{
+						
 			var member= '<style>'
 			+'* { box-sizing: border-box;}'
 			+'body { margin: 0;}'
@@ -1259,7 +1521,7 @@ hyunseok.compUI={
 			+'    position: static;'
 			+'}'
 
-			+'#btn-member-update-cancel{'
+			+'#btn-mem-del-171031{'
 			+'    height: auto;'
 			+'    line-height: 280%;'
 			+'    color: #black;'
@@ -1288,18 +1550,16 @@ hyunseok.compUI={
 			+'<table id="member-sheet">'
 			+'<thead class="datagrid-thead" ><tr><th>선택</th><th>이메일</th><th>성</th><th>이름</th><th >국가</th><th >가입일</th></tr></thead>'
 			+'<tbody id="memberList-tab"></tbody>'
-			
 			+'<tfoot id="member-pagination" class="datagrid-paging">'
 			+'<tr><td colspan="6">'
 			+'<div id="paging">'
 			+'</div>'
-			+'</tr>'
+			+'</tr></td>'
 			+'</tfoot>'
-			
 			+'</table></div></div>'	
 			+'<fieldset class="buttons">'
 			+'<button id="btn-member-update"class="btn-info-admin ">정보 수정</button>'
-			+'<button id="btn-member-update-cancel" class="btn-info-admin ">삭제</button>'
+			+'<button id="btn-mem-del-171031" class="btn-info-admin ">삭제</button>'
 			+'</fieldset>'
 			
 			return member;

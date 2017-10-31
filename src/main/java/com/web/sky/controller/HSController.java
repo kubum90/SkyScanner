@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.sky.command.Command;
 import com.web.sky.mapper.HSMapper;
 import com.web.sky.member.Member;
+import com.web.sky.proxy.PageProxy;
 import com.web.sky.service.IDeleteService;
 import com.web.sky.service.IGetService;
 import com.web.sky.service.IListService;
@@ -32,6 +33,7 @@ public class HSController {
 	@Autowired HSMapper hs ;
 	@Autowired Command cmd;
 	@SuppressWarnings("null")
+	@Autowired PageProxy pxy;
 	
 	@RequestMapping("/list/{cate}")
 	public @ResponseBody Map<?, ?> countDB(Model model,@PathVariable String cate) {
@@ -186,19 +188,28 @@ public class HSController {
 	@RequestMapping(value="/delete/email",
 			method=RequestMethod.POST,
 	         consumes="application/json")
-	public @ResponseBody Map<?, ?> deleteMember(@RequestBody Member bean){
+	public @ResponseBody Map<?, ?> deleteMember(@RequestBody Map<String,String>paramMap){
 		logger.info("컨트롤러 진입!!");
 		Map<String, Object> map = new HashMap<>();
-
-		logger.info("삭제할 이메일: {}",bean.getEmail());
-		cmd.setSearch(bean.getEmail());
 		
-		IDeleteService deleteService=x->{
-				 hs.deleteMember(cmd);
-		};
-		deleteService.execute(cmd);
+		/*logger.info("삭제할 이메일: {}",bean.getEmail());
+		cmd.setSearch(bean.getEmail());*/
+		String emails = paramMap.get("selected_emails");
+		String[] emailArr = emails.split(",");
+		for(String email: emailArr) {
+			cmd.setSearch(email);
+			new IDeleteService() {
+				
+				@Override
+				public void execute(Object o) {
+					hs.deleteMember(cmd);
+					
+				}
+			}.execute(cmd);;
+		}
 		
-		map.put("success", "통신성공");
+		
+		map.put("result", "success");
 			
 		return map;
 	};
@@ -252,30 +263,67 @@ public class HSController {
 	
 	
 	
-	@RequestMapping("/a/list/{cate}")
-	public @ResponseBody Map<?, ?> memberList(Model model,@PathVariable String cate) {
+	@RequestMapping("/a/list/{cate}/{pageNumber}")
+	public @ResponseBody Map<?, ?> memberList(Model model,@PathVariable String cate,@PathVariable int pageNumber) {
 		logger.info("회원정보 하는거 진입");
+		pxy.setPageSize(10);
+		pxy.setBlockSize(5);
+		pxy.setPageNumber(pageNumber);
+		logger.info("페이지 넘버"+pageNumber);
 		Map<String, Object> map=new HashMap<>();
 		System.out.println("/member/list에 들어옴!!");
 		
 		switch(cate){
 		case "member":
 			logger.info("member 리스트에 들어옴");
+			int count=Integer.parseInt((String) hs.countMember(cmd));
+			pxy.setTheNumberOfRows(count);
+			int[]result=new int[6];
+			int theNumberOfPages=0,
+					startPage=0,
+					endPage=0;
+	
+			theNumberOfPages
+			=(pxy.getTheNumberOfRows() % pxy.getPageSize())==0?
+					pxy.getTheNumberOfRows() / pxy.getPageSize()
+					: pxy.getTheNumberOfRows() / pxy.getPageSize() +1;
+			
+			startPage =pxy.getPageNumber() -((pxy.getPageNumber()-1)%pxy.getBlockSize());		
+			
+			endPage=(startPage + pxy.getBlockSize() -1 
+					<= theNumberOfPages)?
+							startPage + pxy.getBlockSize()-1 : theNumberOfPages;
+			
+			result[0]=pxy.getPageNumber();
+			result[1]=theNumberOfPages;
+			result[2]=startPage;
+			result[3]=endPage;
+			result[4]=(startPage-(theNumberOfPages/pxy.getBlockSize())>0)?1:0;
+			result[5]=startPage+pxy.getBlockSize();
+			
 		
-			map.put("memberCount",new IGetService() {
-				@Override
-				public Object execute(Object o) {
-					return hs.countMember(cmd);
+			if(pxy.getPageNumber() <= pxy.getTheNumberOfRows() / pxy.getPageSize() +1) {
+				if(pxy.getPageNumber()==1) {
+					cmd.setStartRow("1");
+					cmd.setEndRow(String.valueOf(pxy.getPageSize()));
+				}else {	
+					cmd.setStartRow(String.valueOf((pxy.getPageNumber()-1)* pxy.getPageSize()+1));
+					cmd.setEndRow(String.valueOf(pxy.getPageNumber()*pxy.getPageSize()));
 				}
-			}.execute(null));
-			map.put("memberList",new IListService() {
-				@Override
-				public List<?> execute(Object o) {
-					return hs.memberList(cmd);
-					
-				}
-			}.execute(null));
+			}
+			
+				List<?> list = hs.memberList(cmd);
+				
+			pxy.execute(model, result,list);
+			map.put("startPage", String.valueOf(result[2]));
+			map.put("endPage", String.valueOf(result[3]));
+			map.put("pageNum", String.valueOf(result[0]));
+			map.put("pageSize", String.valueOf(pxy.getPageSize()));
+			map.put("totalPage", String.valueOf(result[1]));
+			map.put("blockSize", String.valueOf(pxy.getBlockSize()));
+			map.put("count",count);
 			map.put("result","success");
+			map.put("list", list);
 			break;
 	
 		
@@ -290,9 +338,6 @@ public class HSController {
 	public @ResponseBody Map<?, ?> searchMember(@PathVariable String search){
 		logger.info("컨트롤러 진입!!");
 		Map<String, Object> map = new HashMap<>();
-		
-		logger.info("찾는 내용: {}",search);		
-	
 		cmd.setSearch(search);	
 		
 		map.put("searchMember",new IListService() {

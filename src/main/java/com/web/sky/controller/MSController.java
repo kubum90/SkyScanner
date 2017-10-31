@@ -92,9 +92,13 @@ public class MSController {
 			return ms.selectOne(cmd);
 		};
 		Member bean = (Member) loginService.execute(cmd);
+		
+			map.put("success", "통신성공");	
+			map.put("bean", bean);
+			
+		
 		System.out.println("빈은 ::"+bean);
-		map.put("success", "통신성공");
-		map.put("bean", bean);
+		
 		
 		return map;
 	};

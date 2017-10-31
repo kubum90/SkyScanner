@@ -17,6 +17,7 @@ skyAir.common=(()=>{
 	  }
       onCreate();
       $('#airli').click(()=>{
+    	  
     	  if(sessionStorage.getItem('email')===null){
 				
 			}else{
@@ -816,6 +817,7 @@ skyAir.ticket=(()=>{
 	var ctx=$$('x');
 	  	  
 	  	  $('body').empty();
+	  	  location.reload();
 	      	  skyAir.common.init(ctx);
 	      	$('#home-container').removeClass('#home-container').addClass('.homecontent').css("background-image", "url(//content.skyscnr.com/6bf5a29ce130132f28e912434f295b76/canada-lake-feb.jpg?crop=2000px:599px&quality=80)");
 	      $('#first').removeClass('#first').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/853dd1ece19afb1f46dabe8485021767/GettyImages-564760601.jpg?resize=500px:600px&quality=50)");
@@ -829,7 +831,7 @@ skyAir.ticket=(()=>{
 	 $('#airli').click(()=>{
 	 var ctx=$$('x');
 	 if(sessionStorage.getItem('email')===null){
-			
+		 
 		}else{
 			$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
 			
