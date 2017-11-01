@@ -3,6 +3,7 @@ var skyAir=skyAir || {};
 
 skyAir.common=(()=>{
    var init=(ctx)=>{
+	   var n,num;
 	   skyAir.session.init(ctx);
 	   
 	   window.onload = function(){
@@ -15,25 +16,19 @@ skyAir.common=(()=>{
 	      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
 	      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
 	  }
-	   
       onCreate();
-      $('#loginBu').click(()=>{
-		   
-	   });
       $('#airli').click(()=>{
-    	  
     	  if(sessionStorage.getItem('email')===null){
-				
-			}else{
-				$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');	
-			}
+	
+	}else{
+	$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');	
+	}
     	  
   	  $('#account').click(()=>{
-  		  sessionStorage.clear();
-  		  location.reload();
+  	  sessionStorage.clear();
+  	  location.reload();
   	  });
-      });
-      
+});
       $('#skhot').click(()=>{
     	  $('body').empty();
         	  ms.common.init(ctx);
@@ -68,42 +63,53 @@ skyAir.common=(()=>{
                   	
                   },
                   error : (x,s,m)=>{
-                     alert('관리자 탭 에러'+m+'\n x에러: '+x+'\n s에러'+s);
+                     alert('관리자 탭 에러'+m+'\n x에러: '+x+'\n s 에러'+s);
                   }
                });
     	    
     	  }
-    	  
-    	/*  var ctx=$$('x');
-    	  if(sessionStorage.getItem('email')==='2'){
-    		  $('body').empty();
-        	  hyunseok.hello.init(ctx);  
-    	  }else{
-    		  alert('관리자 계정이 아닙니다.');
-    	  }*/
       });
       $('#identity').click(()=>{
-    	  //s
     	  if(sessionStorage.getItem('email')===null){
-				
-			}else{
-				$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
-				
-			}
+	
+	}else{
+	$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
+	
+	}
     	  $('#account').click(()=>{
-    		  sessionStorage.clear();
-    		  location.reload();
+    	  sessionStorage.clear();
+    	  location.reload();
     	  });
       });
-      $('.bpk-text').click(()=>{
-    	  $('body').empty();
-    	  skyAir.ticket.init(ctx);
-    	  //찾았다
+      $('.bpk-text').click(e=>{
+    	 
+    	 if(sessionStorage.getItem('depart')!=null){
+    	 if(sessionStorage.getItem('ret')!=null){
+    	 if(sessionStorage.getItem('n')!=null){
+    	 $('body').empty();
+    	 skyAir.ticket.init(ctx);
+    	 sessionStorage.removeItem('depart');
+    	 sessionStorage.removeItem('ret');
+    	 sessionStorage.removeItem('n');
+    	 e.preventDefault();
+    	 }
+    	 if(sessionStorage.getItem('n')===null){
+    	 
+    	 }
+    	 }
+    	 if(sessionStorage.getItem('ret')===null){
+    	 
+    	 }
+    	 }
+    	 if(sessionStorage.getItem('depart')===null){
+    	 
+    	 }
     	  if(sessionStorage.getItem('email')===null){
 				
 			}else{
 				$('#loginBut').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');		
 			}
+    	 
       });
      
 
@@ -126,13 +132,13 @@ skyAir.common=(()=>{
               	alert('통신: '+data.success);
               	alert('빈: '+data.bean.email);
               	if(data.bean.email===null){
-              		alert('로그인 실패');
+              	alert('로그인 실패');
               	}else{
-              		alert('로그인 성공');
-              		sessionStorage.setItem('email',data.bean.email);
-              		alert('세션 스토리지 :: '+ sessionStorage.getItem('email'));
-              		$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
-              		/*$('#login-button-container').append('<span id="login_session">'+sessionStorage.getItem('email')+'님 환영합니다.'+'</span>')*/
+              	alert('로그인 성공');
+              	sessionStorage.setItem('email',data.bean.email);
+              	alert('세션 스토리지 :: '+ sessionStorage.getItem('email'));
+              	$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
+              
               	}     
               	$('#account').click(()=>{
                 	alert('logout');
@@ -161,38 +167,38 @@ skyAir.common=(()=>{
       $('#signup').click(()=>{
       	alert('sign up');
       	var signup='<div class="modal-body" style="padding:40px 50px;">'
-      		+'<a style="margin-left:100%;" class="clos" data-dismiss="modal">×</a>'
-  			+'        <form role="form">'
-  			+'          <div class="form-group">'
-  			+'            <label for="usrname"><span class="glyphicon glyphicon-envelope"></span> E-MAIL</label>'
-  			+'            <input type="text" class="form-control" id="usrname" placeholder="Enter email">'
-  			+'          </div>'
-  			+'          <div class="form-group">'
-  			+'            <label for="psw"><span class="glyphicon glyphicon-lock"></span> Password</label>'
-  			+'            <input type="text" class="form-control" id="psw" placeholder="Enter password">'
-  			+'          </div>'
-  			+'          <button id="goJoin" type="submit" class="btn btn-success btn-block" data-dismiss="modal"><span class="glyphicon glyphicon-off"></span> JOIN</button>'
-  			+'    <br />'
-  			+'        </form>'
-  			+'      </div>'
-  			+'      <div class="modal-footer" style="">'
-  			+'      </div>';
+      	+'<a style="margin-left:100%;" class="clos" data-dismiss="modal">×</a>'
+  	+'        <form role="form">'
+  	+'          <div class="form-group">'
+  	+'            <label for="usrname"><span class="glyphicon glyphicon-envelope"></span> E-MAIL</label>'
+  	+'            <input type="text" class="form-control" id="usrname" placeholder="Enter email">'
+  	+'          </div>'
+  	+'          <div class="form-group">'
+  	+'            <label for="psw"><span class="glyphicon glyphicon-lock"></span> Password</label>'
+  	+'            <input type="text" class="form-control" id="psw" placeholder="Enter password">'
+  	+'          </div>'
+  	+'          <button id="goJoin" type="submit" class="btn btn-success btn-block" data-dismiss="modal"><span class="glyphicon glyphicon-off"></span> JOIN</button>'
+  	+'    <br />'
+  	+'        </form>'
+  	+'      </div>'
+  	+'      <div class="modal-footer" style="">'
+  	+'      </div>';
       	$('.modal-content').empty();
       	$('.modal-content').append(signup);	
       	$('.clos').click(()=>{
-      		location.reload();
+      	location.reload();
       	});
       
       	$('#goJoin').click(e=>{
-    		e.preventDefault();
-    		alert('조인 버튼 클릭');
-    		var _email = $('#usrname').val();
-    		var _pw = $('#psw').val();
-    		$.ajax({
-    			url:ctx+'/join',
-    			method:'post',
-    			dataType:'json',
-    			data:JSON.stringify({
+    	e.preventDefault();
+    	alert('조인 버튼 클릭');
+    	var _email = $('#usrname').val();
+    	var _pw = $('#psw').val();
+    	$.ajax({
+    	url:ctx+'/join',
+    	method:'post',
+    	dataType:'json',
+    	data:JSON.stringify({
                 	  'email' : _email,
                   	  'password' : _pw
                 }),
@@ -201,52 +207,52 @@ skyAir.common=(()=>{
                 	alert('통신: '+data.success);
                 	
               /*  	if(data.success==='통신성공'){
-                		alert('가입성공');
-                		//$('#login').remove();
-                		//$('#button').before(compUI.span('session').text(data.bean.name+'님 환영합니다.'));
+                	alert('가입성공');
+                	//$('#login').remove();
+                	//$('#button').before(compUI.span('session').text(data.bean.name+'님 환영합니다.'));
                 	}else{
-                		alert('가입 실패');
+                	alert('가입 실패');
                 	}   */   	
                    
                 },
                 error : (x,s,m)=>{
                    alert('가입 에러'+m+'\n x에러: '+x+'\n s에러'+s);
                 }
-    		});
+    	});
     	});
     	
     	
     /*	 $('#loginmm').click(()=>{
     	    	alert('???');
     	    	var loginmm='<div class="modal-content" >'
-	    			+'      <div class="modal-header" style="padding:35px 50px;">'
-	    			+'      <button type="button" class="close" data-dismiss="modal">&times;</button>'	    			
-	    			+'      <span class=""></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-	    			+'      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 로그인 또는 회원가입'
-	    			+'      </div>'
-	    			+'      <div class="modal-body" style="padding:80px 50px; float: left;">'
-	    			+'        <button type="submit" class="btn btn-success btn-block" style="background-color: blue;" data-dismiss="modal">Login By FaceBook</button>'
-	    			+'        <p style="position:absolute; width: 110%; padding: 50px 10px 0px 0px;">Not a member? <a id="joinmm" href="#"><b id="signup" style="color: red;">Sign Up</b></a></p>'	    			
-	    			+'      </div>'
-	    			+'      <div class="modal-body" style="padding:80px 50px; float: right;">'
-	    			+'        <form role="form">'
-	    			+'          <div class="form-group">'
-	    			+'            <label for="usrname"><span class="glyphicon glyphicon-envelope"></span> Username</label>'
-	    			+'            <input type="text" class="form-control" id="usrname" placeholder="Enter email">'
-	    			+'          </div>'
-	    			+'          <div class="form-group">'
-	    			+'            <label for="psw"><span class="glyphicon glyphicon-lock"></span> Password</label>'
-	    			+'            <input type="password" class="form-control" id="psw" placeholder="Enter password">'
-	    			+'          </div>'
-	    			+'          <div class="checkbox">'
-	    			+'            <label><input type="checkbox" value="" checked>Remember me</label>'
-	    			+'          </div>'
-	    			+'          <button id="loginBtn" type="submit" class="btn btn-success btn-block" data-dismiss="modal"><span class="glyphicon glyphicon-off"></span> Login</button>'
-	    			+'        </form>'
-	    			+'      </div>'
-	    			+'      <div class="modal-footer" style="">'
-	    			+'      </div>'
-	    			+'    </div>    '	
+	    	+'      <div class="modal-header" style="padding:35px 50px;">'
+	    	+'      <button type="button" class="close" data-dismiss="modal">&times;</button>'	    	
+	    	+'      <span class=""></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+	    	+'      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 로그인 또는 회원가입'
+	    	+'      </div>'
+	    	+'      <div class="modal-body" style="padding:80px 50px; float: left;">'
+	    	+'        <button type="submit" class="btn btn-success btn-block" style="background-color: blue;" data-dismiss="modal">Login By FaceBook</button>'
+	    	+'        <p style="position:absolute; width: 110%; padding: 50px 10px 0px 0px;">Not a member? <a id="joinmm" href="#"><b id="signup" style="color: red;">Sign Up</b></a></p>'	    	
+	    	+'      </div>'
+	    	+'      <div class="modal-body" style="padding:80px 50px; float: right;">'
+	    	+'        <form role="form">'
+	    	+'          <div class="form-group">'
+	    	+'            <label for="usrname"><span class="glyphicon glyphicon-envelope"></span> Username</label>'
+	    	+'            <input type="text" class="form-control" id="usrname" placeholder="Enter email">'
+	    	+'          </div>'
+	    	+'          <div class="form-group">'
+	    	+'            <label for="psw"><span class="glyphicon glyphicon-lock"></span> Password</label>'
+	    	+'            <input type="password" class="form-control" id="psw" placeholder="Enter password">'
+	    	+'          </div>'
+	    	+'          <div class="checkbox">'
+	    	+'            <label><input type="checkbox" value="" checked>Remember me</label>'
+	    	+'          </div>'
+	    	+'          <button id="loginBtn" type="submit" class="btn btn-success btn-block" data-dismiss="modal"><span class="glyphicon glyphicon-off"></span> Login</button>'
+	    	+'        </form>'
+	    	+'      </div>'
+	    	+'      <div class="modal-footer" style="">'
+	    	+'      </div>'
+	    	+'    </div>    '	
     	    	$('.modal-content').empty();
     	    	$('.modal-content').append(loginmm);
     	    	
@@ -259,14 +265,9 @@ skyAir.common=(()=>{
    };
 	   var onCreate=()=>{
 	   setContentView();
+	  
 	   
 	   $('#pagewrap').append(skyAir.Head.popover());
-	/*	   $('#js-trad-cabin-class-travellers-toggle').click(()=>{
-	   $('#popover')
-	   .removeClass('.popover pax-cabin-class hidden')
-	   .addClass('.popover pax-cabin-class ')
-	   });
-*/
 	    $('#js-trad-cabin-class-travellers-toggle').click(()=>{
 	    	   $('#popover')
 	    	   .removeClass('popover pax-cabin-class hidden')
@@ -322,7 +323,9 @@ skyAir.common=(()=>{
 	if($("#js-return-input").val() < selectedDate){
 	$("#js-depart-input").datepicker( "option", "selectedDate", selectedDate );
 	};
-	            }
+	sessionStorage.setItem('depart',$('#js-depart-input').val());
+	sessionStorage.setItem('depart1',$('#js-depart-input').val());
+	}
 	});
 	$('#js-return-input').datepicker({
 	dayNames:["일", "월", "화", "수", "목", "금", "토"],
@@ -335,6 +338,8 @@ skyAir.common=(()=>{
 	if($("#js-depart-input").val() > selectedDate){
 	$("#js-return-input").datepicker( "option", "selectedDate", selectedDate+1 );
 	};
+	sessionStorage.setItem('ret',$('#js-return-input').val());
+	sessionStorage.setItem('ret1',$('#js-return-input').val());
 	            }
 	});
 	
@@ -344,12 +349,13 @@ skyAir.common=(()=>{
 	    	$('#js-origin-input').val($('#js-destination-input').val());
 	    	$('#js-destination-input').val(temp);
 	    });
-	    
+	  
 	    $('#increment').click(()=>{
 	        var n = $('#increment').index(this);
 	        var num = $("#js-adults:eq("+n+")").val();
 	        if(num<8){
-	        num = $("#js-adults:eq("+n+")").val(num*1+1); 
+	        num = $("#js-adults:eq("+n+")").val(num*1+1);
+	        sessionStorage.setItem('n', $("#js-adults:eq("+n+")").val());
 	        }
 	    });
 	    $('#decrement').click(()=>{
@@ -357,9 +363,10 @@ skyAir.common=(()=>{
 	        var num = $("#js-adults:eq("+n+")").val();
 	        if(num>0){
 	        num = $("#js-adults:eq("+n+")").val(num*1-1);
+	        sessionStorage.setItem('n', $("#js-adults:eq("+n+")").val());
 	        }
 	    });
-	 
+
 	   };
    var setContentView=()=>{
        $('title').append('스카이스캐너-항공권,호텔,렌트카 최저가 비교 예약 ');
@@ -368,7 +375,6 @@ skyAir.common=(()=>{
              +'</div>'
              +'<link rel="stylesheet" href="https://js.skyscnr.com/sttc/oc-registry/components/header/0.4.42/build/static/css/main.dc7e0f67.css"><script>;</script>' 
              +'<div id="header-root"><header class="Header-1_1R8" data-reactroot="" data-reactid="1" data-react-checksum="451503947"><div class="Header__wrapper-2KwQq clearfix wrap" data-reactid="2"><nav class="SecondaryNav-3MUje" data-reactid="3"><ul class="SecondaryNav__list-1lEyp" data-reactid="4"><li class="SecondaryNav__help-19EmT SecondaryNav__item-25SJ- SecondaryNav__item--small-_0Qtf" data-reactid="5"><a class="bpk-link-143_C" href="https://help.skyscanner.net/hc/ko" target="_blank" id="ss-header-links-faq" data-reactid="6">도움말</a></li><li class="SecondaryNav__culture-selector-TeNdM culture-info SecondaryNav__item-25SJ-" id="culture-info" data-reactid="7"><button type="button" class="bpk-button-30cpF bpk-button--secondary-lyMj0" data-reactid="8"><img class="SecondaryNav__country-flag-2Bn20" src="https://images.skyscnr.com/images/country/flag/header/kr.png" alt="KR" title="KR" data-reactid="9"/><!-- react-text: 10 --> <!-- /react-text --><!-- react-text: 11 -->ko-KR<!-- /react-text --><!-- react-text: 12 --> <!-- /react-text --><!-- react-text: 13 -->₩ KRW<!-- /react-text --></button></li><li class="SecondaryNav__account-2N-Uf SecondaryNav__item-25SJ-" id="login-button-container" data-reactid="14"><button id="loginBu" type="button" class="bpk-button-30cpF bpk-button--secondary-lyMj0" data-reactid="15"" data-toggle="modal" data-target="#myModal">로그인</button></li><li class="SecondaryNav__menu-393l9 toggle-touch-menu SecondaryNav__item-25SJ-" id="toggle-touch-menu" data-reactid="17"><button class="SecondaryNav__menu-button-30qZJ" data-reactid="18"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="width:1.5rem;height:1.5rem;" class="SecondaryNav__menu-icon-2RdSm bpk-icon--rtl-support-6bwD-" data-reactid="19"><path d="M20 8H4c-.6 0-1-.4-1-1s.4-1 1-1h16c.6 0 1 .4 1 1s-.4 1-1 1zm1 4c0-.6-.4-1-1-1H4c-.6 0-1 .4-1 1s.4 1 1 1h16c.6 0 1-.4 1-1zm0 5c0-.6-.4-1-1-1H4c-.6 0-1 .4-1 1s.4 1 1 1h16c.6 0 1-.4 1-1z" data-reactid="20"></path></svg><span class="visually-hidden" data-reactid="21">탐색 메뉴</span></button></li></ul></nav><div id="identity" class="Header__logo-wrapper-26Akq" data-reactid="22"><a class="Logo-38wHj" data-reactid="23"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 211 36" class="bpk-logo bpk-logo__inline Logo__svg-l3cXE" data-reactid="24"><path d="M70.187 14.115a.577.577 0 0 1-.765.365c-.969-.373-2.065-.64-3.09-.64-1.764 0-3.426.53-3.426 2.296 0 .954.53 1.449 2.227 1.98l1.236.387c2.473.776 3.533 1.907 3.533 4.096 0 3.778-2.65 6.358-7.452 6.358-1.887 0-3.501-.296-4.87-.773-.333-.116-.493-.486-.394-.825l.565-1.96c.094-.325.456-.479.77-.353 1.237.5 2.608.839 3.822.839 2.156 0 3.673-.742 3.673-2.474 0-1.024-.706-1.411-2.296-1.907l-1.343-.423c-2.367-.777-3.427-2.19-3.427-4.45 0-3.851 3.216-5.933 7.454-5.933 1.275 0 2.732.285 3.947.702.335.114.497.486.394.824l-.558 1.891zm8.347-10.082c.33 0 .575.3.514.623l-2.6 13.436c2.45-1.787 4.59-3.887 6.48-6.324a1.27 1.27 0 0 1 1.007-.494h2.828c.272 0 .423.307.267.53-1.859 2.621-3.986 5.04-6.237 6.993l3.582 9.017a.434.434 0 0 1-.402.592h-3.005a.915.915 0 0 1-.854-.595l-2.465-6.717c-.662.446-1.346.859-2.049 1.237l-1.046 5.451a.772.772 0 0 1-.753.624h-2.582a.523.523 0 0 1-.512-.624l4.49-23.126a.768.768 0 0 1 .756-.624h2.581v.001zm13.213 7.24c.33 0 .577.302.514.626l-1.75 9.019c-.142.67-.283 1.518-.283 2.332 0 1.058.6 1.766 2.013 1.766 1.378 0 3.001-.601 4.203-1.73l2.245-11.388a.774.774 0 0 1 .756-.624h2.582c.329 0 .575.3.511.625l-2.314 11.88c-.283 1.377-.6 2.931-.882 4.168C97.999 33.528 95.456 36 90.369 36c-1.12 0-2.235-.14-3.205-.4a.687.687 0 0 1-.494-.818l.442-1.804a.616.616 0 0 1 .738-.461c.733.175 1.571.304 2.343.304 3.005 0 4.768-1.272 5.404-4.732l.25-1.308c-1.307 1.13-3.252 1.872-5.087 1.872-2.968 0-4.557-1.483-4.557-3.85 0-1.413.283-2.968.6-4.59l1.61-8.313a.773.773 0 0 1 .755-.626h2.579v-.001zm23.306 2.855a.577.577 0 0 1-.765.366c-.968-.374-2.066-.642-3.09-.642-1.764 0-3.424.532-3.424 2.297 0 .954.527 1.449 2.223 1.98l1.237.387c2.472.776 3.533 1.907 3.533 4.097 0 3.778-2.65 6.358-7.452 6.358-1.885 0-3.502-.297-4.868-.774-.334-.116-.494-.486-.397-.825l.567-1.96c.093-.325.457-.479.77-.353 1.236.5 2.607.839 3.82.839 2.155 0 3.674-.742 3.674-2.474 0-1.024-.705-1.411-2.294-1.907l-1.346-.423c-2.365-.777-3.424-2.19-3.424-4.45 0-3.851 3.214-5.933 7.454-5.933 1.275 0 2.73.285 3.946.702.332.114.494.486.393.824l-.557 1.891zm15.075.387a.526.526 0 0 1-.735.323c-.93-.425-1.982-.668-3.181-.668-3.743 0-6.007 3.216-6.007 7.313.036 2.439.92 4.063 3.676 4.098 1.22.03 2.493-.217 3.644-.613.282-.096.59.101.556.396l-.243 2.058a1.044 1.044 0 0 1-.692.868c-1.28.445-2.675.681-4.254.681-4.593 0-6.747-2.613-6.747-6.924 0-6.108 3.462-11.335 10.101-11.335 1.61 0 2.97.3 4.075.775.343.151.52.533.415.893l-.608 2.135zm2.814-1.969a.92.92 0 0 1 .618-.85c1.692-.565 3.828-.984 5.685-.984 3.531 0 5.827 1.059 5.827 4.132 0 .635-.106 1.413-.281 2.26l-1.377 7.24c-.213 1.087-.108 1.695.362 1.933.288.145.53.422.464.739l-.207 1.017c-.08.392-.377.716-.769.8a6.464 6.464 0 0 1-1.264.14c-1.592 0-2.367-.743-2.472-2.05h-.106c-1.165 1.272-2.93 2.05-5.017 2.05-3.001 0-4.943-1.518-4.943-4.556 0-4.098 3.25-7.03 10.526-7.03h.955c.104-.53.174-1.06.174-1.448 0-1.413-.707-2.05-2.93-2.05-1.415 0-3.112.338-4.713.883a.432.432 0 0 1-.572-.421l.04-1.805zm6.762 7.595c-3.567 0-6.182 1.165-6.182 3.743 0 1.132.673 1.838 2.191 1.838 1.447 0 2.967-.742 3.92-1.731l.775-3.85h-.704zm12.01-8.867c.341 0 .608.293.574.634l-.115 1.204h.034c1.73-1.449 3.957-2.4 6.111-2.4 2.685 0 4.45 1.552 4.45 4.026 0 1.2-.175 2.188-.387 3.319l-1.859 9.726a.774.774 0 0 1-.754.624h-2.582a.521.521 0 0 1-.512-.624l1.714-8.879c.178-.882.32-1.872.32-2.472 0-1.306-.708-1.977-2.192-1.977-1.623 0-3.461.845-4.767 2.082l-2.142 11.246a.77.77 0 0 1-.752.624h-2.581a.523.523 0 0 1-.516-.624l3.045-15.884a.768.768 0 0 1 .752-.625h2.159zm17.485 0a.58.58 0 0 1 .575.634l-.117 1.204h.035c1.731-1.449 3.955-2.4 6.109-2.4 2.686 0 4.452 1.552 4.452 4.026 0 1.2-.178 2.188-.388 3.319l-1.86 9.726a.772.772 0 0 1-.754.624h-2.582a.525.525 0 0 1-.515-.624l1.72-8.879c.176-.882.317-1.872.317-2.472 0-1.306-.707-1.977-2.191-1.977-1.624 0-3.46.845-4.768 2.082l-2.14 11.246a.771.771 0 0 1-.755.624h-2.582a.525.525 0 0 1-.516-.624l3.047-15.884a.768.768 0 0 1 .755-.625h2.158zm16.53 10.208c-.06.517-.05 1.04.035 1.555.318 1.73 1.66 2.578 3.92 2.578 1.578 0 3.234-.243 4.689-.706.28-.089.57.126.532.418l-.235 1.955c-.046.382-.289.721-.654.849-1.6.559-3.41.84-5.11.84-4.873 0-7.24-2.084-7.24-6.816 0-4.099 1.34-7.877 4.239-9.89 1.448-1.026 3.25-1.553 5.51-1.553 4.097 0 5.898 2.328 5.898 5.792 0 1.193-.142 2.781-.471 4.388-.073.355-.402.59-.764.59h-10.349zm7.416-2.79c.18-.668.275-1.357.283-2.049 0-1.59-.705-2.72-2.506-2.72-2.614 0-4.205 1.908-4.769 4.769h6.992zm10.495-7.418a.59.59 0 0 1 .588.634l-.098 1.38h.07c1.308-1.59 3.217-2.402 5.017-2.402a7.2 7.2 0 0 1 .514.016c.337.021.527.376.426.697l-.715 2.285c-.113.365-.468.597-.85.613-1.784.077-3.508.587-4.674 1.406l-2.28 11.88a.773.773 0 0 1-.756.624h-2.58a.524.524 0 0 1-.515-.624l3.046-15.884a.77.77 0 0 1 .752-.625h2.055zM28.247 14.713c4.78-4.781 11.05-7.158 17.318-7.152l.05.001c.57 1.336.901 2.763.978 4.214a20.283 20.283 0 0 0-1-.025l-.028.002-.026-.002a20.127 20.127 0 0 0-14.322 5.933 20.126 20.126 0 0 0-5.934 14.321l.003.072H21.09c-.017-6.282 2.361-12.572 7.156-17.365l.001.001zm24.843 8.02c.03-.329.046-.662.046-.999 0-1.604-.369-3.12-1.023-4.473a16.159 16.159 0 0 0-6.548-1.371 16.06 16.06 0 0 0-11.43 4.715 16.063 16.063 0 0 0-4.716 11.473h4.21c-.018-3.08 1.132-6.162 3.475-8.505a11.87 11.87 0 0 1 8.25-3.473v-.003l.211.002.213-.002v.003c2.597.038 5.183.913 7.312 2.633zm-42.019-4.917l-.002-.017.002.017zm40.225 8.491a8.011 8.011 0 0 0-5.518-2.353v.002l-.213-.002-.212.002v-.002a8.014 8.014 0 0 0-5.517 2.353 8.02 8.02 0 0 0-2.35 5.772h4.04c.265-1.35.51-2.032 1.28-2.803a3.83 3.83 0 0 1 2.76-1.11 3.83 3.83 0 0 1 2.76 1.11c.263.264.473.558.642.869a10.095 10.095 0 0 0 2.851-3.258 7.998 7.998 0 0 0-.523-.58zm-34.17 5.7c0-14.844 11.382-27.026 25.895-28.301A12.408 12.408 0 0 0 34.164 0c-6.382 0-11.64 4.8-12.368 10.985a7.013 7.013 0 0 0-3.737-1.074c-3.89 0-7.432 3.892-6.988 7.905a7.562 7.562 0 1 0-4.603 14.183c.287.05.582.08.883.08h9.775v-.074.002zM11.06 17.718l.009.08-.009-.08z" data-reactid="25"></path></svg><span class="visually-hidden" data-reactid="26">Skyscanner</span></a></div><nav id="PrimaryNav" class="PrimaryNav-2IMAs" data-reactid="27"><ul class="PrimaryNav__list-16-_W" data-reactid="28"><li class="HeaderTab-2DhXr" data-reactid="29"><a id="airli" class="js-header-tab HeaderTab__link-o2SAi HeaderTab__link--active-1vNee" data-analytics-name="flights" data-reactid="30"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="width:1.5rem;height:1.5rem;" class="HeaderTab__icon-2pgUO HeaderTab__icon--active-30Ao7 HeaderTab__icon--mobile-1srLF bpk-icon--rtl-support-6bwD-" data-reactid="31"><path d="M17.8 20.1l.6-.6c.2-.2.3-.5.2-.8l-2.2-9.3 4.1-4.2c.5-.5.5-1.3 0-1.9-.5-.5-1.4-.5-1.9 0l-4.2 4.1-9.1-2c-.3-.1-.6 0-.8.2l-.6.6c-.4.4-.3 1.1.2 1.4l7.2 3.2-3.7 3.7-2.3-.8c-.3-.1-.6 0-.8.2L3 15.2l4.2 1.6L8.8 21l1.3-1.5c.2-.2.3-.6.2-.8l-.8-2.3 3.7-3.7 3.2 7.2c.3.5 1 .6 1.4.2z" data-reactid="32"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" style="width:1.125rem;height:1.125rem;" class="HeaderTab__icon-2pgUO HeaderTab__icon--active-30Ao7 HeaderTab__icon--desktop-1e6kR bpk-icon--rtl-support-6bwD-" data-reactid="33"><path d="M17.8 20.1l.6-.6c.2-.2.3-.5.2-.8l-2.2-9.3 4.1-4.2c.5-.5.5-1.3 0-1.9-.5-.5-1.4-.5-1.9 0l-4.2 4.1-9.1-2c-.3-.1-.6 0-.8.2l-.6.6c-.4.4-.3 1.1.2 1.4l7.2 3.2-3.7 3.7-2.3-.8c-.3-.1-.6 0-.8.2L3 15.2l4.2 1.6L8.8 21l1.3-1.5c.2-.2.3-.6.2-.8l-.8-2.3 3.7-3.7 3.2 7.2c.3.5 1 .6 1.4.2z" data-reactid="34"></path></svg><span class="HeaderTab__text-ZVTEX" data-reactid="35"><!-- react-text: 36 --> <!-- /react-text --><!-- react-text: 37 -->항공권<!-- /react-text --></span></a></li><li class="HeaderTab-2DhXr" data-reactid="38"><a id="skhot" class="js-header-tab HeaderTab__link-o2SAi" data-analytics-name="hotels" data-reactid="39"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="width:1.5rem;height:1.5rem;" class="HeaderTab__icon-2pgUO HeaderTab__icon--mobile-1srLF bpk-icon--rtl-support-6bwD-" data-reactid="40"><path d="M8 12c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m11-3.9h-6c-1.1 0-2 .9-2 2V12h10v-1.9c0-1.1-.9-2-2-2m3 5.9c0-.6-.4-1-1-1H5V5.5C5 4.7 4.3 4 3.5 4S2 4.7 2 5.5v13c0 .8.7 1.5 1.5 1.5S5 19.3 5 18.5V16h14v2.5c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V14z" data-reactid="41"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" style="width:1.125rem;height:1.125rem;" class="HeaderTab__icon-2pgUO HeaderTab__icon--desktop-1e6kR bpk-icon--rtl-support-6bwD-" data-reactid="42"><path d="M8 12c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m11-3.9h-6c-1.1 0-2 .9-2 2V12h10v-1.9c0-1.1-.9-2-2-2m3 5.9c0-.6-.4-1-1-1H5V5.5C5 4.7 4.3 4 3.5 4S2 4.7 2 5.5v13c0 .8.7 1.5 1.5 1.5S5 19.3 5 18.5V16h14v2.5c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V14z" data-reactid="43"></path></svg><span class="HeaderTab__text-ZVTEX" data-reactid="44"><!-- react-text: 45 --> <!-- /react-text --><!-- react-text: 46 -->호텔<!-- /react-text --></span></a></li><li class="HeaderTab-2DhXr" data-reactid="47"><a id="adminhi" class="js-header-tab HeaderTab__link-o2SAi" data-analytics-name="carhire" data-reactid="48"><span class="HeaderTab__text-ZVTEX" data-reactid="53"><!-- react-text: 54 --> <!-- /react-text --><!-- react-text: 55 -->관리자<!-- /react-text --></span></a></li></ul></nav></div></header></div>'
-             
              +'<div id="trip-shortlist" class="hidden">'
              +'</div>'
              +'<div id="container-trip-planning-refactor" class="trip-planning hidden">'
@@ -382,25 +388,11 @@ skyAir.common=(()=>{
              +'</div>'
              
        );
-       
-       
-      
+ 
    };
    return {init : init};
 })();
 skyAir.Head={
-		session : ()=>{
-			  if(sessionStorage.getItem('email')===null){
-					
-				}else{
-					$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
-					
-				}
-	    	  $('#account').click(()=>{
-	    		  sessionStorage.clear();
-	    		  location.reload();
-	    	  });
-		},
       navbar:()=>{
          return '<div id="home-container" class="homecontent" style="background-image: url(https://content.skyscnr.com/6bf5a29ce130132f28e912434f295b76/canada-lake-feb.jpg?crop=200px:45px&amp;quality=80)">'
          +'    <div class="wrap-homecontent">'
@@ -432,11 +424,11 @@ skyAir.Head={
          +'                </div><div id="js-dates" class="search-controls-dates">'
          +'                    <div class="depart">'
          +'                        <label for="js-depart-input">가는날</label>'
-         +'                        <input type="text" id="js-depart-input" value="2017. 10. 24." tabindex="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="">'
+         +'                        <input type="text" id="js-depart-input" placeholder="날짜 선택." tabindex="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="">'
          +'                    </div>'
          +'                    <div class="return ">'
          +'                        <label for="js-return-input">오는날</label>'
-         +'                        <input type="text" id="js-return-input"  value="2017. 10. 31." tabindex="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="">'
+         +'                        <input type="text" id="js-return-input"  placeholder="날짜 선택" tabindex="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="">'
          +'                    </div>'
          +'                    <span id="js-depart-summary" class="date-summary"></span>'
          +'                    <span id="js-return-summary" class="date-summary"></span>'
@@ -444,13 +436,13 @@ skyAir.Head={
          +'                    <label for="js-trad-cabin-class-travellers-toggle">좌석 등급 및 승객</label>'
          +'                    <button type="button" id="js-trad-cabin-class-travellers-toggle" class="cabin-class-travellers-trigger" tabindex="1">'
          +'                        <span class="down-arrow"></span>'
-         +'                        <span>1 성인, 일반석</span>'
+         +'                        <span> 성인, 일반석</span>'
          +'                    </button>'
          +'                </div>'
          +'                <label class="sc-checkbox prefer-directs">'
          +'                    <input type="checkbox" id="js-prefer-directs" class="visuallyhidden" tabindex="1"> 직항만'
          +'                </label>'
-         +'                <button class="js-search-button fss-bpk-button fss-bpk-button--large" type="button" tabindex="1">'
+         +'                <button id="searchBtn" class="js-search-button fss-bpk-button fss-bpk-button--large" type="button" tabindex="1">'
          +'                    <span class="bpk-text">항공권 검색&nbsp;</span>'
          +'                    <span class="bpk-icon-lg bpk-icon-pointer bpk-icon-lg--align-to-button"></span>'
          +'                </button>'
@@ -812,12 +804,9 @@ skyAir.Head={
     	/*+'  <button type="button" class="popover-hide ">완료</button>'*/
     	+'<label for="js-cabin-class-dropdown">좌석 등급</label><select id="js-cabin-class-dropdown" class="cabin-class-dropdown hidden" tabindex="1"><option value="Economy">일반석</option><option value="PremiumEconomy">프리미엄 일반석</option><option value="Business">비즈니스석</option><option value="First">일등석</option></select><div id="js-cabin-class-economy-only" class="cabin-class-economy-only"><p><strong>검색하신 노선은 일반석 가격만 보여 드릴 수 있습니다.</strong></p><p>비즈니스석 및 일등석 옵션을 보려면 정확한 날짜 및/또는 도착지 도시 이름을 알려주세요.</p></div><div id="js-travellers" class="traveller-nudgers"><label for="js-adults" value="1" class="traveller-label">성인</label>'
     	+'<button type="button" id="decrement" class="decrement adults" data-selector="#js-adults" tabindex="1">−</button>'
-    	+'<input type="text" id="js-adults" readonly="">'
+    	+'<input type="text" id="js-adults" readonly="" value="0">'
     	+'<button type="button" id="increment" class="increment adults" data-selector="#js-adults" tabindex="1">+</button>'
-    	+'<span>만 16세 이상</span><label for="js-children" class="traveller-label">유/소아</label>'
-    	+'<button type="button" class="decrement children" data-selector="#js-children" tabindex="1" disabled="">−</button>'
-    	+'<input type="text" id="js-children" readonly="">'
-    	+'<button type="button" class="increment children" data-selector="#js-children" tabindex="1">+</button>'
+    	+'<span>만 16세 이상</span>'
     	+'<span>만 0 - 15세</span><div class="childAges"><div id="childDiv-0" class="hidden">'
     	+'<label for="childAge-0" class="traveller-label">유/소아&nbsp;1 나이</label>'
     	+'<select id="childAge-0" class="childAge" data-selector="0"><option value="-1">-</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option></select>'
@@ -842,7 +831,7 @@ skyAir.Head={
     	+'</div><div id="childDiv-7" class="hidden">'
     	+'<label for="childAge-7" class="traveller-label">유/소아&nbsp;8 나이</label>'
     	+'<select id="childAge-7" class="childAge" data-selector="7"><option value="-1">-</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option></select>'
-    	+'</div></div></div><div class="passengers-legal"><p class="top">여행 시 탑승객의 나이는 예약된 연령 범주에 부합해야 합니다. 항공사는 만 18세 미만의 단독 여행 탑승객에 대한 제한이 있습니다.</p><p class="bottom">유/소아 동반 여행 시 연령 제한과 정책은 항공사별로 다를 수 있으니 예약하기 전에 해당 항공사와 확인하시기 바랍니다.</p></div> <button type="button" class="popover-hide">완료</button></div></div>'
+    	+'</div></div></div><div class="passengers-legal"><p class="top">여행 시 탑승객의 나이는 예약된 연령 범주에 부합해야 합니다. 항공사는 만 18세 미만의 단독 여행 탑승객에 대한 제한이 있습니다.</p><p class="bottom">유/소아 동반 여행 시 연령 제한과 정책은 항공사별로 다를 수 있으니 예약하기 전에 해당 항공사와 확인하시기 바랍니다.</p></div> <button type="button" class="popover-hide" id="confirmBtn">완료</button></div></div>'
       }
     
      
@@ -861,7 +850,6 @@ skyAir.ticket=(()=>{
 	var onCreate=function(){
 	$(document).ready(function(){
 	//$('#pagewrap').append(skyAir.timeline.modaldal());
-	alert('화면실행')
 	$.ajax({
 	url:$$('x')+'/price',
 	method:'post',
@@ -914,11 +902,11 @@ skyAir.ticket=(()=>{
 	 $('#airli').click(()=>{
 	 var ctx=$$('x');
 	 if(sessionStorage.getItem('email')===null){
-		 
-		}else{
-			$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
-			
-		}
+	
+	}else{
+	$('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
+	
+	}
 	 
 	  	  $('body').empty();
 	      	  skyAir.common.init(ctx);
@@ -931,7 +919,6 @@ skyAir.ticket=(()=>{
 	      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
 	      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
 	      });
-	 
 	      $('#skhot').click(()=>{
 	    	  var ctx=$$('x');
 	    	  $('body').empty();
@@ -958,11 +945,7 @@ skyAir.ticket=(()=>{
 	  });
 	  });
 	  $('#icn').click(e=>{
-	// $('input[name=icn]').attr("checked","true");
-	/*  if(count<2){
-	  count=count+1;
-	  }else{alert('노빠꾸')}
-	  */
+
 	  search='ICN';	 
 	  e.preventDefault();
 	
@@ -1106,20 +1089,19 @@ skyAir.ticket=(()=>{
 +'    </div>'
 +'    <div id="content-wrap" class="wrap clearfix" margin-top:0%; width:88%; background-color:#f3f2f5">'
 +skyAir.timeline.head()
-
 +'</div>'
 +skyAir.timeline.footer()
 +'</div>'
-
 	);
 	$('#loginBut').click(()=>{
-		alert('로그인1 btn');
+		
 		sessionStorage.clear();
 		location.reload();
 		
 	});
 	
-};
+	
+	};
 	var fly=function(x){
 	var flist='<li class="day-list-item clearfix ">'
         $.each( x,(i,val)=>{
@@ -1210,28 +1192,41 @@ skyAir.ticket=(()=>{
               +'</div>'
               +'</article>'
              /* $('<img/>').attr('src',arr[i]).appendTo($('#airline'+i));*/
-              
               $(document).ready(()=>{
             	  $('#modalaction'+i+'').click(e=>{
             	  e.preventDefault();
-            	  alert(val);
-            	  
+            	  alert('선택 항공=>'+val.airline+', 선택 항공 번호=>'+val.flight_no);
             	  $('#content-wrap').append(skyAir.timeline.modaldal(val));
             	  $('#yesBtn').click(e=>{
+            	/*	  if(sessionStorage.getItem('email')===null){
+            	  alert('로그인을 해주세용~@@')
+            	  }*/
+            
             	  $.ajax({
             	  url:$$('x')+'/reserve',
             	  method:'post',
             	  dataType:'json',
             	  contentType:'application/json',
             	  data:JSON.stringify({
-            	  'search' : val.airline
+            	'airline' : val.airline,
+            	  'flight_no':val.flight_no,
+            	  'departCity':val.departCity,
+            	  'arriveCity':val.arriveCity,
+            	  'cabin_class':val.cabin_class,
+            	  'departDate':sessionStorage.getItem('depart1'),
+                  'arriveDate':sessionStorage.getItem('ret1')
             	  }),
             	  success:(x)=>{
             	  alert('예매성공');
+            	  $('#modaldal').remove();
             	  }
             	  });
             	  });
             	  $('#close').click(()=>{
+            	  $('#modaldal').remove();
+            	  });
+            	  $('#noBtn').click(()=>{
+            	  alert('아니요 클릭!')
             	  $('#modaldal').remove();
             	  });
             	  });
@@ -1275,17 +1270,17 @@ skyAir.timeline={
 	+'</button>'
 	+'<div class="search-summary-main return">'
 	+'<div class="search-summary-places " >'
-	+'<h2>'
+	/*+'<h2>'
 	+'서울 (모두)'
 	+'<span class="visually-hidden">to</span>'
 	+'<span aria-hidden="true">&nbsp;-&nbsp;</span>'
 	+'상하이 (모두)'
-	+'</h2>'
+	+'</h2>'*/
 	+'<p>&nbsp;2 항공편</p>'
 	+'</div>'
 	+'<p class="search-summary-info">'
 	+'  <span class="travellers">'
-	+'  <span>1 성인</span>'
+	+'  <span>'+ sessionStorage.getItem('n')+' 성인</span>'
 	+'  </span>'
 	+'  일반석'
 	+'  </p>'
@@ -1295,7 +1290,7 @@ skyAir.timeline={
 	+'  <button class="prev" data-date="2017-10-31">'
 	+'  <span class="visually-hidden">이전</span>'
 	+'</button>'
-	+'<span class="date">11월 1일 (수)</span>'
+	+'<span class="date">'+sessionStorage.getItem('depart')+'</span>'
 	+'  <button class="next" data-date="2017-11-02">'
 	+'  <span class="visually-hidden">다음</span>'
 	+'</button>'
@@ -1304,7 +1299,7 @@ skyAir.timeline={
 	+'  <button class="prev" data-date="2017-10-31">'
 	+'   <span class="visually-hidden">이전</span>'
 	+'   </button>'
-	+'   <span class="date">11월 1일 (수)</span>'
+	+'   <span class="date">'+sessionStorage.getItem('ret')+'</span>'
 	+'    <button class="next" data-date="2017-11-02">'
 	+'      <span class="visually-hidden">다음</span>'
 	+'      </button>'
@@ -1326,12 +1321,10 @@ skyAir.timeline={
 	+'        <div class="day-cols clearfix">'
 	+'            <div id="nav-header" class="day-nav-header clearfix fqs-switcher">'
 	+skyAir.timeline.btns()
-	
 	+'<ul id="flylist" class="day-list clearfix fss-tap-anywhere tap-b fss-ticket-style animate-plane">'
 	+'</ul>'
 	+'</div>'
 	+skyAir.timeline.filter()
-	
 	+'            <div class="day-searching-message"></div>'
 	+'        </div>'
 	+'    </section>'
@@ -1711,9 +1704,7 @@ skyAir.timeline={
 	+'</div>'
 	+'</div>'
 	+'</div>'
-	
 	},
-	
 	strevda:()=>{
 	return '<div id="skyscraper-strevda"> '
 	+'<div id="adslot-beb55849" class="strevda-slot" data-type="rhsSkyscraper" data-google-query-id="CKiA74a4_tYCFU7ZvQodn0cEfA">'
@@ -1736,9 +1727,10 @@ skyAir.timeline={
 	   +'<button class="tertiary good" id="yesBtn">'
 	   +'<span class="icon" aria-hidden="true">'
 	   +'</span><!-- react-text: 911 -->예<!-- /react-text --></button>'
-	   +'<button class="tertiary bad">'
+	   +'<button class="tertiary bad" id="noBtn">'
 	   +'<span class="icon" aria-hidden="true">'
-	   +'</span><!-- react-text: 914 -->아니요<!-- /react-text --></button><button class="dismiss">둘러보고 오겠습니다.</button>'
+	   +'</span><!-- react-text: 914 -->아니요<!-- /react-text -->'
+	   +'</button>'
 	   +'</div>'
 	   +'</div>'
 	   +'</div>'
@@ -1748,6 +1740,39 @@ skyAir.timeline={
 
 	
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
