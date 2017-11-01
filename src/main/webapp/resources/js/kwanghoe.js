@@ -43,6 +43,7 @@ skyAir.common=(()=>{
         	  hyunseok.hello.init(ctx);
       });
       $('#identity').click(()=>{
+    	  //s
     	  if(sessionStorage.getItem('email')===null){
 				
 			}else{
@@ -835,6 +836,7 @@ skyAir.ticket=(()=>{
 	setContentView();
 	  	
 	$('#identity').click(()=>{
+		alert('skyscanner');
 		var ctx=$$('x');
 	 if(sessionStorage.getItem('email')===null){
 		  $('body').empty();
@@ -849,10 +851,22 @@ skyAir.ticket=(()=>{
 	      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
 	      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)");
 		}else{
-			 
-			  
-		      
-		      $('#loginBut').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
+			$('body').empty();
+			skyAir.common.init(ctx);
+		      $('#home-container').removeClass('#home-container').addClass('.homecontent').css("background-image", "url(//content.skyscnr.com/6bf5a29ce130132f28e912434f295b76/canada-lake-feb.jpg?crop=2000px:599px&quality=80)");
+		      $('#first').removeClass('#first').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/853dd1ece19afb1f46dabe8485021767/GettyImages-564760601.jpg?resize=500px:600px&quality=50)");
+		      $('#two').removeClass('#two').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/a60a89126ed3f927d123c815b610298d/GettyImages-475335963.jpg?resize=600px:600px&quality=50)");
+		      $('#three').removeClass('#three').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/bc42cc80dd1447615ee441e2020cbe2c/GettyImages-126509194.jpg?resize=450px:603px&quality=50)");
+		      $('#ssssssss').css("background-image","url(https://css.skyscnr.com/inspiration/static/embeddableMap/svg_map_20170525.svg)"); 
+		      $('#saleone').removeClass('#saleone').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/3d13492ebf1c1b0ac415bea8e172b960/GettyImages-505532917.jpg?resize=500px:600px&quality=50)");
+		      $('#saletwo').removeClass('#saletwo').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/7adba3a46af3ca29695f96937d19fcf1/GettyImages-149127892.jpg?resize=500px:600px&quality=50)");
+		      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)"); 
+		      $('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
+		      $('#account').click(()=>{
+		    	  alert('sdfdsafadfs');
+		    	  sessionStorage.clear();
+		    	  location.reload();
+		      });
 		}	  	  
 	  	
 	      
@@ -1060,6 +1074,8 @@ skyAir.ticket=(()=>{
 	);
 	$('#loginBut').click(()=>{
 		alert('로그인1 btn');
+		sessionStorage.clear();
+		location.reload();
 		
 	});
 	
