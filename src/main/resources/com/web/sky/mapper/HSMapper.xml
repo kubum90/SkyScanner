@@ -12,10 +12,14 @@
 		<select id="countFlight" resultType="string">
 	SELECT COUNT(*)AS count FROM Flight;	
 	</select>
-		<select id="countHotel" resultType="string">
+	<select id="countHotel" resultType="string">
 	SELECT COUNT(*)AS count FROM Hotel;	
 	</select>
-
+	<select id="adminCheck" resultType="com.web.sky.member.Member" parameterType="com.web.sky.command.Command">
+		select s.email
+		from(select  * from member where authority =1 ) s
+		where s.email =#{search};
+	</select>
 	<select id="selectAdminEmail" resultType="string">
 	select email from member where authority like 1;
 	</select>

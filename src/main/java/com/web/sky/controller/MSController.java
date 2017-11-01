@@ -53,30 +53,12 @@ public class MSController {
 		};
 		postService.execute(cmd);
 		
-/*		System.out.println("실행 후 회원수"+(ms.count(cmd)));
-*/	/*	new IPostService() {
-			@Override
-			public void execute(Object o) {
-				System.out.println("실행 전 체크"+cmd.getSearch());
-				System.out.println("실행 전 회원수"
-						+
-						(ms.count(cmd)));
-				ms.memberInsert(cmd);	
-				
-				System.out.println("실행 전 체크"
-						+
-						((Member)ms.selectOne(cmd)).getPassword());
-				System.out.println("실행 후 회원수"
-						+
-						(ms.count(cmd)));
-				
-			}
-		}.execute(null);*/
-		map.put("success", "들어가");
+		map.put("success", "회원가입 성공");
 		return map;
 	};
 	
-		
+	
+	
 	@RequestMapping(value="/login",
             method=RequestMethod.POST,
             consumes="application/json")
@@ -92,66 +74,13 @@ public class MSController {
 			return ms.selectOne(cmd);
 		};
 		Member bean = (Member) loginService.execute(cmd);
-		
 			map.put("success", "통신성공");	
 			map.put("bean", bean);
-			
-		
 		System.out.println("빈은 ::"+bean);
-		
-		
 		return map;
 	};
-	/*@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody Map<?, ?> login(@RequestBody Member mem) {
-		Map<String, Object> map = new HashMap<>();
-		cmd.setSearch(mem.getEmail());
-		cmd.setColumn(mem.getPassword());
-		System.out.println("받은 이메일::" + cmd.getSearch());
-		System.out.println("받은 패스워드::" + cmd.getColumn());
-		member.setEmail((String) ms.selectOne(cmd));
-		member.setEmail(mem.getEmail());
-		
-		IGetService loginService = x->{
-				
-			return ms.selectOne(cmd);
-		};
-		loginService.execute(cmd);
-		System.out.println("execute 실행 후 이메일 :: "+member.getEmail());
-		if(member.getEmail()==null) {
-			System.out.println("실패");
-		}else {
-			map.put("success", "통신성공");
-			map.put("bean", member);	
-		}
-		System.out.println("aaaa =>"+member.getEmail());
-		return map;
-		
-		IGetService detailService = (x) -> {
-			System.out.println("llllll"+((Member)ms.selectOne(cmd)).getEmail());
-			return ms.selectOne(cmd);
-		};
-
-			 m=(Member)new IGetService() {
-			
-			@Override
-			public Object execute(Object o) {
-				
-				return ms.selectOne(cmd);
-			}
-		}.execute(null);
-		//Member bean = (Member) detailService.execute(cmd);
-		
-	};
-*/
-	/*
-	 * String result=""; if(member.getEmail().equals(cmd.getSearch())) {
-	 * result="success"; }else {
-	 * 
-	 * result="fail"; } map.put("msg", result);
-	 */
-
-
+	
+	
 	@RequestMapping(value="/suggest",
 			method=RequestMethod.POST,
             consumes="application/json")

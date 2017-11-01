@@ -6,10 +6,7 @@ hyunseok.hello=(()=>{
 		hyunseok.index.init();
 		onCreate();};
 	var onCreate=()=>{setContentView();};
-	var setContentView=()=>{
-		
-		
-		};
+	var setContentView=()=>{};
 	return{init:init};
 })();
 
@@ -374,42 +371,100 @@ hyunseok.member=(()=>{
 		$('#paging').append(pagination);
 		
 		$('#next').click(e=>{
-			alert('next');
-			console.log(start_page);
-			console.log(block_size);
-		
+			alert('next');	
 		var i=(parseInt(start_page)+parseInt(block_size));
-		console.log(i);
 			hyunseok.member.list(i);
 		});
-			
-		});
-
+	});
+	   
+	  
+	
 	   	$('#member-search-btn').click(e=>{
 			alert('멤버 검색');
-			var i=$('#searchContent').val();
-			alert('searchContent'+i);
+			var k=$('#searchContent').val();
+			alert('searchContent'+k);
+			if(k==""){
+				alert('검색어를 입력해 주세요');
+			};
 			e.preventDefault();
 			$.ajax({
-				url:ctx+'/search/'+i,
+				url:ctx+'/search/'+k+'/1',
 				method:'get',
 				dataType:'json',		
 				contentType:'application/json',
-			
 			success : (data)=>{
-			           alert('ajax 통신:'+data.success);			          
-			           var list='';
-			           console.log(data.searchMember);
-			          for(var i=0;i<data.searchMember.length;i++){
-						list+='<tr id="tr-'+i+'"><td><input type="checkbox" id="check-'+i+'" name="check" value=""></td><td id="email-'+i+'">'+data.searchMember[i].email+'</td><td id="firstname-'+i+'">'+data.searchMember[i].firstName+'</td><td id="surname-'+i+'">'+data.searchMember[i].surname+'</td><td id="country-'+i+'">'+data.searchMember[i].country+'</td><td id="regdate-'+i+'">'+data.searchMember[i].regdate+'</td></tr>'
-				
-			          
-			          }
-					$('#memberList-tab').html(list);
-				 },
-				 		error : (x,s,m)=>{
-			            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
-			     }
+			        alert('ajax 통신:'+data.success);		
+			        var memberList='';
+			   		var pagination='';
+			   	    var start_page=data.startPage;
+			   		var end_page=data.endPage;
+			   		var page_num=data.pageNum;
+			   		var page_size=data.pageSize;
+			   		var total_page=data.totalPage;
+			   		var block_size=data.blockSize;
+			   		console.log('start_page '+start_page )
+			   		console.log('end_page '+end_page )
+			   		console.log('page_num '+page_num )
+			   		console.log('page_size '+page_size)
+			   		console.log('total_page'+total_page)
+			   		console.log('block_size '+block_size )
+			   		console.log(data.count);
+			   		if(data.count==0){
+			   			memberList +='<tr><td colspan=6>'
+			   			+'등록된 회원이 없습니다</td>'
+			   			+'</tr>';
+
+			   		}else{
+			   			if(parseInt(data.count)>=parseInt(end_page)*parseInt(page_size)){
+			   				alert('AA');
+			   				for(var i=(page_num-1)*page_size+1;i<=page_num*page_size;i++){
+			   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+			   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+			   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+			   				};
+			   			}else{
+			   				if(page_num==end_page){
+			   					alert('BB');
+			   				page_size=data.count-page_size*(page_num-1);
+			   				console.log('page_size'+page_size);
+			   				console.log('i=='+parseInt((parseInt(page_num)-1)*parseInt(page_size)));
+			   				console.log('i<'+parseInt((parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size)+parseInt(1)));
+			   				
+			   				for(var i=+parseInt((parseInt(page_num)-1)*parseInt(page_size));i<parseInt((parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size));i++){
+			   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+			   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+			   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+			   				};
+			   					}
+			   				else{
+			   					alert('CC');
+			   				for(var i=(parseInt(page_num)-1)*parseInt(page_size)+1;i<=(parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size);i++){
+			   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+			   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+			   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+			   				};};
+			   				
+			   			};		
+			   			}
+			   			$('#memberList-tab').html(memberList);
+			    
+					for(var i=start_page;i<=end_page;i++){
+						console.log('!!!!!'+k);
+						
+						pagination+='<li><a onclick="hyunseok.member.search('+i+','+'\''+k+'\''+')"><p style="cursor: pointer">'+i+'</p></a></li>';
+					}
+					if(parseInt(block_size)<parseInt(total_page)){
+						pagination+=
+							   '<li>'
+						       +'<a aria-label="Next">'
+						        +'<button aria-hidden="true" id="next">&raquo;</button>'
+						        +'</a>'
+						        +'</li>';
+					}
+					
+				$('#paging').html(pagination);
+			 		 }
+				 		
 			});
 	   	});
 	   	
@@ -439,13 +494,11 @@ hyunseok.member=(()=>{
 					}),
 					contentType:'application/json',
 					 success : (data)=>{
-						 	alert("결과 :"+data.result);
+						 	
 						 	hyunseok.member.list(1);
 						
-				        },
-				        error : (x,s,m)=>{
-				            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
-				       }
+				        }
+				      
 				})
 
 	   		};
@@ -492,16 +545,311 @@ hyunseok.member=(()=>{
 		
 		
 	};
-var list=(i)=>{
+
+	var search=(i,k)=>{
+		$('body').empty();
+		$('body').append(hyunseok.navbar.init());
+		$('body').append(hyunseok.compUI.member());
+			$(document).ready(()=>{
+			$.ajax({
+					url:ctx+'/search/'+k+'/'+i,
+					method:'get',
+					dataType:'json',
+					contentType:'application/json',
+					 success : (data)=>{
+						   	var memberList='';
+					   		var pagination='';
+					   	    var start_page=data.startPage;
+					   		var end_page=data.endPage;
+					   		var page_num=data.pageNum;
+					   		var page_size=data.pageSize;
+					   		var total_page=data.totalPage;
+					   		var block_size=data.blockSize;
+					   		console.log('start_page '+start_page )
+					   		console.log('end_page '+end_page )
+					   		console.log('page_num '+page_num )
+					   		console.log('page_size '+page_size)
+					   		console.log('total_page'+total_page)
+					   		console.log('block_size '+block_size )
+					   		console.log(data.count);
+					   		if(data.count==0){
+					   			memberList +='<tr><td colspan=6>'
+					   			+'등록된 회원이 없습니다</td>'
+					   			+'</tr>';
+
+					   		}else{
+					   			if(parseInt(data.count)>=parseInt(end_page)*parseInt(page_size)){
+					   				alert('AA');
+					   				for(var i=(page_num-1)*page_size+1;i<=page_num*page_size;i++){
+					   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+					   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+					   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+					   				};
+					   			}else{
+					   				if(page_num==end_page){
+					   					alert('BB');
+					   				page_size=data.count-page_size*(page_num-1);
+					   				console.log('page_size'+page_size);
+					   				console.log('i=='+parseInt((parseInt(page_num)-1)*parseInt(page_size)));
+					   				console.log('i<'+parseInt((parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size)+parseInt(1)));
+					   				
+					   				for(var i=+parseInt((parseInt(page_num)-1)*parseInt(page_size));i<parseInt((parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size));i++){
+					   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+					   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+					   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+					   				};
+					   					}
+					   				else{
+					   					alert('CC');
+					   				for(var i=(parseInt(page_num)-1)*parseInt(page_size)+1;i<=(parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size);i++){
+					   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+					   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+					   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+					   				};};
+					   				
+					   			};		
+					   			}
+					   			$('#memberList-tab').html(memberList);
+					    
+					   	if(parseInt(start_page)!=1){
+								pagination+=
+								    '<li>'
+							       +'<a aria-label="Previous">'
+							        +'<button aria-hidden="true" id="prev">&laquo;</button>'
+							        +'</a>'
+							        +'</li>';
+							};
+							for(var i=parseInt(start_page);i<=parseInt(end_page);i++){
+								pagination+='<li><a onclick="hyunseok.member.search('+i+','+'\''+k+'\''+')"><p style="cursor: pointer">'+i+'</p></a></li>';
+							}
+							if(parseInt(end_page)<parseInt(total_page)){
+								pagination+=
+									   '<li>'
+								       +'<a aria-label="Next">'
+								        +'<button aria-hidden="true" id="next">&raquo;</button>'
+								        +'</a>'
+								        +'</li>';
+							}
+							$('#paging').append(pagination);
+						$('#prev').click(e=>{
+							alert('previous');
+							console.log(start_page);
+							console.log(block_size);
+						
+						var i=(parseInt(start_page)-parseInt(block_size));
+						console.log(i);
+							hyunseok.member.search(i);
+						});
+						$('#next').click(e=>{
+							alert('next');
+							console.log(start_page);
+							console.log(block_size);
+						
+							var i=(parseInt(start_page)+parseInt(block_size));
+							console.log(i);
+								hyunseok.member.search(i);
+						});
+					 },
+				        error : (x,s,m)=>{
+				            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+				       }
+				})	
+			});			
+	
+			$('#member-search-btn').click(e=>{
+				alert('멤버 검색');
+				var k=$('#searchContent').val();
+				alert('searchContent'+k);
+				if(k==""){
+					alert('검색어를 입력해 주세요');
+				};
+				e.preventDefault();
+				$.ajax({
+					url:ctx+'/search/'+k+'/1',
+					method:'get',
+					dataType:'json',		
+					contentType:'application/json',
+				success : (data)=>{
+				        alert('ajax 통신:'+data.success);		
+				        var memberList='';
+				   		var pagination='';
+				   	    var start_page=data.startPage;
+				   		var end_page=data.endPage;
+				   		var page_num=data.pageNum;
+				   		var page_size=data.pageSize;
+				   		var total_page=data.totalPage;
+				   		var block_size=data.blockSize;
+				   		console.log('start_page '+start_page )
+				   		console.log('end_page '+end_page )
+				   		console.log('page_num '+page_num )
+				   		console.log('page_size '+page_size)
+				   		console.log('total_page'+total_page)
+				   		console.log('block_size '+block_size )
+				   		console.log(data.count);
+				   		if(data.count==0){
+				   			memberList +='<tr><td colspan=6>'
+				   			+'등록된 회원이 없습니다</td>'
+				   			+'</tr>';
+
+				   		}else{
+				   			if(parseInt(data.count)>=parseInt(end_page)*parseInt(page_size)){
+				   				alert('AA');
+				   				for(var i=(page_num-1)*page_size+1;i<=page_num*page_size;i++){
+				   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+				   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+				   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+				   				};
+				   			}else{
+				   				if(page_num==end_page){
+				   					alert('BB');
+				   				page_size=data.count-page_size*(page_num-1);
+				   				console.log('page_size'+page_size);
+				   				console.log('i=='+parseInt((parseInt(page_num)-1)*parseInt(page_size)));
+				   				console.log('i<'+parseInt((parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size)+parseInt(1)));
+				   				
+				   				for(var i=+parseInt((parseInt(page_num)-1)*parseInt(page_size));i<parseInt((parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size));i++){
+				   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+				   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+				   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+				   				};
+				   					}
+				   				else{
+				   					alert('CC');
+				   				for(var i=(parseInt(page_num)-1)*parseInt(page_size)+1;i<=(parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size);i++){
+				   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+				   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+				   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+				   				};};
+				   				
+				   			};		
+				   			}
+				   			$('#memberList-tab').html(memberList);
+				    
+						for(var i=start_page;i<=end_page;i++){
+							console.log('!!!!!'+k);
+							
+							pagination+='<li><a onclick="hyunseok.member.search('+i+','+'\''+k+'\''+')"><p style="cursor: pointer">'+i+'</p></a></li>';
+						}
+						if(parseInt(block_size)<parseInt(total_page)){
+							pagination+=
+								   '<li>'
+							       +'<a aria-label="Next">'
+							        +'<button aria-hidden="true" id="next">&raquo;</button>'
+							        +'</a>'
+							        +'</li>';
+						}
+						
+					$('#paging').html(pagination);
+				 		 }
+					 		
+				});
+		   	});
+			
+			
+			
+			$.ajax({
+				url:ctx+'/search/'+k+'/1',
+				method:'get',
+				dataType:'json',		
+				contentType:'application/json',
+			success : (data)=>{
+	   		
+	   		$('#btn-mem-del-171031').click(e=>{
+		   		e.preventDefault();
+		   		if($("input:checkbox[name=check]:checked").length==0){
+		   			alert("삭제할 계정을 선택해주세요!");
+		   		}else{		
+		   			var selected_emails='';
+		   		$.each($('#memberList-tab tr'),i=>{
+		   			console.log(i);
+		   			console.log('check'+$('#check-'+i).prop("checked"));
+		   			var check=$('#check-'+i).prop("checked");
+		   		  		 if(check==true){
+		   		  			  selected_emails+=$('#email-'+i).text()+',';
+		   				alert(selected_emails);
+		   				};
+		   		});
+		   		$.ajax({
+						url:ctx+'/delete/email',
+						method:'post',
+						dataType:'json',
+						data : JSON.stringify({
+							'selected_emails':selected_emails						
+						}),
+						contentType:'application/json',
+						 success : (data)=>{
+							 	
+							 	hyunseok.member.list(1);
+							
+					        },
+					        error : (x,s,m)=>{
+					            alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
+					       }
+					})
+
+		   		};
+		   	});}});
+			
+			
+	$.ajax({
+			url:ctx+'/search/'+k+'/1',
+			method:'get',
+			dataType:'json',		
+			contentType:'application/json',
+			success : (data)=>{
+				 var memberList='';
+			   		var pagination='';
+			   	    var start_page=data.startPage;
+			   		var end_page=data.endPage;
+			   		var page_num=data.pageNum;
+			   		var page_size=data.pageSize;
+			   		var total_page=data.totalPage;
+			   		var block_size=data.blockSize;
+	  $('#btn-member-update').click(e=>{
+	   		e.preventDefault();
+			alert('member update');
+			if($("input:checkbox[name=check]:checked").length==1){
+				 
+				page_size= data.count-(page_num-1)*page_size;
+				alert(page_size);
+				for(var i=+parseInt((parseInt(page_num)-1)*parseInt(page_size));i<parseInt((parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size));i++){
+					console.log('check'+$('#check-'+i).prop("checked"));
+					var check=$('#check-'+i).prop("checked");
+					if(check==true){
+						var k=$('#email-'+i).text();
+						var f=$('#firstname-'+i).text();
+						var s=$('#surname-'+i).text();
+						var c=$('#country-'+i).text();
+						
+						alert(k);
+						$('body').empty();
+						hyunseok.navbar.init();
+						$('body').append(hyunseok.compUI.memberUpdate());
+						hyunseok.memberUpdate.init();
+						$('#ac-email').val(k);
+						if(f==="null"){$('#ac-first-name').val(""); }else{$('#ac-first-name').val(f);};
+						if(s==="null"){$('#ac-last-name').val(""); }else{$('#ac-last-name').val(s);};
+						if(c==="null"){$('#ac-locale').val(""); }else{$('#ac-locale').val(c);};
+						};
+				};
+			}else if($("input:checkbox[name=check]:checked").length==0){
+				alert("계정을 선택해주세요");
+			}else{
+				alert("계정 하나만 선택해주세요");
+			};
+	  
+				  
+			});}});
+		
 		
 
+		};	
+		
+var list=(i)=>{
 	$('body').empty();
 	$('body').append(hyunseok.navbar.init());
 	$('body').append(hyunseok.compUI.member());
-
-	
    $.getJSON(ctx+'/a/list/member/'+i,data=>{
-	   
 	var memberList='';
 	var pagination='';
     var start_page=data.startPage;
@@ -595,30 +943,89 @@ var list=(i)=>{
 		
 	});
 
-   	$('#member-search-btn').click(e=>{
+  	$('#member-search-btn').click(e=>{
 		alert('멤버 검색');
-		var i=$('#searchContent').val();
-		alert('searchContent'+i);
+		var k=$('#searchContent').val();
+		alert('searchContent'+k);
+		if(k==""){
+			alert('검색어를 입력해 주세요');
+		};
 		e.preventDefault();
 		$.ajax({
-			url:ctx+'/search/'+i,
+			url:ctx+'/search/'+k+'/1',
 			method:'get',
-			dataType:'json',			
+			dataType:'json',		
 			contentType:'application/json',
-			
-			success : (data)=>{
-				          alert('ajax 통신:'+data.success);			          
-				          var list='';
-				          console.log(data.searchMember);
-				          for(var i=0;i<data.searchMember.length;i++){
-							list+='<tr id="tr-'+i+'"><td><input type="checkbox" id="check-'+i+'" name="check" value=""></td><td id="email-'+i+'">'+data.searchMember[i].email+'</td><td id="firstname-'+i+'">'+data.searchMember[i].firstName+'</td><td id="surname-'+i+'">'+data.searchMember[i].surname+'</td><td id="country-'+i+'">'+data.searchMember[i].country+'</td><td id="regdate-'+i+'">'+data.searchMember[i].regdate+'</td></tr>'
-						
-				          }
-						$('#memberList-tab').html(list);
-			},
-	 		error : (x,s,m)=>{
-	 			alert('글 게시시 에러발생'+m+'\n x에러: '+x+'\n s에러'+s);
-		    }
+		success : (data)=>{
+		        alert('ajax 통신:'+data.success);		
+		        var memberList='';
+		   		var pagination='';
+		   	    var start_page=data.startPage;
+		   		var end_page=data.endPage;
+		   		var page_num=data.pageNum;
+		   		var page_size=data.pageSize;
+		   		var total_page=data.totalPage;
+		   		var block_size=data.blockSize;
+		   		console.log('start_page '+start_page )
+		   		console.log('end_page '+end_page )
+		   		console.log('page_num '+page_num )
+		   		console.log('page_size '+page_size)
+		   		console.log('total_page'+total_page)
+		   		console.log('block_size '+block_size )
+		   		console.log(data.count);
+		   		if(data.count==0){
+		   			memberList +='<tr><td colspan=6>'
+		   			+'등록된 회원이 없습니다</td>'
+		   			+'</tr>';
+
+		   		}else{
+		   			if(parseInt(data.count)>=parseInt(end_page)*parseInt(page_size)){
+		   				alert('AA');
+		   				for(var i=(page_num-1)*page_size+1;i<=page_num*page_size;i++){
+		   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+		   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+		   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+		   				};
+		   			}else{
+		   				if(page_num==end_page){
+		   					alert('BB');
+		   				page_size=data.count-page_size*(page_num-1);
+		   				
+		   				for(var i=+parseInt((parseInt(page_num)-1)*parseInt(page_size));i<parseInt((parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size));i++){
+		   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+		   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+		   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+		   				};
+		   					}
+		   				else{
+		   					alert('CC');
+		   				for(var i=(parseInt(page_num)-1)*parseInt(page_size)+1;i<=(parseInt(page_num)-1)*parseInt(page_size)+parseInt(page_size);i++){
+		   					memberList+='<tr id="tr-'+i+'"><td><input class="check-b" type="checkbox" id="check-'+i+'" name="check"></td><td id="email-'+i+'">'+data.list[i].email
+		   					+'</td><td  id="firstname-'+i+'">'+data.list[i].firstName+'</td><td  id="surname-'+i+'">'+data.list[i].surname+'</td><td  id="country-'+i+'">'
+		   					+data.list[i].country+'</td><td  id="regdate-'+i+'">'+data.list[i].regdate+'</td></tr>';
+		   				};};
+		   				
+		   			};		
+		   			}
+		   			$('#memberList-tab').html(memberList);
+		    
+				for(var i=start_page;i<=end_page;i++){
+					console.log('!!!!!'+k);
+					
+					pagination+='<li><a onclick="hyunseok.member.search('+i+','+'\''+k+'\''+')"><p style="cursor: pointer">'+i+'</p></a></li>';
+				}
+				if(parseInt(block_size)<parseInt(total_page)){
+					pagination+=
+						   '<li>'
+					       +'<a aria-label="Next">'
+					        +'<button aria-hidden="true" id="next">&raquo;</button>'
+					        +'</a>'
+					        +'</li>';
+				}
+				
+			$('#paging').html(pagination);
+		 		 },
+			 		
 		});
    	});
    	$.getJSON(ctx+'/a/list/member/'+i,data=>{
@@ -712,7 +1119,7 @@ var list=(i)=>{
 	
 
 	};
-	return {init:init,list:list};
+	return {init:init,list:list,search:search};
 })();
 hyunseok.memberUpdate=(()=>{
 	var init=()=>{	
@@ -1527,7 +1934,24 @@ hyunseok.compUI={
 			+'font-size: 30px;'
 			+    'padding-left: 15px;'
 			+'  }'
-			+'.datagrid table { margin-top:3%;margin:0 auto; text-align:center;border-collapse: collapse; text-align: center; width: 95%; } .datagrid table td, .datagrid table th {margin:0 auto; text-align:center; font-size:15px; }.datagrid table thead th {background:-webkit-gradient( linear, color-stop(0.05, #00b2d6), color-stop(1, #00b2d6) );background:-moz-linear-gradient( center top,  5%, #00b2d6 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:#00b2d6; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8;text-align:center; }  .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 20px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid ;background: #E1EEF4;color:#333;} .datagrid table tfoot td { padding: 3px; font-size: 15px ;color:#333} .datagrid table tfoot td div{ padding: 10px; }.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: center; }.datagrid table tfoot  li { display: inline; }.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #333;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, ), color-stop(1, #00557F) );background:-moz-linear-gradient( center top,  5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:; }.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none; color: #FFFFFF; background: none; background-color:#00557F;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }'
+			+'.datagrid table { margin-top:3%;margin:0 auto; text-align:center;border-collapse: collapse; text-align: center; width: 95%; }' 
+			+'.datagrid table td, .datagrid table th {margin:0 auto; text-align:center; font-size:15px; }'
+			+'.datagrid table thead th {background:-webkit-gradient( linear, color-stop(0.05, #00b2d6), color-stop(1, #00b2d6) );background:-moz-linear-gradient( center top,  5%, #00b2d6 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:#00b2d6; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8;text-align:center; }'
+			+'.datagrid table thead th:first-child { border: none; }'
+			+'.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 20px;font-weight: normal; }'
+			+'.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }'
+			+'.datagrid table tbody td:first-child { border-left: none; }'
+			+'.datagrid table tbody tr:last-child td { border-bottom: none; }'
+			+'.datagrid table tfoot td div { border-top: 1px solid ;background: #E1EEF4;color:#333;}' 
+			+'.datagrid table tfoot td { padding: 3px; font-size: 15px ;color:#333}' 
+			+'.datagrid table tfoot td div{ padding: 10px; }'
+			+'.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: center; }'
+			+'.datagrid table tfoot li { display: inline; }'
+			+'.datagrid table tfoot li a { display: inline-block;  padding: 2px 8px; margin: 1px; }'
+			+'.datagrid table tfoot li a :active  text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'.datagrid table tfoot li a :hover  text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'.datagrid table tfoot li a :visited { text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }'
 			+'fieldset{'
 			+'  border :0px solid;'
 			+'  text-align :center;'
@@ -1913,7 +2337,25 @@ hyunseok.compUI={
 			+'}'
 			
 			
-			+'.datagrid table { margin-top:3%;margin:0 auto; text-align:center;border-collapse: collapse; text-align: center; width: 95%; } .datagrid table td, .datagrid table th {margin:0 auto; text-align:center; font-size:15px; }.datagrid table thead th {background:-webkit-gradient( linear, color-stop(0.05, #00b2d6), color-stop(1, #00b2d6) );background:-moz-linear-gradient( center top,  5%, #00b2d6 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:#00b2d6; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8;text-align:center; }  .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 20px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid ;background: #E1EEF4;color:#333;} .datagrid table tfoot td { padding: 3px; font-size: 15px ;color:#333} .datagrid table tfoot td div{ padding: 10px; }.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: center; }.datagrid table tfoot  li { display: inline; }.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #333;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, ), color-stop(1, #00557F) );background:-moz-linear-gradient( center top,  5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:; }.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none; color: #FFFFFF; background: none; background-color:#00557F;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }'
+			+'.datagrid table { margin-top:3%;margin:0 auto; text-align:center;border-collapse: collapse; text-align: center; width: 95%; }' 
+			+'.datagrid table td, .datagrid table th {margin:0 auto; text-align:center; font-size:15px; }'
+			+'.datagrid table thead th {background:-webkit-gradient( linear, color-stop(0.05, #00b2d6), color-stop(1, #00b2d6) );background:-moz-linear-gradient( center top,  5%, #00b2d6 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:#00b2d6; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8;text-align:center; }'
+			+'.datagrid table thead th:first-child { border: none; }'
+			+'.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 20px;font-weight: normal; }'
+			+'.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }'
+			+'.datagrid table tbody td:first-child { border-left: none; }'
+			+'.datagrid table tbody tr:last-child td { border-bottom: none; }'
+			+'.datagrid table tfoot td div { border-top: 1px solid ;background: #E1EEF4;color:#333;}' 
+			+'.datagrid table tfoot td { padding: 3px; font-size: 15px ;color:#333}' 
+			+'.datagrid table tfoot td div{ padding: 10px; }'
+			+'.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: center; }'
+			+'.datagrid table tfoot li { display: inline; }'
+			+'.datagrid table tfoot li a { display: inline-block;  padding: 2px 8px; margin: 1px; }'
+			+'.datagrid table tfoot li a :active  text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'.datagrid table tfoot li a :hover  text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'.datagrid table tfoot li a :visited { text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }'
+			
 				
 			+'#btn-air-update{'
 			+'    height: auto;'
@@ -2285,7 +2727,25 @@ hyunseok.compUI={
 			+'    text-align: center;'
 			+'    margin-right: 2%;'
 			+'}'
-			+'.datagrid table { margin-top:3%;margin:0 auto; text-align:center;border-collapse: collapse; text-align: center; width: 95%; } .datagrid table td, .datagrid table th {margin:0 auto; text-align:center; font-size:15px; }.datagrid table thead th {background:-webkit-gradient( linear, color-stop(0.05, #00b2d6), color-stop(1, #00b2d6) );background:-moz-linear-gradient( center top,  5%, #00b2d6 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:#00b2d6; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8;text-align:center; }  .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 20px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid ;background: #E1EEF4;color:#333;} .datagrid table tfoot td { padding: 3px; font-size: 15px ;color:#333} .datagrid table tfoot td div{ padding: 10px; }.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: center; }.datagrid table tfoot  li { display: inline; }.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #333;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, ), color-stop(1, #00557F) );background:-moz-linear-gradient( center top,  5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:; }.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none; color: #FFFFFF; background: none; background-color:#00557F;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }'
+			+'.datagrid table { margin-top:3%;margin:0 auto; text-align:center;border-collapse: collapse; text-align: center; width: 95%; }' 
+			+'.datagrid table td, .datagrid table th {margin:0 auto; text-align:center; font-size:15px; }'
+			+'.datagrid table thead th {background:-webkit-gradient( linear, color-stop(0.05, #00b2d6), color-stop(1, #00b2d6) );background:-moz-linear-gradient( center top,  5%, #00b2d6 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:#00b2d6; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8;text-align:center; }'
+			+'.datagrid table thead th:first-child { border: none; }'
+			+'.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 20px;font-weight: normal; }'
+			+'.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }'
+			+'.datagrid table tbody td:first-child { border-left: none; }'
+			+'.datagrid table tbody tr:last-child td { border-bottom: none; }'
+			+'.datagrid table tfoot td div { border-top: 1px solid ;background: #E1EEF4;color:#333;}' 
+			+'.datagrid table tfoot td { padding: 3px; font-size: 15px ;color:#333}' 
+			+'.datagrid table tfoot td div{ padding: 10px; }'
+			+'.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: center; }'
+			+'.datagrid table tfoot li { display: inline; }'
+			+'.datagrid table tfoot li a { display: inline-block;  padding: 2px 8px; margin: 1px; }'
+			+'.datagrid table tfoot li a :active  text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'.datagrid table tfoot li a :hover  text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'.datagrid table tfoot li a :visited { text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }'
+			
 				
 			+'#btn-air-update{'
 			+'    height: auto;'
@@ -2695,7 +3155,25 @@ hyunseok.compUI={
 			+'font-size: 30px;'
 			+    'padding-left: 15px;'
 			+'  }'
-			+'.datagrid table { margin-top:3%;margin:0 auto; text-align:center;border-collapse: collapse; text-align: center; width: 95%; } .datagrid table td, .datagrid table th {margin:0 auto; text-align:center; font-size:15px; }.datagrid table thead th {background:-webkit-gradient( linear, color-stop(0.05, #00b2d6), color-stop(1, #00b2d6) );background:-moz-linear-gradient( center top,  5%, #00b2d6 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:#00b2d6; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8;text-align:center; }  .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 20px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid ;background: #E1EEF4;color:#333;} .datagrid table tfoot td { padding: 3px; font-size: 15px ;color:#333} .datagrid table tfoot td div{ padding: 10px; }.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: center; }.datagrid table tfoot  li { display: inline; }.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #333;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, ), color-stop(1, #00557F) );background:-moz-linear-gradient( center top,  5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:; }.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none; color: #FFFFFF; background: none; background-color:#00557F;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }'
+			+'.datagrid table { margin-top:3%;margin:0 auto; text-align:center;border-collapse: collapse; text-align: center; width: 95%; }' 
+			+'.datagrid table td, .datagrid table th {margin:0 auto; text-align:center; font-size:15px; }'
+			+'.datagrid table thead th {background:-webkit-gradient( linear, color-stop(0.05, #00b2d6), color-stop(1, #00b2d6) );background:-moz-linear-gradient( center top,  5%, #00b2d6 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:#00b2d6; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8;text-align:center; }'
+			+'.datagrid table thead th:first-child { border: none; }'
+			+'.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 20px;font-weight: normal; }'
+			+'.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }'
+			+'.datagrid table tbody td:first-child { border-left: none; }'
+			+'.datagrid table tbody tr:last-child td { border-bottom: none; }'
+			+'.datagrid table tfoot td div { border-top: 1px solid ;background: #E1EEF4;color:#333;}' 
+			+'.datagrid table tfoot td { padding: 3px; font-size: 15px ;color:#333}' 
+			+'.datagrid table tfoot td div{ padding: 10px; }'
+			+'.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: center; }'
+			+'.datagrid table tfoot li { display: inline; }'
+			+'.datagrid table tfoot li a { display: inline-block;  padding: 2px 8px; margin: 1px; }'
+			+'.datagrid table tfoot li a :active  text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'.datagrid table tfoot li a :hover  text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'.datagrid table tfoot li a :visited { text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }'
+			
 				
 		
 			+'#btn-air-update-complete{'
@@ -2973,7 +3451,25 @@ hyunseok.compUI={
 			+'font-size: 30px;'
 			+    'padding-left: 15px;'
 			+'  }'
-			+'.datagrid table { margin-top:3%;margin:0 auto; text-align:center;border-collapse: collapse; text-align: center; width: 95%; } .datagrid table td, .datagrid table th {margin:0 auto; text-align:center; font-size:15px; }.datagrid table thead th {background:-webkit-gradient( linear, color-stop(0.05, #00b2d6), color-stop(1, #00b2d6) );background:-moz-linear-gradient( center top,  5%, #00b2d6 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:#00b2d6; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8;text-align:center; }  .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 20px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid ;background: #E1EEF4;color:#333;} .datagrid table tfoot td { padding: 3px; font-size: 15px ;color:#333} .datagrid table tfoot td div{ padding: 10px; }.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: center; }.datagrid table tfoot  li { display: inline; }.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #333;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, ), color-stop(1, #00557F) );background:-moz-linear-gradient( center top,  5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:; }.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none; color: #FFFFFF; background: none; background-color:#00557F;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }'
+			+'.datagrid table { margin-top:3%;margin:0 auto; text-align:center;border-collapse: collapse; text-align: center; width: 95%; }' 
+			+'.datagrid table td, .datagrid table th {margin:0 auto; text-align:center; font-size:15px; }'
+			+'.datagrid table thead th {background:-webkit-gradient( linear, color-stop(0.05, #00b2d6), color-stop(1, #00b2d6) );background:-moz-linear-gradient( center top,  5%, #00b2d6 100% );filter:progid:DXImageTransform.Microsoft.gradient();background-color:#00b2d6; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8;text-align:center; }'
+			+'.datagrid table thead th:first-child { border: none; }'
+			+'.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 20px;font-weight: normal; }'
+			+'.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }'
+			+'.datagrid table tbody td:first-child { border-left: none; }'
+			+'.datagrid table tbody tr:last-child td { border-bottom: none; }'
+			+'.datagrid table tfoot td div { border-top: 1px solid ;background: #E1EEF4;color:#333;}' 
+			+'.datagrid table tfoot td { padding: 3px; font-size: 15px ;color:#333}' 
+			+'.datagrid table tfoot td div{ padding: 10px; }'
+			+'.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: center; }'
+			+'.datagrid table tfoot li { display: inline; }'
+			+'.datagrid table tfoot li a { display: inline-block;  padding: 2px 8px; margin: 1px; }'
+			+'.datagrid table tfoot li a :active  text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'.datagrid table tfoot li a :hover  text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'.datagrid table tfoot li a :visited { text-decoration: underline; background: none;  color:#00b2d6;   border:1px solid #333;  }'
+			+'div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }'
+			
 				
 		
 			+'#content-wrap{'

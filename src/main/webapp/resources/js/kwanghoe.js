@@ -18,7 +18,7 @@ skyAir.common=(()=>{
 	   
       onCreate();
       $('#loginBu').click(()=>{
-		   alert('sdfasdf');
+		   
 	   });
       $('#airli').click(()=>{
     	  
@@ -38,9 +38,49 @@ skyAir.common=(()=>{
     	  $('body').empty();
         	  ms.common.init(ctx);
       });
-      $('#adminhi').click(()=>{
-    	  $('body').empty();
-        	  hyunseok.hello.init(ctx);
+      $('#adminhi').click(e=>{
+    	  e.preventDefault();
+    	  if(sessionStorage.getItem('email')===null){
+    		  
+    	  }else{
+    		  var _admin = sessionStorage.getItem('email');
+              $.ajax({
+              	url :ctx+'/adminCheck',
+                  method : 'post',
+                  dataType:'json',
+                  data : JSON.stringify({
+                    	  'email' : _admin                    	
+                  }),
+                  contentType : 'application/json',
+                  success : (data)=>{
+                	  if(data.email===null){
+                		  
+                	  }else{
+                		  if(sessionStorage.getItem('email')===data.email){
+                    		  $('body').empty();
+                        	  hyunseok.hello.init(ctx);  
+                    	  }else{
+                    		  
+                    	  }
+                	  }
+                	 
+                  	alert('통신: '+data.success);
+                  	
+                  },
+                  error : (x,s,m)=>{
+                     alert('관리자 탭 에러'+m+'\n x에러: '+x+'\n s에러'+s);
+                  }
+               });
+    	    
+    	  }
+    	  
+    	/*  var ctx=$$('x');
+    	  if(sessionStorage.getItem('email')==='2'){
+    		  $('body').empty();
+        	  hyunseok.hello.init(ctx);  
+    	  }else{
+    		  alert('관리자 계정이 아닙니다.');
+    	  }*/
       });
       $('#identity').click(()=>{
     	  //s
@@ -863,7 +903,7 @@ skyAir.ticket=(()=>{
 		      $('#saleth').removeClass('#saleth').addClass('.image hi-res-image-loaded').css("background-image","url(https://content.skyscnr.com/e0a42512a8f7baba699430c43d90e339/GettyImages-465582049.jpg?resize=500px:600px&quality=50)"); 
 		      $('#loginBu').attr('class','bpk-button-30cpF bpk-button--secondary-lyMj0').attr('id','account').removeAttr('data-toggle','').removeAttr('data-target','').text('로그아웃');
 		      $('#account').click(()=>{
-		    	  alert('sdfdsafadfs');
+		    	  
 		    	  sessionStorage.clear();
 		    	  location.reload();
 		      });

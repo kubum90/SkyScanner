@@ -137,7 +137,33 @@ public class HSController {
 		return map;
 	}
 	
-	
+	@RequestMapping(value="/adminCheck",
+			method=RequestMethod.POST,
+			consumes="application/json")
+	public @ResponseBody Map<?,?> adminCheck(@RequestBody Member member){
+		logger.info("관리자 체크 컨트롤러 진입");
+		Map<String, Object> map = new HashMap<>();
+		logger.info("관리자 체크 컨트롤러로 들어온 이메일 주소: {}",member.getEmail());
+		cmd.setSearch(member.getEmail());
+		IGetService adminCheckService = x->{
+			return hs.adminCheck(cmd);
+		};
+		Member bean=(Member) adminCheckService.execute(cmd);
+		if(bean==null) {
+			System.out.println("email null");
+			map.put("success", "관리자 계정이 아닙니다.");
+		}else {
+			if(bean.getEmail().equals(cmd.getSearch())) {
+				map.put("success", "성공");
+				map.put("email", bean.getEmail());	
+			}else {
+				map.put("success", "실패");
+			}
+		}
+		
+		
+		return map;
+	}
 	
 	
 	@RequestMapping(value="/update/member",
@@ -332,21 +358,64 @@ public class HSController {
 		}
 		return map;
 	};
-	@RequestMapping(value="/search/{search}",
+	@RequestMapping(value="/search/{search}/{pageNumber}",
 			method=RequestMethod.GET,
 	         consumes="application/json")
-	public @ResponseBody Map<?, ?> searchMember(@PathVariable String search){
-		logger.info("컨트롤러 진입!!");
+	
+	public @ResponseBody Map<?, ?> searchMember(Model model,@PathVariable String search,@PathVariable int pageNumber){
+		logger.info("서치 진입(1)");
 		Map<String, Object> map = new HashMap<>();
+		pxy.setPageSize(10);
+		pxy.setBlockSize(5);
+		pxy.setPageNumber(pageNumber);
+		logger.info("페이지 넘버"+pageNumber);
 		cmd.setSearch(search);	
+		List<?> list = hs.searchMember(cmd);
+		int count=hs.searchMember(cmd).size();
+		pxy.setTheNumberOfRows(count);
+		int[]result=new int[6];
+		int theNumberOfPages=0,
+				startPage=0,
+				endPage=0;
+
+		theNumberOfPages
+		=(pxy.getTheNumberOfRows() % pxy.getPageSize())==0?
+				pxy.getTheNumberOfRows() / pxy.getPageSize()
+				: pxy.getTheNumberOfRows() / pxy.getPageSize() +1;
 		
-		map.put("searchMember",new IListService() {
-			@Override
-			public List<?> execute(Object o) {
-				return hs.searchMember(cmd);
+		startPage =pxy.getPageNumber() -((pxy.getPageNumber()-1)%pxy.getBlockSize());		
+		
+		endPage=(startPage + pxy.getBlockSize() -1 
+				<= theNumberOfPages)?
+						startPage + pxy.getBlockSize()-1 : theNumberOfPages;
+		
+		result[0]=pxy.getPageNumber();
+		result[1]=theNumberOfPages;
+		result[2]=startPage;
+		result[3]=endPage;
+		result[4]=(startPage-(theNumberOfPages/pxy.getBlockSize())>0)?1:0;
+		result[5]=startPage+pxy.getBlockSize();
+		
+	
+		if(pxy.getPageNumber() <= pxy.getTheNumberOfRows() / pxy.getPageSize() +1) {
+			if(pxy.getPageNumber()==1) {
+				cmd.setStartRow("1");
+				cmd.setEndRow(String.valueOf(pxy.getPageSize()));
+			}else {	
+				cmd.setStartRow(String.valueOf((pxy.getPageNumber()-1)* pxy.getPageSize()+1));
+				cmd.setEndRow(String.valueOf(pxy.getPageNumber()*pxy.getPageSize()));
 			}
-		}.execute(cmd));
+		}
 		
+		pxy.execute(model, result,list);
+		map.put("startPage", String.valueOf(result[2]));
+		map.put("endPage", String.valueOf(result[3]));
+		map.put("pageNum", String.valueOf(result[0]));
+		map.put("pageSize", String.valueOf(pxy.getPageSize()));
+		map.put("totalPage", String.valueOf(result[1]));
+		map.put("blockSize", String.valueOf(pxy.getBlockSize()));
+		map.put("count",count);
+		map.put("list", list);
 		map.put("success", "통신성공");
 		
 		return map;

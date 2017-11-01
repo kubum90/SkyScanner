@@ -36,6 +36,7 @@ public interface HSMapper {
 	public Object newAdmin1(Command cmd);
 	
 	public void deleteMember(Command cmd);
+	public Object adminCheck(Command cmd);
 	;
 	
 }

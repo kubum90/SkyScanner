@@ -15,6 +15,9 @@ ms.common=((ctx)=>{
 	var onCreate=()=>{
 		setContentView();
 		
+		$('#loginBu').click(()=>{
+			alert('호텔 로그인 버튼 조작');
+		});
 		alert('email ::'+sessionStorage.getItem('email'));
 		if(sessionStorage.getItem('email')===null){
 	
