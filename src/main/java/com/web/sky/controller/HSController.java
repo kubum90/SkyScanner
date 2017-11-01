@@ -136,7 +136,7 @@ public class HSController {
 		}
 		return map;
 	}
-	
+
 	@RequestMapping(value="/adminCheck",
 			method=RequestMethod.POST,
 			consumes="application/json")
