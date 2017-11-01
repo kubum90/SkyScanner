@@ -866,7 +866,7 @@ skyAir.ticket=(()=>{
 	$('#identity').click(()=>{
 		alert('skyscanner');
 		var ctx=$$('x');
-	 if(sessionStorage.getItem('email')===null){
+	 if(sessionStorage.getItem('email')===null) {
 		  $('body').empty();
 	  	  location.reload();
 	      skyAir.common.init(ctx);
